@@ -16,5 +16,6 @@
     "@changesets/get-github-info": "^0.5.2",
     "@manypkg/get-packages": "^2.2.0"
   },
-  "type": "module"
+  "type": "module",
+  "private": true
 }

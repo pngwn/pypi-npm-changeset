@@ -4,8 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "refresh": "cp -r ./_changesets/*.md ./.changeset/",
-    "version": "changeset version && node ./fix_changelogs.cjs"
+    "ci:version": "changeset version && pnpm i --lockfile-only && node ./fix_changelogs.cjs",
+		"ci:publish": "pnpm publish --no-git-checks --access public -r",
+    "refresh": "cp -r ./_changesets/*.md ./.changeset/"
   },
   "keywords": [],
   "author": "",

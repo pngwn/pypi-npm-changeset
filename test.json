@@ -1,0 +1,12 @@
+{
+  "@pngwn/gradio-test-pkg-three": {
+    "feat": [],
+    "fix": [
+      {
+        "summary": "something"
+      }
+    ],
+    "highlight": [],
+    "other": []
+  }
+}

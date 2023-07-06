@@ -4,9 +4,16 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "refresh": "cp -r ./_changesets/*.md ./.changeset/",
+    "version": "changeset version && node ./fix_changelogs.cjs"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "@changesets/cli": "^2.26.2",
+    "@changesets/get-github-info": "^0.5.2",
+    "@manypkg/get-packages": "^2.2.0"
+  },
+  "type": "module"
 }

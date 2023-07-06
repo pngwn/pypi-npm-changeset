@@ -53,7 +53,7 @@ jobs:
           cache-dependency-path: |
             requirements.txt
       - name: Check new pypi version
-        run: check_pypi.py --name="gradio"
+        run: python check_pypi.py --name="gradio"
       - name: Publish package
         uses: pypa/gh-action-pypi-publish@release/v1
         with:

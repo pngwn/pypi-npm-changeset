@@ -53,7 +53,7 @@ jobs:
           cache-dependency-path: |
             requirements.txt
       - name: Check new pypi version
-        run: python client/python/scripts/check_pypi.py --name="gradio"
+        run: check_pypi.py --name="gradio"
       - name: Publish package
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
@@ -74,10 +74,10 @@ jobs:
           cache-dependency-path: |
             requirements.txt
       - name: Check new pypi version
-        run: python client/python/scripts/check_pypi.py --name="gradio_client"
+        run: python check_pypi.py --name="gradio_client"
       - name: Build pypi package
         run: |
-          client/python/scripts/build_pypi.sh
+          build_pypi.sh
       - name: Publish package
         uses: pypa/gh-action-pypi-publish@release/v1
         with:

@@ -1,10 +1,8 @@
-name: publish
-
+name: Changesets
 on:
   push:
     branches:
-      - "main"
-  pull_request:
+      - main
 
 env:
   CI: true

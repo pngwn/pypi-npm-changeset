@@ -55,8 +55,7 @@ jobs:
       - name: Check new pypi version
         run: python check_pypi.py --name="gradio"
       - name: build
-        run: |
-          ./client/python/build_pypi.sh
+        run: client/python/build_pypi.sh
       - name: Publish package
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
@@ -79,8 +78,7 @@ jobs:
       - name: Check new pypi version
         run: python check_pypi.py --name="gradio_client"
       - name: Build pypi package
-        run: |
-          ./build_pypi.sh
+        run: bash build_pypi.sh
       - name: Publish package
         uses: pypa/gh-action-pypi-publish@release/v1
         with:

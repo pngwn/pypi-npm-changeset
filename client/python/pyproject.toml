@@ -38,7 +38,7 @@ classifiers = [
 Homepage = "https://github.com/gradio-app/gradio"
 
 [tool.hatch.version]
-path = "gradio_client/version.txt"
+path = "client/python/version.txt"
 pattern = "(?P<version>.+)"
 
 [tool.hatch.metadata.hooks.requirements_txt]

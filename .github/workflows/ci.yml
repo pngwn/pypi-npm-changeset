@@ -15,6 +15,7 @@ jobs:
     name: static checks
     runs-on: ubuntu-22.04
     steps:
+      - uses: actions/checkout@v3
       - name: Install pnpm
         uses: pnpm/action-setup@v2
         with:
@@ -42,6 +43,7 @@ jobs:
     needs: publish
     if: github.ref == 'refs/heads/master'
     steps:
+      - uses: actions/checkout@v3
       - name: Install Python
         uses: actions/setup-python@v4
         with:
@@ -62,6 +64,7 @@ jobs:
     needs: publish
     if: github.ref == 'refs/heads/master'
     steps:
+      - uses: actions/checkout@v3
       - name: Install Python
         uses: actions/setup-python@v4
         with:

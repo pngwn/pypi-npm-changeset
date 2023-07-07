@@ -142,7 +142,7 @@ async function check_version_exists(package_name: string, version: string) {
 
 async function publish_package(user: string, password: string, dir: string) {
 	try {
-		await exec("python", [join(dir, "..", "build_pypi.py")]);
+		await exec("sh", [join(dir, "..", "build_pypi.py")]);
 		await exec("twine", ["upload", `${join(dir, "..")}/dist/*`], {
 			env: {
 				...process.env,
@@ -150,6 +150,9 @@ async function publish_package(user: string, password: string, dir: string) {
 				TWINE_PASSWORD: password,
 			},
 		});
+		await exec("rm", ["-rf", `${join(dir, "..")}/dist/*`]);
+		await exec("rm", ["-rf", `${join(dir, "..")}/build/*`]);
+
 		return true;
 	} catch (e) {
 		warning(e);

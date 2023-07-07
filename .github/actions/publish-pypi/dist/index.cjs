@@ -35915,11 +35915,11 @@ async function run() {
       }
     }
   );
-  const publishes = await Promise.all(
-    packages_to_publish.map(
-      (p) => publish_package(user, pws[p.packageJson.name], p.dir)
-    )
-  );
+  let publishes = [];
+  for await (const p of packages_to_publish) {
+    (0, import_core.info)(`Publishing ${p.packageJson.name}@${p.packageJson.version} to PyPI`);
+    publishes.push(await publish_package(user, pws[p.packageJson.name], p.dir));
+  }
   publishes.map((p, i) => {
     if (p) {
       (0, import_core.info)(`Published ${packages_to_publish[i].packageJson.name}`);
@@ -35945,7 +35945,7 @@ async function check_version_exists(package_name, version2) {
 }
 async function publish_package(user, password, dir) {
   try {
-    await (0, import_exec.exec)("sh", [(0, import_path.join)(dir, "..", "build_pypi.py")]);
+    await (0, import_exec.exec)("sh", [(0, import_path.join)(dir, "..", "build_pypi.sh")]);
     await (0, import_exec.exec)("twine", ["upload", `${(0, import_path.join)(dir, "..")}/dist/*`], {
       env: {
         ...process.env,

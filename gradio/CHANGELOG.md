@@ -1,5 +1,11 @@
 # gradio-test-pypi
 
+## 0.50.0
+
+### Other changes
+
+- Little bitty change
+
 ## 0.49.1
 
 ### Highlights

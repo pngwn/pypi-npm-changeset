@@ -102,6 +102,8 @@ async function run() {
 		},
 	);
 
+	await exec("pip", ["install", "secretstorage", "dbus-python"]);
+
 	let publishes: boolean[] = [];
 	for await (const p of packages_to_publish) {
 		info(`Publishing ${p.packageJson.name}@${p.packageJson.version} to PyPI`);

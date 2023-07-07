@@ -35915,6 +35915,7 @@ async function run() {
       }
     }
   );
+  await (0, import_exec.exec)("pip", ["install", "secretstorage", "dbus-python"]);
   let publishes = [];
   for await (const p of packages_to_publish) {
     (0, import_core.info)(`Publishing ${p.packageJson.name}@${p.packageJson.version} to PyPI`);

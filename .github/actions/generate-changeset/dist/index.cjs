@@ -19526,7 +19526,7 @@ var globs_to_ignore = [
   "!**/*.test.js",
   "!**/*.spec.js",
   "!**/*.test.ts",
-  "!**/*.story.svelte"
+  "!**/*.stories.svelte"
 ];
 async function run() {
   await (0, import_exec.exec)("git", ["show-ref"]);

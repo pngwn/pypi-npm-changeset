@@ -187,12 +187,6 @@ const changelogFunctions = {
 
 		// throw new Error('Not yet')
 
-		console.log(
-			`\n\n-${prefix ? `${prefix} -` : ""} ${firstLine}\n${futureLines
-				.map((l) => `  ${l}`)
-				.join("\n")}`,
-		);
-
 		return `\n\n-${prefix ? `${prefix} -` : ""} ${firstLine}\n${futureLines
 			.map((l) => `  ${l}`)
 			.join("\n")}`;
@@ -200,3 +194,5 @@ const changelogFunctions = {
 };
 
 module.exports = changelogFunctions;
+
+//  hello change

@@ -19,6 +19,9 @@ const globs_to_ignore = [
 async function run() {
 	console.log(context.eventName);
 	console.log(context.action);
+	console.log(context.payload.action);
+
+	console.log(JSON.stringify(context, null, 2));
 	const changed_pkgs = await getChangedPackagesSinceRef({
 		cwd: process.cwd(),
 		ref: "refs/remotes/origin/main",

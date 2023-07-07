@@ -2,5 +2,9 @@
   "name": "@pngwn/gradio-test-pkg-three",
   "version": "0.48.0",
   "description": "",
-  "main": "index.js"
+  "main": "index.js",
+  "dependencies": {
+    "@pngwn/gradio-test-pkg-one": "0.48.0",
+    "@pngwn/gradio-test-pkg-two": "0.48.0"
+  }
 }

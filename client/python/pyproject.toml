@@ -38,7 +38,7 @@ classifiers = [
 Homepage = "https://github.com/gradio-app/gradio"
 
 [tool.hatch.version]
-path = "version.txt"
+path = "gradio-test-client-pypi/version.txt"
 pattern = "(?P<version>.+)"
 
 [tool.hatch.metadata.hooks.requirements_txt]
@@ -52,10 +52,9 @@ fragments = [
 
 [tool.hatch.build.targets.sdist]
 include = [
-  "/gradio_client",
+  "/gradio-test-client-pypi",
   "/README.md",
   "/requirements.txt",
-  "version.txt",
 ]
 
 [tool.ruff]
@@ -63,5 +62,5 @@ extend = "../../pyproject.toml"
 
 [tool.ruff.isort]
 known-first-party = [
-  "gradio_client"
+  "gradio-test-client-pypi"
 ]

@@ -38,8 +38,6 @@ importers:
 
   client/js: {}
 
-  client/python: {}
-
   gradio: {}
 
   js/test-pkg-one: {}

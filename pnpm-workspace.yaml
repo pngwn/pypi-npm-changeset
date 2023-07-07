@@ -1,4 +1,5 @@
 packages:
-  - 'js/*'
-  - 'gradio'
-  - 'client/*'
+  - "js/*"
+  - "gradio"
+  - "client/*"
+  - "client/*/*"

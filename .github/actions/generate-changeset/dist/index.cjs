@@ -19520,11 +19520,20 @@ var require_git_cjs = __commonJS({
 var import_core = __toESM(require_core(), 1);
 var import_exec = __toESM(require_exec(), 1);
 var import_git = __toESM(require_git_cjs(), 1);
+var globs_to_ignore = [
+  "!**/test/**/*",
+  "!**/*.test.ts",
+  "!**/*.test.js",
+  "!**/*.spec.js",
+  "!**/*.test.ts",
+  "!**/*.story.svelte"
+];
 async function run() {
   await (0, import_exec.exec)("git", ["show-ref"]);
   const changed_pkgs = await (0, import_git.getChangedPackagesSinceRef)({
     cwd: process.cwd(),
-    ref: "refs/remotes/origin/main"
+    ref: "refs/remotes/origin/main",
+    changedFilePatterns: globs_to_ignore
   });
   (0, import_core.info)(JSON.stringify(changed_pkgs, null, 2));
 }

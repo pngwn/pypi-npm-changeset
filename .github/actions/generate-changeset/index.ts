@@ -7,11 +7,21 @@ import { promises as fs } from "fs";
 import { join } from "path";
 import { getChangedPackagesSinceRef } from "@changesets/git";
 
+const globs_to_ignore = [
+	"!**/test/**/*",
+	"!**/*.test.ts",
+	"!**/*.test.js",
+	"!**/*.spec.js",
+	"!**/*.test.ts",
+	"!**/*.story.svelte",
+];
+
 async function run() {
 	await exec("git", ["show-ref"]);
 	const changed_pkgs = await getChangedPackagesSinceRef({
 		cwd: process.cwd(),
 		ref: "refs/remotes/origin/main",
+		changedFilePatterns: globs_to_ignore,
 	});
 
 	info(JSON.stringify(changed_pkgs, null, 2));

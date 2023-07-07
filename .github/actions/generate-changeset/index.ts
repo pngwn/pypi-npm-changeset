@@ -18,7 +18,6 @@ const globs_to_ignore = [
 
 async function run() {
 	console.log(context.eventName);
-	await exec("git", ["show-ref"]);
 	const changed_pkgs = await getChangedPackagesSinceRef({
 		cwd: process.cwd(),
 		ref: "refs/remotes/origin/main",

@@ -23,6 +23,9 @@ importers:
       '@changesets/get-github-info':
         specifier: ^0.5.2
         version: 0.5.2
+      '@changesets/git':
+        specifier: ^2.0.0
+        version: 2.0.0
       '@manypkg/get-packages':
         specifier: ^2.2.0
         version: 2.2.0
@@ -37,6 +40,8 @@ importers:
         version: 5.22.1
 
   client/js: {}
+
+  client/python/gradio-test-client-pypi: {}
 
   gradio: {}
 

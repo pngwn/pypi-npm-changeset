@@ -24053,6 +24053,7 @@ var globs_to_ignore = [
 ];
 async function run() {
   console.log(import_github.context.eventName);
+  console.log(import_github.context.action);
   const changed_pkgs = await (0, import_git.getChangedPackagesSinceRef)({
     cwd: process.cwd(),
     ref: "refs/remotes/origin/main",

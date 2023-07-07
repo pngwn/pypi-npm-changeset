@@ -39,7 +39,7 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GRADIO_PAT }}
       - name: publish to pypi
-        uses: ./.github/actions/publish-pypi
+        uses: "./.github/actions/publish-pypi"
         with:
           packages: |
             { gradio: {

@@ -8,6 +8,7 @@ import { join } from "path";
 import { getChangedPackagesSinceRef } from "@changesets/git";
 
 async function run() {
+	await exec("git", ["show-ref"]);
 	const changed_pkgs = await getChangedPackagesSinceRef({
 		cwd: process.cwd(),
 		ref: "refs/heads/main",

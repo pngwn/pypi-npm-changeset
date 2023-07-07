@@ -12,7 +12,7 @@ const globs_to_ignore = [
 	"!**/*.test.ts",
 	"!**/*.test.js",
 	"!**/*.spec.js",
-	"!**/*.test.ts",
+	"!**/*.spec.ts",
 	"!**/*.stories.svelte",
 ];
 

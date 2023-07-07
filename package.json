@@ -7,7 +7,7 @@
     "ci:version": "changeset version && pnpm i --lockfile-only && node ./fix_changelogs.cjs",
     "ci:publish": "pnpm publish --no-git-checks --access public -r --filter=@pngwn/*",
     "refresh": "cp -r ./_changesets/*.md ./.changeset/",
-    "build-action": "esbuild .github/actions/publish-pypi/index.ts --bundle --platform=node --format=esm --outfile=.github/actions/publish-pypi/dist/index.js"
+    "build-action": "esbuild .github/actions/publish-pypi/index.ts --bundle --platform=node --outfile=.github/actions/publish-pypi/dist/index.cjs"
   },
   "keywords": [],
   "author": "",

@@ -79,12 +79,12 @@ async function run() {
 			"--no-cache-dir",
 			"--prefer-binary",
 			"-r",
-			"requirements/runtime.in",
+			"_action_temp/requirements/runtime.in",
 		],
 		{
 			env: {
 				...process.env,
-				PIP_CONSTRAINT: "requirements/runtime.txt",
+				PIP_CONSTRAINT: "_action_temp/requirements/runtime.txt",
 			},
 		},
 	);

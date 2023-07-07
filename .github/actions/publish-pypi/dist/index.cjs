@@ -2209,10 +2209,11 @@ Support boolean input list: \`true | True | TRUE | false | False | FALSE\``);
 // .github/actions/publish-pypi/index.ts
 var import_core = __toESM(require_core(), 1);
 function run() {
-  const packages = (0, import_core.getInput)("packages");
-  (0, import_core.info)(packages);
-  const parsed = JSON.parse(packages);
-  (0, import_core.info)(parsed);
-  (0, import_core.info)(JSON.stringify(parsed, null, 2));
+  const user = (0, import_core.getInput)("user");
+  const passwords = (0, import_core.getInput)("packages");
+  (0, import_core.info)(user);
+  (0, import_core.info)(passwords);
+  const pws = passwords.trim().split("\n").map((p) => p.split(":"));
+  (0, import_core.info)(JSON.stringify(pws, null, 2));
 }
 run();

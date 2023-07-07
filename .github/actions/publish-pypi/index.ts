@@ -1,13 +1,16 @@
 import { getInput, info } from '@actions/core'
 
 function run() {
-  const packages = getInput("packages");
-  info(packages);
+  const user = getInput("user");
+  const passwords = getInput("packages");
+  info(user)
+  info(passwords);
 
-  const parsed = JSON.parse(packages);
+  const pws = passwords.trim().split("\n").map((p) => p.split(':'));
 
-  info(parsed);
-  info(JSON.stringify(parsed, null, 2));
+  info(JSON.stringify(pws, null, 2));
+
+  
 }
 
 run()

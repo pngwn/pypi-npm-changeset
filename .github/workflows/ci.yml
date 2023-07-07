@@ -42,7 +42,7 @@ jobs:
         uses: "./.github/actions/publish-pypi"
         with:
           user: __token__
-          packages: |
+          passwords: |
             gradio:${{ secrets.PYPI_API_TOKEN }}
             gradio_client:${{ secrets.PYPI_API_TOKEN }}
           

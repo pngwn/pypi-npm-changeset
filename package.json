@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "ci:version": "changeset version && pnpm i --lockfile-only && node ./fix_changelogs.cjs",
-		"ci:publish": "pnpm publish --no-git-checks --access public -r",
+		"ci:publish": "pnpm publish --no-git-checks --access public -r --filter=@pngwn/*",
     "refresh": "cp -r ./_changesets/*.md ./.changeset/"
   },
   "keywords": [],

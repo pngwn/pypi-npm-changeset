@@ -44,9 +44,9 @@ async function run() {
 
 	const dependency_files = pkgs.map(({ dir, packageJson, relativeDir }) => {
 		if ((packageJson as PackageJson).python) {
-			return join(relativeDir, "..", "requirements.txt");
+			return [join(relativeDir, "..", "requirements.txt"), packageJson.name];
 		} else {
-			return join(relativeDir, "package.json");
+			return [join(relativeDir, "package.json"), packageJson.name];
 		}
 	});
 
@@ -67,16 +67,21 @@ async function run() {
 	};
 	await exec("git", ["diff", "--name-only", ref], options);
 
-	console.log(
-		output,
-		error,
-		output
-			.split("\n")
-			.map((s) => s.trim())
-			.filter(Boolean),
-	);
+	console.log(output, error);
 
-	console.log(dependency_files);
+	const changes = output
+		.split("\n")
+		.map((s) => s.trim())
+		.filter(Boolean)
+		.reduce<Set<string>>((acc, next) => {
+			acc.add(next);
+			return acc;
+		}, new Set());
+
+	const changed_dependency_files = dependency_files.filter(([f]) =>
+		changes.has(f),
+	);
+	console.log(changed_dependency_files);
 
 	// const changed_dependencies = await getChangedPackagesSinceRef({
 	// 	cwd: process.cwd(),

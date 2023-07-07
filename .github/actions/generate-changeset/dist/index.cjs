@@ -27884,9 +27884,9 @@ async function run() {
   const { packages: pkgs } = (0, import_get_packages.getPackagesSync)(process.cwd());
   const dependency_files = pkgs.map(({ dir, packageJson, relativeDir }) => {
     if (packageJson.python) {
-      return (0, import_path.join)(relativeDir, "..", "requirements.txt");
+      return [(0, import_path.join)(relativeDir, "..", "requirements.txt"), packageJson.name];
     } else {
-      return (0, import_path.join)(relativeDir, "package.json");
+      return [(0, import_path.join)(relativeDir, "package.json"), packageJson.name];
     }
   });
   const ref = import_github.context.payload.pull_request?.base?.sha || "refs/remotes/origin/main";
@@ -27903,12 +27903,15 @@ async function run() {
     }
   };
   await (0, import_exec.exec)("git", ["diff", "--name-only", ref], options);
-  console.log(
-    output,
-    error,
-    output.split("\n").map((s) => s.trim()).filter(Boolean)
+  console.log(output, error);
+  const changes = output.split("\n").map((s) => s.trim()).filter(Boolean).reduce((acc, next) => {
+    acc.add(next);
+    return acc;
+  }, /* @__PURE__ */ new Set());
+  const changed_dependency_files = dependency_files.filter(
+    ([f]) => changes.has(f)
   );
-  console.log(dependency_files);
+  console.log(changed_dependency_files);
   (0, import_core.info)(JSON.stringify(changed_pkgs, null, 2));
 }
 run();

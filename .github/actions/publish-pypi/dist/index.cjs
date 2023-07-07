@@ -35726,6 +35726,7 @@ var import_exec = __toESM(require_exec(), 1);
 var import_get_packages = __toESM(require_manypkg_get_packages_cjs(), 1);
 var import_undici = __toESM(require_undici(), 1);
 var import_fs = require("fs");
+var import_path = require("path");
 
 // .github/actions/publish-pypi/requirements.ts
 var requirements_exports = {};
@@ -35839,13 +35840,10 @@ zipp==3.11.0
 
 // .github/actions/publish-pypi/index.ts
 async function run() {
-  const { tool, packages, rootPackage, rootDir } = (0, import_get_packages.getPackagesSync)(
-    process.cwd()
-  );
+  const { packages } = (0, import_get_packages.getPackagesSync)(process.cwd());
   const python_packages = packages.filter(
     (p) => p.packageJson.python
   );
-  console.log(JSON.stringify(python_packages, null, 2));
   const user = (0, import_core.getInput)("user");
   const passwords = (0, import_core.getInput)("passwords");
   const packages_to_publish = (await Promise.all(
@@ -35863,14 +35861,24 @@ async function run() {
       return p;
     })
   )).filter(Boolean);
+  if (packages_to_publish.length === 0) {
+    (0, import_core.info)("No packages to publish.");
+    return;
+  }
+  const pws = passwords.trim().split("\n").reduce((acc, next) => {
+    const [pkg, pwd] = next.split(":");
+    return {
+      ...acc,
+      [pkg]: pwd
+    };
+  }, {});
   (0, import_core.info)("Installing prerequisites.");
   await import_fs.promises.mkdir("_action_temp/requirements", { recursive: true });
-  for (const [name, content] of Object.values(requirements_exports)) {
-    console.log(name, content);
-    await import_fs.promises.writeFile(`_action_temp/requirements/${name}`, content);
-  }
-  const _files = await import_fs.promises.readdir("_action_temp");
-  console.log(_files);
+  await Promise.all(
+    Object.values(requirements_exports).map(
+      ([name, content]) => import_fs.promises.writeFile(`_action_temp/requirements/${name}`, content)
+    )
+  );
   await (0, import_exec.exec)(
     "pip",
     [
@@ -35907,10 +35915,21 @@ async function run() {
       }
     }
   );
-  (0, import_core.info)(user);
-  (0, import_core.info)(passwords);
-  const pws = passwords.trim().split("\n").map((p) => p.split(":"));
-  (0, import_core.info)(JSON.stringify(pws, null, 2));
+  const publishes = await Promise.all(
+    packages_to_publish.map(
+      (p) => publish_package(user, pws[p.packageJson.name], p.dir)
+    )
+  );
+  publishes.map((p, i) => {
+    if (p) {
+      (0, import_core.info)(`Published ${packages_to_publish[i].packageJson.name}`);
+    } else {
+      (0, import_core.warning)(
+        `Failed to publish ${packages_to_publish[i].packageJson.name}@${packages_to_publish[i].packageJson.version}`
+      );
+    }
+  });
+  await import_fs.promises.rmdir("_action_temp", { recursive: true });
 }
 run();
 async function check_version_exists(package_name, version2) {
@@ -35923,6 +35942,22 @@ async function check_version_exists(package_name, version2) {
   }
   const data = await body.json();
   return version2 in data.releases;
+}
+async function publish_package(user, password, dir) {
+  try {
+    await (0, import_exec.exec)("python", [(0, import_path.join)(dir, "..", "build_pypi.py")]);
+    await (0, import_exec.exec)("twine", ["upload", `${(0, import_path.join)(dir, "..")}/dist/*`], {
+      env: {
+        ...process.env,
+        TWINE_USERNAME: user,
+        TWINE_PASSWORD: password
+      }
+    });
+    return true;
+  } catch (e) {
+    (0, import_core.warning)(e);
+    return false;
+  }
 }
 /*! Bundled license information:
 

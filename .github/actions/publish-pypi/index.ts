@@ -4,19 +4,17 @@ import { type Packages, getPackagesSync } from "@manypkg/get-packages";
 import { context } from "@actions/github";
 import { request } from "undici";
 import { promises as fs } from "fs";
+import { join } from "path";
 
 import * as files from "./requirements";
 
 async function run() {
-	const { tool, packages, rootPackage, rootDir } = getPackagesSync(
-		process.cwd(),
-	);
+	const { packages } = getPackagesSync(process.cwd());
 	type PackageJson = Packages["packages"][0]["packageJson"];
 	const python_packages = packages.filter(
 		(p) => (p.packageJson as PackageJson & { python: boolean }).python,
 	);
 
-	console.log(JSON.stringify(python_packages, null, 2));
 	const user = getInput("user");
 	const passwords = getInput("passwords");
 
@@ -41,16 +39,31 @@ async function run() {
 		)
 	).filter(Boolean) as Packages["packages"];
 
-	info("Installing prerequisites.");
-	await fs.mkdir("_action_temp/requirements", { recursive: true });
-	for (const [name, content] of Object.values(files)) {
-		console.log(name, content);
-		await fs.writeFile(`_action_temp/requirements/${name}`, content);
+	if (packages_to_publish.length === 0) {
+		info("No packages to publish.");
+		return;
 	}
 
-	const _files = await fs.readdir("_action_temp");
-	console.log(_files);
-	// await Promise.all()
+	const pws = passwords
+		.trim()
+		.split("\n")
+		.reduce((acc, next) => {
+			const [pkg, pwd] = next.split(":");
+			return {
+				...acc,
+				[pkg]: pwd,
+			};
+		}, {});
+
+	info("Installing prerequisites.");
+	await fs.mkdir("_action_temp/requirements", { recursive: true });
+
+	await Promise.all(
+		Object.values(files).map(([name, content]) =>
+			fs.writeFile(`_action_temp/requirements/${name}`, content),
+		),
+	);
+
 	await exec(
 		"pip",
 		[
@@ -89,17 +102,25 @@ async function run() {
 		},
 	);
 
-	info(user);
-	info(passwords);
+	const publishes = await Promise.all(
+		packages_to_publish.map((p) =>
+			publish_package(user, pws[p.packageJson.name], p.dir),
+		),
+	);
 
-	const pws = passwords
-		.trim()
-		.split("\n")
-		.map((p) => p.split(":"));
-
-	info(JSON.stringify(pws, null, 2));
+	publishes.map((p, i) => {
+		if (p) {
+			info(`Published ${packages_to_publish[i].packageJson.name}`);
+		} else {
+			warning(
+				`Failed to publish ${packages_to_publish[i].packageJson.name}@${packages_to_publish[i].packageJson.version}`,
+			);
+		}
+	});
 
 	// TODO: remove `_action_temp` directory at end of run
+
+	await fs.rmdir("_action_temp", { recursive: true });
 }
 
 run();
@@ -117,4 +138,21 @@ async function check_version_exists(package_name: string, version: string) {
 	const data = await body.json();
 
 	return version in data.releases;
+}
+
+async function publish_package(user: string, password: string, dir: string) {
+	try {
+		await exec("python", [join(dir, "..", "build_pypi.py")]);
+		await exec("twine", ["upload", `${join(dir, "..")}/dist/*`], {
+			env: {
+				...process.env,
+				TWINE_USERNAME: user,
+				TWINE_PASSWORD: password,
+			},
+		});
+		return true;
+	} catch (e) {
+		warning(e);
+		return false;
+	}
 }

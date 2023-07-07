@@ -11,7 +11,7 @@ async function run() {
 	await exec("git", ["show-ref"]);
 	const changed_pkgs = await getChangedPackagesSinceRef({
 		cwd: process.cwd(),
-		ref: "refs/heads/main",
+		ref: "refs/remotes/origin/main",
 	});
 
 	info(JSON.stringify(changed_pkgs, null, 2));

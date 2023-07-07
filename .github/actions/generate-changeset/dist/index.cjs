@@ -19524,7 +19524,7 @@ async function run() {
   await (0, import_exec.exec)("git", ["show-ref"]);
   const changed_pkgs = await (0, import_git.getChangedPackagesSinceRef)({
     cwd: process.cwd(),
-    ref: "refs/heads/main"
+    ref: "refs/remotes/origin/main"
   });
   (0, import_core.info)(JSON.stringify(changed_pkgs, null, 2));
 }

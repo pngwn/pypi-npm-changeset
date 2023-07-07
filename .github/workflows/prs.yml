@@ -1,0 +1,21 @@
+name: Changesets
+on:
+  pull_request:
+    branches:
+      - main
+
+env:
+  CI: true
+  NODE_OPTIONS: "--max-old-space-size=4096"
+
+jobs:
+  publish:
+    name: static checks
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: generate changeset
+        uses: "./.github/actions/generate-changeset"

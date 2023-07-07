@@ -1,25 +1,11 @@
-name: "Generate Docs"
+name: "Publish to PyPI"
 
-description: "Generate docs from markdown"
+description: "Publish packages to PyPI"
 
 inputs:
-  repo:
-    description: "the target repo of the docs"
+  packages:
+    description: "the packages to publish"
     required: true
-  branch:
-    description: "the target branch of the docs"
-    required: true
-  cf_token:
-    description: "the cloudflare token to use for deploying the docs"
-    required: true
-  docs_path:
-    description: "the path to your root documentation (without a leading slash)"
-    required: false
-    default: "documentation"
-  pkg_path:
-    description: "the path to your packages in a monorepo (without a leading slash)"
-    required: false
-    default: "packages"
 
 runs:
   using: "node16"

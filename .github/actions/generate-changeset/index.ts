@@ -8,7 +8,7 @@ import { join } from "path";
 import { getChangedPackagesSinceRef } from "@changesets/git";
 
 const globs_to_ignore = [
-	"!**/test/**/*",
+	"!**/test/**",
 	"!**/*.test.ts",
 	"!**/*.test.js",
 	"!**/*.spec.js",

@@ -19521,11 +19521,11 @@ var import_core = __toESM(require_core(), 1);
 var import_exec = __toESM(require_exec(), 1);
 var import_git = __toESM(require_git_cjs(), 1);
 var globs_to_ignore = [
-  "!**/test/**/*",
+  "!**/test/**",
   "!**/*.test.ts",
   "!**/*.test.js",
   "!**/*.spec.js",
-  "!**/*.test.ts",
+  "!**/*.spec.ts",
   "!**/*.stories.svelte"
 ];
 async function run() {

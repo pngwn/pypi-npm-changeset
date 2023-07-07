@@ -10,7 +10,7 @@ import { getChangedPackagesSinceRef } from "@changesets/git";
 async function run() {
 	const changed_pkgs = await getChangedPackagesSinceRef({
 		cwd: process.cwd(),
-		ref: "main",
+		ref: "refs/heads/main",
 	});
 
 	info(JSON.stringify(changed_pkgs, null, 2));

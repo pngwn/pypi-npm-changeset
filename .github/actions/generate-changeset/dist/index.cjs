@@ -18490,7 +18490,7 @@ var import_git = __toESM(require_git_cjs(), 1);
 async function run() {
   const changed_pkgs = await (0, import_git.getChangedPackagesSinceRef)({
     cwd: process.cwd(),
-    ref: "main"
+    ref: "refs/heads/main"
   });
   (0, import_core.info)(JSON.stringify(changed_pkgs, null, 2));
 }

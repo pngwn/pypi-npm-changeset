@@ -35947,13 +35947,14 @@ async function check_version_exists(package_name, version2) {
 async function publish_package(user, password, dir) {
   try {
     await (0, import_exec.exec)("sh", [(0, import_path.join)(dir, "..", "build_pypi.sh")]);
-    await (0, import_exec.exec)("twine", ["upload", `${(0, import_path.join)(dir, "..")}/dist/*`], {
-      env: {
-        ...process.env,
-        TWINE_USERNAME: user,
-        TWINE_PASSWORD: password
-      }
-    });
+    await (0, import_exec.exec)("twine", [
+      "upload",
+      "-u",
+      user,
+      "-p",
+      password,
+      `${(0, import_path.join)(dir, "..")}/dist/*`
+    ]);
     await (0, import_exec.exec)("rm", ["-rf", `${(0, import_path.join)(dir, "..")}/dist/*`]);
     await (0, import_exec.exec)("rm", ["-rf", `${(0, import_path.join)(dir, "..")}/build/*`]);
     return true;

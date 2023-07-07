@@ -145,13 +145,14 @@ async function check_version_exists(package_name: string, version: string) {
 async function publish_package(user: string, password: string, dir: string) {
 	try {
 		await exec("sh", [join(dir, "..", "build_pypi.sh")]);
-		await exec("twine", ["upload", `${join(dir, "..")}/dist/*`], {
-			env: {
-				...process.env,
-				TWINE_USERNAME: user,
-				TWINE_PASSWORD: password,
-			},
-		});
+		await exec("twine", [
+			"upload",
+			"-u",
+			user,
+			"-p",
+			password,
+			`${join(dir, "..")}/dist/*`,
+		]);
 		await exec("rm", ["-rf", `${join(dir, "..")}/dist/*`]);
 		await exec("rm", ["-rf", `${join(dir, "..")}/build/*`]);
 

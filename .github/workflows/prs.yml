@@ -1,8 +1,11 @@
 name: Changesets
 on:
   pull_request:
+    types: [opened, synchronize, reopened, edited, labeled, unlabeled, closed]
     branches:
       - main
+  label:
+    types: [created, deleted, edited]
 
 env:
   CI: true

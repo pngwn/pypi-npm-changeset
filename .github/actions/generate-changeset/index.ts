@@ -6,7 +6,7 @@ import { request } from "undici";
 import { promises as fs } from "fs";
 import { join } from "path";
 import { getChangedPackagesSinceRef } from "@changesets/git";
-import { gql_get_pr } from "./gql";
+import { gql_get_pr, create_changeset_comment } from "./gql";
 
 const dev_only_ignore_globs = [
 	"!**/test/**",
@@ -155,6 +155,44 @@ async function run() {
 	// 	ref,
 	// 	changedFilePatterns: dev_only_ignore_globs,
 	// });
+
+	const pr_comment_content = create_changeset_comment(
+		Array.from(updated_pkgs),
+		version,
+		title,
+	);
+
+	const changeset_content = `---
+${updated_pkgs.map((pkg) => `- ${pkg}: ${version}`).join("\n")}
+---
+
+${title}
+	`;
+
+	console.log(comment);
+	if (comment) {
+		await octokit.rest.issues.updateComment({
+			owner: context.repo.owner,
+			repo: context.repo.repo,
+			comment_id: comment.id,
+			body: pr_comment_content,
+		});
+	} else {
+		await octokit.rest.issues.createComment({
+			owner: context.repo.owner,
+			repo: context.repo.repo,
+			issue_number: context.issue.number,
+			body: pr_comment_content,
+		});
+	}
+
+	fs.writeFile(".changeset/changeset.md", changeset_content);
+	const _ref = getInput("ref");
+	await exec("git", ["add", "."]);
+	await exec("git", ["commit", "-m", "add changeset"]);
+	await exec("git", ["push", "origin", _ref]);
+
+	// context.payload.pull_request.
 }
 
 run();

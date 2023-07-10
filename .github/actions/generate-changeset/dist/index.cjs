@@ -27919,16 +27919,16 @@ async function run() {
   console.log(import_github.context.payload.action);
   const token = (0, import_core.getInput)("github-token");
   const octokit = (0, import_github.getOctokit)(token);
-  const response = await octokit.graphql(
-    gql_get_pr(import_github.context.issue.number)
-  );
+  const response = await octokit.graphql(gql_get_pr(import_github.context.issue.number));
   console.log(JSON.stringify(response, null, 2));
   const {
-    data: {
-      closingIssuesReferences: { edges: closes },
-      labels: { nodes: labels },
-      title,
-      comments: { nodes: comments }
+    repository: {
+      pulllRequest: {
+        closingIssuesReferences: { edges: closes },
+        labels: { nodes: labels },
+        title,
+        comments: { nodes: comments }
+      }
     }
   } = response;
   const the_comment = comments.data.find((comment) => {

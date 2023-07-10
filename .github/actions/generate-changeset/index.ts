@@ -38,18 +38,18 @@ async function run() {
 
 	// console.log(comments);
 
-	const response = await octokit.graphql<{ data: Record<string, any> }>(
-		gql_get_pr(context.issue.number),
-	);
+	const response = await octokit.graphql(gql_get_pr(context.issue.number));
 
 	console.log(JSON.stringify(response, null, 2));
 
 	const {
-		data: {
-			closingIssuesReferences: { edges: closes },
-			labels: { nodes: labels },
-			title,
-			comments: { nodes: comments },
+		repository: {
+			pulllRequest: {
+				closingIssuesReferences: { edges: closes },
+				labels: { nodes: labels },
+				title,
+				comments: { nodes: comments },
+			},
 		},
 	} = response;
 

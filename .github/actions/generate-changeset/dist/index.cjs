@@ -28060,6 +28060,8 @@ ${title}
   }
   import_fs.promises.writeFile(".changeset/changeset.md", changeset_content);
   const _ref = (0, import_core.getInput)("ref");
+  await (0, import_exec.exec)("git", ["config", "-global", "user.email", "you@example.com"]);
+  await (0, import_exec.exec)("git", ["config", "-global", "user.name", "my name"]);
   await (0, import_exec.exec)("git", ["add", "."]);
   await (0, import_exec.exec)("git", ["commit", "-m", "add changeset"]);
   await (0, import_exec.exec)("git", ["push", "origin", _ref]);

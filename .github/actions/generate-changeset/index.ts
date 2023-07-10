@@ -183,7 +183,7 @@ function find_version_label(labels: Label[]) {
 interface Comment {
 	id: string;
 	body: string;
-	owner: {
+	author: {
 		login: string;
 	};
 }
@@ -197,7 +197,7 @@ function find_comment(comments: Comment[]) {
 	return comment
 		? {
 				...comment,
-				owner: comment.owner.login,
+				owner: comment.author.login,
 		  }
 		: undefined;
 }

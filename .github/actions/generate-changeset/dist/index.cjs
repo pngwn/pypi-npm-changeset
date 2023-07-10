@@ -27996,7 +27996,7 @@ function find_comment(comments) {
   });
   return comment ? {
     ...comment,
-    owner: comment.owner.login
+    owner: comment.author.login
   } : void 0;
 }
 function get_version_bump(closes) {

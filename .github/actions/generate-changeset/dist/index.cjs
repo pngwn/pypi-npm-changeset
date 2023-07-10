@@ -27916,7 +27916,6 @@ var dev_only_ignore_globs = [
 ];
 async function run() {
   console.log(import_github.context.eventName);
-  console.log(import_github.context.action);
   console.log(import_github.context.payload.action);
   const token = (0, import_core.getInput)("github-token");
   const octokit = (0, import_github.getOctokit)(token);
@@ -27936,8 +27935,6 @@ async function run() {
   const comment = find_comment(comments);
   const version_label = find_version_label(labels) || get_version_bump(closes);
   console.log(comment, version_label);
-  console.log(JSON.stringify(closes, null, 2));
-  console.log(JSON.stringify(labels, null, 2));
   console.log(title);
   if (import_github.context.payload.action === "opened" || import_github.context.payload.action === "edited") {
   }
@@ -27996,12 +27993,12 @@ function find_comment(comments) {
   });
   return comment ? {
     ...comment,
-    owner: comment.author.login
+    author: comment.author.login
   } : void 0;
 }
 function get_version_bump(closes) {
   let version2 = "unknown";
-  return closes.forEach((c) => {
+  closes.forEach((c) => {
     const labels = c.labels.nodes.map((l) => l.name);
     if (labels.includes("bug")) {
       version2 = "patch";

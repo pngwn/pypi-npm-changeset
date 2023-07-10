@@ -23,29 +23,14 @@ type PackageJson = Packages["packages"][0]["packageJson"] & { python: boolean };
 
 async function run() {
 	console.log(context.eventName);
-	console.log(context.action);
 	console.log(context.payload.action);
 
 	const token = getInput("github-token");
-
 	const octokit = getOctokit(token);
-
-	// const comments = await octokit.rest.issues.listComments({
-	// 	owner: context.repo.owner,
-	// 	repo: context.repo.repo,
-	// 	issue_number: context.issue.number,
-	// });
-
-	// console.log(comments);
 
 	const response = await octokit.graphql<Record<string, any>>(
 		gql_get_pr(context.repo.owner, context.repo.repo, context.issue.number),
 	);
-	// console.log(JSON.stringify(response, null, 2));
-	// console.log(JSON.stringify(response, null, 2));
-	// console.log(response?.repository);
-	// console.log(response?.repository?.pullRequest);
-	// console.log(response?.repository?.pullRequest?.closingIssuesReferences);
 
 	const {
 		repository: {
@@ -63,8 +48,6 @@ async function run() {
 
 	console.log(comment, version_label);
 
-	console.log(JSON.stringify(closes, null, 2));
-	console.log(JSON.stringify(labels, null, 2));
 	console.log(title);
 
 	if (
@@ -197,7 +180,7 @@ function find_comment(comments: Comment[]) {
 	return comment
 		? {
 				...comment,
-				owner: comment.author.login,
+				author: comment.author.login,
 		  }
 		: undefined;
 }
@@ -213,7 +196,7 @@ interface ClosesLink {
 
 function get_version_bump(closes: ClosesLink[]) {
 	let version = "unknown";
-	return closes.forEach((c) => {
+	closes.forEach((c) => {
 		const labels = c.labels.nodes.map((l) => l.name);
 		if (labels.includes("bug")) {
 			version = "patch";

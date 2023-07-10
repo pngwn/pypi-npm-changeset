@@ -231,7 +231,10 @@ interface Label {
 }
 
 function find_version_label(labels: Label[]) {
-	return labels.filter((l) => l.name.startsWith("v:"))[0].name.slice(2);
+	return labels
+		.filter((l) => l.name.startsWith("v:"))[0]
+		.name.slice(2)
+		.trim();
 }
 
 interface Comment {

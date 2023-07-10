@@ -28069,7 +28069,7 @@ ${title}
 }
 run();
 function find_version_label(labels) {
-  return labels.filter((l) => l.name.startsWith("v:"))[0].name.slice(2);
+  return labels.filter((l) => l.name.startsWith("v:"))[0].name.slice(2).trim();
 }
 function find_comment(comments) {
   const comment = comments.find((comment2) => {

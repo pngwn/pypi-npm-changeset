@@ -233,6 +233,7 @@ interface Label {
 }
 
 function find_version_label(labels: Label[]) {
+	if (!labels.length) return undefined;
 	return labels
 		.filter((l) => l.name.startsWith("v:"))[0]
 		.name.slice(2)

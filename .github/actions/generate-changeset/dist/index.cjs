@@ -28069,6 +28069,8 @@ ${title}
 }
 run();
 function find_version_label(labels) {
+  if (!labels.length)
+    return void 0;
   return labels.filter((l) => l.name.startsWith("v:"))[0].name.slice(2).trim();
 }
 function find_comment(comments) {

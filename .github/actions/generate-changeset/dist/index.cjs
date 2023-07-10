@@ -27887,14 +27887,12 @@ function gql_get_pr(pr_number) {
         }
         title
         comments(first: 10) {
-          edges {
-            node {
-              id
-              author {
-                login
-              }
-              body
+          nodes {
+            id
+            author {
+              login
             }
+            body
           }
         }
       }
@@ -27919,8 +27917,9 @@ async function run() {
   console.log(import_github.context.payload.action);
   const token = (0, import_core.getInput)("github-token");
   const octokit = (0, import_github.getOctokit)(token);
-  const response = await octokit.graphql(gql_get_pr(import_github.context.issue.number));
-  console.log(JSON.stringify(response, null, 2));
+  const response = await octokit.graphql(
+    gql_get_pr(import_github.context.issue.number)
+  );
   const {
     repository: {
       pullRequest: {
@@ -27931,6 +27930,16 @@ async function run() {
       }
     }
   } = response;
+  const the_comment = comments.find((comment) => {
+    const body = comment.body;
+    return body?.includes("<!-- tag=changesets_gradio -->");
+  });
+  console.log(JSON.stringify(the_comment, null, 2));
+  if (the_comment) {
+    console.log("found comment");
+  } else {
+    console.log("no comment");
+  }
   console.log(JSON.stringify(closes, null, 2));
   console.log(JSON.stringify(labels, null, 2));
   console.log(title);

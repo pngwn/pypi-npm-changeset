@@ -23,14 +23,12 @@ export function gql_get_pr(pr_number: number) {
         }
         title
         comments(first: 10) {
-          edges {
-            node {
-              id
-              author {
-                login
-              }
-              body
+          nodes {
+            id
+            author {
+              login
             }
+            body
           }
         }
       }

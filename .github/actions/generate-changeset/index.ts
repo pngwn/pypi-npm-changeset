@@ -23,11 +23,6 @@ const dev_only_ignore_globs = [
 type PackageJson = Packages["packages"][0]["packageJson"] & { python: boolean };
 
 async function run() {
-	console.log(human_id);
-	// console.log(JSON.stringify(context, null, 2));
-	console.log(context.eventName);
-	console.log(context.payload.action);
-
 	const token = getInput("github-token");
 	const octokit = getOctokit(token);
 
@@ -46,35 +41,11 @@ async function run() {
 		},
 	} = response;
 
-	console.log({ comments, labels: JSON.stringify(labels, null, 2), closes });
-
 	const comment = find_comment(comments);
 	let version =
 		get_version_from_label(labels) || get_version_from_linked_issues(closes);
 	let type = get_type_from_label(labels) || get_type_from_linked_issues(closes);
 
-	// console.log(comment, version_label);
-
-	// console.log(title);
-
-	// if (
-	// 	context.payload.action === "opened" ||
-	// 	context.payload.action === "edited"
-	// ) {
-	// TODO: check if context.payload.changes.title is defined
-	// if so load the changset file and check if the text is the same as context.payload.changes.title
-	// if not then the changelog file has been manually edited, abort
-	// else change the changelog text to the PR title in context.pull_request.title
-	// }
-
-	// if (context.payload.action === "closed") {
-	// 	// do we need to do anything here?
-	// }
-
-	// if (
-	// 	context.payload.action === "opened" ||
-	// 	context.payload.action === "synchronize"
-	// ) {
 	const ref =
 		context.payload.pull_request?.base?.sha || "refs/remotes/origin/main";
 
@@ -121,9 +92,6 @@ async function run() {
 	const changed_dependency_files = dependency_files.filter(([f]) =>
 		changed_files.has(f),
 	);
-	console.log("changed deps", changed_dependency_files);
-	info("changed_pkgs");
-	info(JSON.stringify(changed_pkgs, null, 2));
 
 	if (version === "unknown") {
 		if (changed_pkgs.length) {
@@ -144,11 +112,6 @@ async function run() {
 	changed_dependency_files.forEach(([file, pkg]) => {
 		updated_pkgs.add(pkg);
 	});
-
-	console.log({ title });
-	console.log({ updated_pkgs });
-	console.log({ version });
-	console.log({ type });
 
 	const pr_comment_content = create_changeset_comment(
 		Array.from(updated_pkgs),
@@ -184,8 +147,8 @@ ${type}:${title}
 	if (changeset_content !== old_changeset_content) {
 		fs.writeFile(filename, changeset_content);
 
-		await exec("git", ["config", "--global", "user.email", "you@example.com"]);
-		await exec("git", ["config", "--global", "user.name", "my name"]);
+		// await exec("git", ["config", "--global", "user.email", "you@example.com"]);
+		// await exec("git", ["config", "--global", "user.name", "my name"]);
 		await exec("git", ["add", "."]);
 		await exec("git", ["commit", "-m", "add changeset"]);
 		await exec("git", ["push"]);

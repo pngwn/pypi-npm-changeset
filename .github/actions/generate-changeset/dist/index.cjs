@@ -28041,9 +28041,6 @@ var dev_only_ignore_globs = [
   "!**/requirements.txt"
 ];
 async function run() {
-  console.log(human_id);
-  console.log(import_github.context.eventName);
-  console.log(import_github.context.payload.action);
   const token = (0, import_core.getInput)("github-token");
   const octokit = (0, import_github.getOctokit)(token);
   const response = await octokit.graphql(
@@ -28059,7 +28056,6 @@ async function run() {
       }
     }
   } = response;
-  console.log({ comments, labels: JSON.stringify(labels, null, 2), closes });
   const comment = find_comment(comments);
   let version2 = get_version_from_label(labels) || get_version_from_linked_issues(closes);
   let type = get_type_from_label(labels) || get_type_from_linked_issues(closes);
@@ -28097,9 +28093,6 @@ async function run() {
   const changed_dependency_files = dependency_files.filter(
     ([f]) => changed_files.has(f)
   );
-  console.log("changed deps", changed_dependency_files);
-  (0, import_core.info)("changed_pkgs");
-  (0, import_core.info)(JSON.stringify(changed_pkgs, null, 2));
   if (version2 === "unknown") {
     if (changed_pkgs.length) {
       version2 = "minor";
@@ -28115,10 +28108,6 @@ async function run() {
   changed_dependency_files.forEach(([file, pkg]) => {
     updated_pkgs.add(pkg);
   });
-  console.log({ title });
-  console.log({ updated_pkgs });
-  console.log({ version: version2 });
-  console.log({ type });
   const pr_comment_content = create_changeset_comment(
     Array.from(updated_pkgs),
     version2,
@@ -28145,8 +28134,6 @@ ${type}:${title}
 	`;
   if (changeset_content !== old_changeset_content) {
     import_fs.promises.writeFile(filename, changeset_content);
-    await (0, import_exec.exec)("git", ["config", "--global", "user.email", "you@example.com"]);
-    await (0, import_exec.exec)("git", ["config", "--global", "user.name", "my name"]);
     await (0, import_exec.exec)("git", ["add", "."]);
     await (0, import_exec.exec)("git", ["commit", "-m", "add changeset"]);
     await (0, import_exec.exec)("git", ["push"]);

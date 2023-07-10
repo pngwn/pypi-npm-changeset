@@ -28065,7 +28065,7 @@ ${title}
   await (0, import_exec.exec)("git", ["config", "--global", "user.name", "my name"]);
   await (0, import_exec.exec)("git", ["add", "."]);
   await (0, import_exec.exec)("git", ["commit", "-m", "add changeset"]);
-  await (0, import_exec.exec)("git", ["push", "origin", import_github.context.payload.pull_request?.head.ref]);
+  await (0, import_exec.exec)("git", ["push"]);
 }
 run();
 function find_version_label(labels) {

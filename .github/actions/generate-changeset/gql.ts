@@ -1,16 +1,19 @@
-export function gql_get_pr(pr_number: number) {
+export function gql_get_pr(owner: string, repo: string, pr_number: number) {
 	return `{
-    repository(owner: "pngwn", name: "pypi-npm-changeset") {
+    repository(owner: ${owner}, name: ${repo}) {
       pullRequest(number: ${pr_number}) {
         id
         closingIssuesReferences(first: 50) {
-          edges {
-            node {
-              id
-              body
-              number
-              title
+          nodes {
+            labels(after: "", first: 10) {
+              nodes {
+                name
+              }
             }
+            id
+            body
+            number
+            title
           }
         }
         labels(first: 10) {

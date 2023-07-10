@@ -39,7 +39,7 @@ async function run() {
 	// console.log(comments);
 
 	const response = await octokit.graphql<Record<string, any>>(
-		gql_get_pr(context.issue.number),
+		gql_get_pr(context.repo.owner, context.repo.repo, context.issue.number),
 	);
 	// console.log(JSON.stringify(response, null, 2));
 	// console.log(JSON.stringify(response, null, 2));
@@ -50,7 +50,7 @@ async function run() {
 	const {
 		repository: {
 			pullRequest: {
-				closingIssuesReferences: { edges: closes },
+				closingIssuesReferences: { nodes: closes },
 				labels: { nodes: labels },
 				title,
 				comments: { nodes: comments },
@@ -58,18 +58,10 @@ async function run() {
 		},
 	} = response;
 
-	const the_comment = comments.find((comment) => {
-		const body = comment.body;
-		return body?.includes("<!-- tag=changesets_gradio -->");
-	});
+	const comment = find_comment(comments);
+	const version_label = find_version_label(labels) || get_version_bump(closes);
 
-	console.log(JSON.stringify(the_comment, null, 2));
-
-	if (the_comment) {
-		console.log("found comment");
-	} else {
-		console.log("no comment");
-	}
+	console.log(comment, version_label);
 
 	console.log(JSON.stringify(closes, null, 2));
 	console.log(JSON.stringify(labels, null, 2));
@@ -139,7 +131,8 @@ async function run() {
 		const changed_dependency_files = dependency_files.filter(([f]) =>
 			changed_files.has(f),
 		);
-		console.log(changed_dependency_files);
+		console.log("changed deps", changed_dependency_files);
+		info("changed_pkgs");
 		info(JSON.stringify(changed_pkgs, null, 2));
 	}
 
@@ -177,3 +170,57 @@ run();
  */
 
 // package(s) - version - type - changelog
+
+interface Label {
+	name: string;
+	id: string;
+}
+
+function find_version_label(labels: Label[]) {
+	return labels.filter((l) => l.name.startsWith("v:"))[0];
+}
+
+interface Comment {
+	id: string;
+	body: string;
+	owner: {
+		login: string;
+	};
+}
+
+function find_comment(comments: Comment[]) {
+	const comment = comments.find((comment) => {
+		const body = comment.body;
+		return body?.includes("<!-- tag=changesets_gradio -->");
+	});
+
+	return comment
+		? {
+				...comment,
+				owner: comment.owner.login,
+		  }
+		: undefined;
+}
+
+interface ClosesLink {
+	body: string;
+	number: number;
+	title: string;
+	labels: {
+		nodes: { name: string }[];
+	};
+}
+
+function get_version_bump(closes: ClosesLink[]) {
+	let version = "unknown";
+	return closes.forEach((c) => {
+		const labels = c.labels.nodes.map((l) => l.name);
+		if (labels.includes("bug")) {
+			version = "patch";
+		} else if (labels.includes("enhancement")) {
+			version = "minor";
+		}
+	});
+
+	return version;
+}

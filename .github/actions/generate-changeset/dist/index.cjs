@@ -27862,19 +27862,22 @@ var import_path = require("path");
 var import_git = __toESM(require_git_cjs(), 1);
 
 // .github/actions/generate-changeset/gql.ts
-function gql_get_pr(pr_number) {
+function gql_get_pr(owner, repo, pr_number) {
   return `{
-    repository(owner: "pngwn", name: "pypi-npm-changeset") {
+    repository(owner: ${owner}, name: ${repo}) {
       pullRequest(number: ${pr_number}) {
         id
         closingIssuesReferences(first: 50) {
-          edges {
-            node {
-              id
-              body
-              number
-              title
+          nodes {
+            labels(after: "", first: 10) {
+              nodes {
+                name
+              }
             }
+            id
+            body
+            number
+            title
           }
         }
         labels(first: 10) {
@@ -27918,28 +27921,21 @@ async function run() {
   const token = (0, import_core.getInput)("github-token");
   const octokit = (0, import_github.getOctokit)(token);
   const response = await octokit.graphql(
-    gql_get_pr(import_github.context.issue.number)
+    gql_get_pr(import_github.context.repo.owner, import_github.context.repo.repo, import_github.context.issue.number)
   );
   const {
     repository: {
       pullRequest: {
-        closingIssuesReferences: { edges: closes },
+        closingIssuesReferences: { nodes: closes },
         labels: { nodes: labels },
         title,
         comments: { nodes: comments }
       }
     }
   } = response;
-  const the_comment = comments.find((comment) => {
-    const body = comment.body;
-    return body?.includes("<!-- tag=changesets_gradio -->");
-  });
-  console.log(JSON.stringify(the_comment, null, 2));
-  if (the_comment) {
-    console.log("found comment");
-  } else {
-    console.log("no comment");
-  }
+  const comment = find_comment(comments);
+  const version_label = find_version_label(labels) || get_version_bump(closes);
+  console.log(comment, version_label);
   console.log(JSON.stringify(closes, null, 2));
   console.log(JSON.stringify(labels, null, 2));
   console.log(title);
@@ -27982,13 +27978,39 @@ async function run() {
     const changed_dependency_files = dependency_files.filter(
       ([f]) => changed_files.has(f)
     );
-    console.log(changed_dependency_files);
+    console.log("changed deps", changed_dependency_files);
+    (0, import_core.info)("changed_pkgs");
     (0, import_core.info)(JSON.stringify(changed_pkgs, null, 2));
   }
   if (import_github.context.payload.action === "labeled" || import_github.context.payload.action === "unlabeled") {
   }
 }
 run();
+function find_version_label(labels) {
+  return labels.filter((l) => l.name.startsWith("v:"))[0];
+}
+function find_comment(comments) {
+  const comment = comments.find((comment2) => {
+    const body = comment2.body;
+    return body?.includes("<!-- tag=changesets_gradio -->");
+  });
+  return comment ? {
+    ...comment,
+    owner: comment.owner.login
+  } : void 0;
+}
+function get_version_bump(closes) {
+  let version2 = "unknown";
+  return closes.forEach((c) => {
+    const labels = c.labels.nodes.map((l) => l.name);
+    if (labels.includes("bug")) {
+      version2 = "patch";
+    } else if (labels.includes("enhancement")) {
+      version2 = "minor";
+    }
+  });
+  return version2;
+}
 /*! Bundled license information:
 
 is-extglob/index.js:

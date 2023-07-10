@@ -194,8 +194,8 @@ ${title}
 	// git config --global user.email "you@example.com"
 	// git config --global user.name "Your Name"
 
-	await exec("git", ["config", "-global", "user.email", "you@example.com"]);
-	await exec("git", ["config", "-global", "user.name", "my name"]);
+	await exec("git", ["config", "--global", "user.email", "you@example.com"]);
+	await exec("git", ["config", "--global", "user.name", "my name"]);
 	await exec("git", ["add", "."]);
 	await exec("git", ["commit", "-m", "add changeset"]);
 	await exec("git", ["push", "origin", _ref]);

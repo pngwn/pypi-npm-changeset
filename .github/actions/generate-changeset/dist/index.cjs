@@ -27956,7 +27956,6 @@ var dev_only_ignore_globs = [
   "!**/requirements.txt"
 ];
 async function run() {
-  console.log(JSON.stringify(import_github.context, null, 2));
   console.log(import_github.context.eventName);
   console.log(import_github.context.payload.action);
   const token = (0, import_core.getInput)("github-token");
@@ -27974,6 +27973,7 @@ async function run() {
       }
     }
   } = response;
+  console.log(comments, labels, closes);
   const comment = find_comment(comments);
   let version2 = find_version_label(labels) || get_version_bump(closes);
   const ref = import_github.context.payload.pull_request?.base?.sha || "refs/remotes/origin/main";

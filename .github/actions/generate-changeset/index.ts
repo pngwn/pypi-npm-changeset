@@ -22,7 +22,7 @@ const dev_only_ignore_globs = [
 type PackageJson = Packages["packages"][0]["packageJson"] & { python: boolean };
 
 async function run() {
-	console.log(JSON.stringify(context, null, 2));
+	// console.log(JSON.stringify(context, null, 2));
 	console.log(context.eventName);
 	console.log(context.payload.action);
 
@@ -43,6 +43,8 @@ async function run() {
 			},
 		},
 	} = response;
+
+	console.log(comments, labels, closes);
 
 	const comment = find_comment(comments);
 	let version = find_version_label(labels) || get_version_bump(closes);

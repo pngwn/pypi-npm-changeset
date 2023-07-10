@@ -22,6 +22,7 @@ const dev_only_ignore_globs = [
 type PackageJson = Packages["packages"][0]["packageJson"] & { python: boolean };
 
 async function run() {
+	console.log(JSON.stringify(context, null, 2));
 	console.log(context.eventName);
 	console.log(context.payload.action);
 

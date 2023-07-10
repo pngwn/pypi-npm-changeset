@@ -27956,6 +27956,7 @@ var dev_only_ignore_globs = [
   "!**/requirements.txt"
 ];
 async function run() {
+  console.log(JSON.stringify(import_github.context, null, 2));
   console.log(import_github.context.eventName);
   console.log(import_github.context.payload.action);
   const token = (0, import_core.getInput)("github-token");

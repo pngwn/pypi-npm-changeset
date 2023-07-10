@@ -27973,7 +27973,7 @@ async function run() {
       }
     }
   } = response;
-  console.log(comments, labels, closes);
+  console.log({ comments, labels: JSON.stringify(labels, null, 2), closes });
   const comment = find_comment(comments);
   let version2 = find_version_label(labels) || get_version_bump(closes);
   const ref = import_github.context.payload.pull_request?.base?.sha || "refs/remotes/origin/main";

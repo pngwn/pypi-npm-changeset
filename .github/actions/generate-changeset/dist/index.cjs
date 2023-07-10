@@ -27897,6 +27897,7 @@ function gql_get_pr(owner, repo, pr_number) {
               login
             }
             body
+            fullDatabaseId
           }
         }
       }
@@ -28046,7 +28047,7 @@ ${title}
     await octokit.rest.issues.updateComment({
       owner: import_github.context.repo.owner,
       repo: import_github.context.repo.repo,
-      comment_id: comment.id,
+      comment_id: parseInt(comment.fullDatabaseId),
       body: pr_comment_content
     });
   } else {

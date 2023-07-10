@@ -176,7 +176,7 @@ ${title}
 		await octokit.rest.issues.updateComment({
 			owner: context.repo.owner,
 			repo: context.repo.repo,
-			comment_id: comment.id,
+			comment_id: parseInt(comment.fullDatabaseId),
 			body: pr_comment_content,
 		});
 	} else {
@@ -233,6 +233,7 @@ interface Comment {
 	author: {
 		login: string;
 	};
+	fullDatabaseId: string;
 }
 
 function find_comment(comments: Comment[]) {

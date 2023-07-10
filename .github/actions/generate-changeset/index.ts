@@ -56,7 +56,7 @@ async function run() {
 		},
 	} = response;
 
-	const the_comment = comments.data.find((comment) => {
+	const the_comment = comments.find((comment) => {
 		const body = comment.body;
 		return body?.includes("<!-- tag=changesets_gradio -->");
 	});

@@ -27887,7 +27887,7 @@ var require_dist = __commonJS({
         return a.length < b.length ? a : b;
       });
     }
-    function humanId(options) {
+    function humanId2(options) {
       if (options === void 0) {
         options = {};
       }
@@ -27908,7 +27908,7 @@ var require_dist = __commonJS({
         });
       return res.join(separator);
     }
-    exports.humanId = humanId;
+    exports.humanId = humanId2;
     function poolSize(options) {
       if (options === void 0) {
         options = {};
@@ -27933,7 +27933,7 @@ var require_dist = __commonJS({
       return shortest(exports.adjectives).length * adjectiveCount + adjectiveCount * separator.length + shortest(exports.nouns).length + separator.length + shortest(exports.verbs).length + (addAdverb ? shortest(exports.adverbs).length + separator.length : 0);
     }
     exports.minLength = minLength;
-    exports.default = humanId;
+    exports.default = humanId2;
   }
 });
 
@@ -28029,7 +28029,7 @@ _Maintainers or the PR author can modify the PR title to modify this entry._
 }
 
 // .github/actions/generate-changeset/index.ts
-var import_human_id = __toESM(require_dist(), 1);
+var human_id = __toESM(require_dist(), 1);
 var dev_only_ignore_globs = [
   "!**/test/**",
   "!**/*.test.ts",
@@ -28041,7 +28041,7 @@ var dev_only_ignore_globs = [
   "!**/requirements.txt"
 ];
 async function run() {
-  console.log(import_human_id.default);
+  console.log(human_id);
   console.log(import_github.context.eventName);
   console.log(import_github.context.payload.action);
   const token = (0, import_core.getInput)("github-token");
@@ -28131,7 +28131,7 @@ async function run() {
   if (filename) {
     old_changeset_content = (await import_fs.promises.readFile(filename, "utf-8")).trim();
   } else {
-    const id = (0, import_human_id.default)({
+    const id = human_id.humanId({
       separator: "-",
       capitalize: false
     });

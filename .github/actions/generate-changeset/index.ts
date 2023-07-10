@@ -7,7 +7,7 @@ import { promises as fs } from "fs";
 import { join } from "path";
 import { getChangedPackagesSinceRef } from "@changesets/git";
 import { gql_get_pr, create_changeset_comment } from "./gql";
-import human_id from "human-id";
+import * as human_id from "human-id";
 
 const dev_only_ignore_globs = [
 	"!**/test/**",
@@ -164,7 +164,7 @@ async function run() {
 	if (filename) {
 		old_changeset_content = (await fs.readFile(filename, "utf-8")).trim();
 	} else {
-		const id = human_id({
+		const id = human_id.humanId({
 			separator: "-",
 			capitalize: false,
 		});

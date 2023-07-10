@@ -199,7 +199,7 @@ ${title}
 	await exec("git", ["config", "--global", "user.name", "my name"]);
 	await exec("git", ["add", "."]);
 	await exec("git", ["commit", "-m", "add changeset"]);
-	await exec("git", ["push", "origin", _ref]);
+	await exec("git", ["push", "origin", context.payload.pull_request?.head.ref]);
 
 	// context.payload.pull_request.
 }

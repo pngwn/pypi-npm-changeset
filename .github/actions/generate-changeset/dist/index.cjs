@@ -27920,10 +27920,29 @@ async function run() {
   const token = (0, import_core.getInput)("github-token");
   const octokit = (0, import_github.getOctokit)(token);
   const response = await octokit.graphql(gql_get_pr(import_github.context.issue.number));
-  console.log(JSON.stringify(response, null, 2));
-  console.log(response?.repository);
-  console.log(response?.repository?.pulllRequest);
-  console.log(response?.repository?.pulllRequest?.closingIssuesReferences);
+  const {
+    repository: {
+      pullRequest: {
+        closingIssuesReferences: { edges: closes },
+        labels: { nodes: labels },
+        title,
+        comments: { nodes: comments }
+      }
+    }
+  } = response;
+  const the_comment = comments.data.find((comment) => {
+    const body = comment.body;
+    return body?.includes("<!-- tag=changesets_gradio -->");
+  });
+  console.log(JSON.stringify(the_comment, null, 2));
+  if (the_comment) {
+    console.log("found comment");
+  } else {
+    console.log("no comment");
+  }
+  console.log(JSON.stringify(closes, null, 2));
+  console.log(JSON.stringify(labels, null, 2));
+  console.log(title);
   if (import_github.context.payload.action === "opened" || import_github.context.payload.action === "edited") {
   }
   if (import_github.context.payload.action === "closed") {

@@ -1,6 +1,6 @@
 export function gql_get_pr(owner: string, repo: string, pr_number: number) {
 	return `{
-    repository(owner: ${owner}, name: ${repo}) {
+    repository(owner: "${owner}", name: "${repo}") {
       pullRequest(number: ${pr_number}) {
         id
         closingIssuesReferences(first: 50) {

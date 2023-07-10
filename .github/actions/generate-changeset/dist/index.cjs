@@ -27864,7 +27864,7 @@ var import_git = __toESM(require_git_cjs(), 1);
 // .github/actions/generate-changeset/gql.ts
 function gql_get_pr(owner, repo, pr_number) {
   return `{
-    repository(owner: ${owner}, name: ${repo}) {
+    repository(owner: "${owner}", name: "${repo}") {
       pullRequest(number: ${pr_number}) {
         id
         closingIssuesReferences(first: 50) {

@@ -28041,6 +28041,7 @@ var dev_only_ignore_globs = [
   "!**/requirements.txt"
 ];
 async function run() {
+  console.log(import_human_id.default);
   console.log(import_github.context.eventName);
   console.log(import_github.context.payload.action);
   const token = (0, import_core.getInput)("github-token");
@@ -28130,10 +28131,11 @@ async function run() {
   if (filename) {
     old_changeset_content = (await import_fs.promises.readFile(filename, "utf-8")).trim();
   } else {
-    filename = `.changeset/${(0, import_human_id.default)({
+    const id = (0, import_human_id.default)({
       separator: "-",
       capitalize: false
-    })}.md`;
+    });
+    filename = `.changeset/${id}.md`;
   }
   const changeset_content = `---
 ${Array.from(updated_pkgs).map((pkg) => `"${pkg}": ${version2}`).join("\n")}

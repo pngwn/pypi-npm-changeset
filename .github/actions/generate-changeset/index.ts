@@ -23,6 +23,7 @@ const dev_only_ignore_globs = [
 type PackageJson = Packages["packages"][0]["packageJson"] & { python: boolean };
 
 async function run() {
+	console.log(human_id);
 	// console.log(JSON.stringify(context, null, 2));
 	console.log(context.eventName);
 	console.log(context.payload.action);
@@ -163,10 +164,12 @@ async function run() {
 	if (filename) {
 		old_changeset_content = (await fs.readFile(filename, "utf-8")).trim();
 	} else {
-		filename = `.changeset/${human_id({
+		const id = human_id({
 			separator: "-",
 			capitalize: false,
-		})}.md`;
+		});
+
+		filename = `.changeset/${id}.md`;
 	}
 
 	const changeset_content = `---

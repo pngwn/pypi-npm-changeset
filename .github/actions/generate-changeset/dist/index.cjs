@@ -27919,6 +27919,10 @@ async function run() {
   console.log(import_github.context.payload.action);
   const token = (0, import_core.getInput)("github-token");
   const octokit = (0, import_github.getOctokit)(token);
+  const response = await octokit.graphql(
+    gql_get_pr(import_github.context.issue.number)
+  );
+  JSON.stringify(response, null, 2);
   const {
     data: {
       closingIssuesReferences: { edges: closes },
@@ -27926,9 +27930,7 @@ async function run() {
       title,
       comments: { nodes: comments }
     }
-  } = await octokit.graphql(
-    gql_get_pr(import_github.context.issue.number)
-  );
+  } = response;
   const the_comment = comments.data.find((comment) => {
     const body = comment.body;
     return body?.includes("<!-- tag=changesets_gradio -->");

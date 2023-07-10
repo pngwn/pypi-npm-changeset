@@ -1,7 +1,7 @@
 ---
-- @pngwn/gradio-test-client: minor
-- @pngwn/gradio-test-pkg-three: minor
+"@pngwn/gradio-test-client": minor
+"@pngwn/gradio-test-pkg-three": minor
 ---
 
-A new title
+feat:A new title
 	

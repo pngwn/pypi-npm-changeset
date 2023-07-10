@@ -27922,7 +27922,7 @@ async function run() {
   const response = await octokit.graphql(
     gql_get_pr(import_github.context.issue.number)
   );
-  JSON.stringify(response, null, 2);
+  console.log(JSON.stringify(response, null, 2));
   const {
     data: {
       closingIssuesReferences: { edges: closes },

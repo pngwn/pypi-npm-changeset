@@ -42,7 +42,7 @@ async function run() {
 		gql_get_pr(context.issue.number),
 	);
 
-	JSON.stringify(response, null, 2);
+	console.log(JSON.stringify(response, null, 2));
 
 	const {
 		data: {

@@ -27917,7 +27917,8 @@ async function run() {
   console.log(import_github.context.eventName);
   console.log(import_github.context.action);
   console.log(import_github.context.payload.action);
-  const octokit = (0, import_github.getOctokit)(process.env.GITHUB_TOKEN);
+  const token = (0, import_core.getInput)("github-token");
+  const octokit = (0, import_github.getOctokit)(token);
   const {
     data: {
       closingIssuesReferences: { edges: closes },

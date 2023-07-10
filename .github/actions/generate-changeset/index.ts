@@ -26,7 +26,9 @@ async function run() {
 	console.log(context.action);
 	console.log(context.payload.action);
 
-	const octokit = getOctokit(process.env.GITHUB_TOKEN!);
+	const token = getInput("github-token");
+
+	const octokit = getOctokit(token);
 
 	// const comments = await octokit.rest.issues.listComments({
 	// 	owner: context.repo.owner,

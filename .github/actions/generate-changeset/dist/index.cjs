@@ -27853,6 +27853,90 @@ var require_git_cjs = __commonJS({
   }
 });
 
+// node_modules/.pnpm/human-id@4.0.0/node_modules/human-id/dist/index.js
+var require_dist = __commonJS({
+  "node_modules/.pnpm/human-id@4.0.0/node_modules/human-id/dist/index.js"(exports) {
+    "use strict";
+    var __spreadArray = exports && exports.__spreadArray || function(to, from, pack) {
+      if (pack || arguments.length === 2)
+        for (var i = 0, l = from.length, ar; i < l; i++) {
+          if (ar || !(i in from)) {
+            if (!ar)
+              ar = Array.prototype.slice.call(from, 0, i);
+            ar[i] = from[i];
+          }
+        }
+      return to.concat(ar || Array.prototype.slice.call(from));
+    };
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.minLength = exports.maxLength = exports.poolSize = exports.humanId = exports.adverbs = exports.verbs = exports.nouns = exports.adjectives = void 0;
+    exports.adjectives = ["afraid", "all", "angry", "beige", "big", "better", "bitter", "blue", "brave", "breezy", "bright", "brown", "bumpy", "busy", "calm", "chatty", "chilly", "chubby", "clean", "clear", "clever", "cold", "crazy", "cruel", "cuddly", "curly", "curvy", "cute", "common", "cold", "cool", "cyan", "dark", "deep", "dirty", "dry", "dull", "eager", "early", "easy", "eight", "eighty", "eleven", "empty", "every", "evil", "fair", "famous", "fast", "fancy", "few", "fine", "fifty", "five", "flat", "fluffy", "floppy", "forty", "four", "free", "fresh", "fruity", "full", "funny", "fuzzy", "gentle", "giant", "gold", "good", "great", "green", "grumpy", "happy", "heavy", "hip", "honest", "hot", "huge", "hungry", "icy", "itchy", "khaki", "kind", "large", "late", "lazy", "lemon", "legal", "light", "little", "long", "loose", "loud", "lovely", "lucky", "major", "many", "mean", "metal", "mighty", "modern", "moody", "nasty", "neat", "new", "nice", "nine", "ninety", "odd", "old", "olive", "open", "orange", "pink", "plain", "plenty", "polite", "poor", "pretty", "proud", "public", "puny", "petite", "purple", "quick", "quiet", "rare", "real", "ready", "red", "rich", "ripe", "rotten", "rude", "sad", "salty", "seven", "shaggy", "shaky", "sharp", "shiny", "short", "shy", "silent", "silly", "silver", "six", "sixty", "slick", "slimy", "slow", "small", "smart", "smooth", "social", "soft", "solid", "some", "sour", "spicy", "spotty", "stale", "strong", "stupid", "sweet", "swift", "tall", "tame", "tangy", "tasty", "ten", "tender", "thick", "thin", "thirty", "three", "tidy", "tiny", "tired", "tough", "tricky", "true", "twelve", "twenty", "two", "upset", "vast", "violet", "warm", "weak", "wet", "whole", "wicked", "wide", "wild", "wise", "witty", "yellow", "young", "yummy"];
+    exports.nouns = ["apes", "animals", "areas", "bars", "banks", "baths", "breads", "bushes", "cloths", "clowns", "clubs", "hoops", "loops", "memes", "papers", "parks", "paths", "showers", "sides", "signs", "sites", "streets", "teeth", "tires", "webs", "actors", "ads", "adults", "aliens", "ants", "apples", "baboons", "badgers", "bags", "bananas", "bats", "beans", "bears", "beds", "beers", "bees", "berries", "bikes", "birds", "boats", "bobcats", "books", "bottles", "boxes", "brooms", "buckets", "bugs", "buses", "buttons", "camels", "cases", "cameras", "candies", "candles", "carpets", "carrots", "carrots", "cars", "cats", "chairs", "chefs", "chicken", "clocks", "clouds", "coats", "cobras", "coins", "corners", "colts", "comics", "cooks", "cougars", "regions", "results", "cows", "crabs", "crabs", "crews", "cups", "cities", "cycles", "dancers", "days", "deer", "dingos", "dodos", "dogs", "dolls", "donkeys", "donuts", "doodles", "doors", "dots", "dragons", "drinks", "dryers", "ducks", "ducks", "eagles", "ears", "eels", "eggs", "ends", "mammals", "emus", "experts", "eyes", "facts", "falcons", "fans", "feet", "files", "flies", "flowers", "forks", "foxes", "friends", "frogs", "games", "garlics", "geckos", "geese", "ghosts", "ghosts", "gifts", "glasses", "goats", "grapes", "groups", "guests", "hairs", "hands", "hats", "heads", "hornets", "horses", "hotels", "hounds", "houses", "humans", "icons", "ideas", "impalas", "insects", "islands", "items", "jars", "jeans", "jobs", "jokes", "keys", "kids", "kings", "kiwis", "knives", "lamps", "lands", "laws", "lemons", "lies", "lights", "lines", "lions", "lizards", "llamas", "mails", "mangos", "maps", "masks", "meals", "melons", "mice", "mirrors", "moments", "moles", "monkeys", "months", "moons", "moose", "mugs", "nails", "needles", "news", "nights", "numbers", "olives", "onions", "oranges", "otters", "owls", "pandas", "pans", "pants", "papayas", "parents", "parts", "parrots", "paws", "peaches", "pears", "peas", "pens", "pets", "phones", "pianos", "pigs", "pillows", "places", "planes", "planets", "plants", "plums", "poems", "poets", "points", "pots", "pugs", "pumas", "queens", "rabbits", "radios", "rats", "ravens", "readers", "rice", "rings", "rivers", "rockets", "rocks", "rooms", "roses", "rules", "schools", "bats", "seals", "seas", "sheep", "shirts", "shoes", "shrimps", "singers", "sloths", "snails", "snakes", "socks", "spiders", "spies", "spoons", "squids", "stars", "states", "steaks", "wings", "suits", "suns", "swans", "symbols", "tables", "taxes", "taxis", "teams", "terms", "things", "ties", "tigers", "times", "tips", "toes", "towns", "tools", "toys", "trains", "trams", "trees", "turkeys", "turtles", "vans", "views", "walls", "walls", "wasps", "waves", "ways", "weeks", "windows", "wolves", "women", "wombats", "words", "worlds", "worms", "yaks", "years", "zebras", "zoos"];
+    exports.verbs = ["accept", "act", "add", "admire", "agree", "allow", "appear", "argue", "arrive", "ask", "attack", "attend", "bake", "bathe", "battle", "beam", "beg", "begin", "behave", "bet", "boil", "bow", "brake", "brush", "build", "burn", "buy", "call", "camp", "care", "carry", "change", "cheat", "check", "cheer", "chew", "clap", "clean", "cough", "count", "cover", "crash", "create", "cross", "cry", "cut", "dance", "decide", "deny", "design", "dig", "divide", "do", "double", "doubt", "draw", "dream", "dress", "drive", "drop", "drum", "eat", "end", "enter", "enjoy", "exist", "fail", "fall", "feel", "fetch", "film", "find", "fix", "flash", "float", "flow", "fly", "fold", "follow", "fry", "give", "glow", "go", "grab", "greet", "grin", "grow", "guess", "hammer", "hang", "happen", "heal", "hear", "help", "hide", "hope", "hug", "hunt", "invent", "invite", "itch", "jam", "jog", "join", "joke", "judge", "juggle", "jump", "kick", "kiss", "kneel", "knock", "know", "laugh", "lay", "lead", "learn", "leave", "lick", "like", "lie", "listen", "live", "look", "lose", "love", "make", "march", "marry", "mate", "matter", "melt", "mix", "move", "nail", "notice", "obey", "occur", "open", "own", "pay", "peel", "play", "poke", "post", "press", "prove", "pull", "pump", "pick", "punch", "push", "raise", "read", "refuse", "relate", "relax", "remain", "repair", "repeat", "reply", "report", "rescue", "rest", "retire", "return", "rhyme", "ring", "roll", "rule", "run", "rush", "say", "scream", "see", "search", "sell", "send", "serve", "shake", "share", "shave", "shine", "show", "shop", "shout", "sin", "sink", "sing", "sip", "sit", "sleep", "slide", "smash", "smell", "smile", "smoke", "sneeze", "sniff", "sort", "speak", "spend", "stand", "start", "stay", "stick", "stop", "stare", "study", "suffer", "swim", "switch", "take", "talk", "tan", "tap", "taste", "teach", "tease", "tell", "thank", "think", "throw", "tickle", "tie", "trade", "train", "travel", "try", "turn", "type", "unite", "vanish", "visit", "wait", "walk", "warn", "wash", "watch", "wave", "wear", "win", "wink", "wish", "wonder", "work", "worry", "write", "yawn", "yell"];
+    exports.adverbs = ["bravely", "brightly", "busily", "daily", "freely", "hungrily", "joyously", "knowlingly", "lazily", "oddly", "mysteriously", "noisily", "politely", "quickly", "quietly", "rapidly", "safely", "sleepily", "slowly", "truly", "yearly"];
+    function random(arr) {
+      return arr[Math.floor(Math.random() * arr.length)];
+    }
+    function longest(arr) {
+      return arr.reduce(function(a, b) {
+        return a.length > b.length ? a : b;
+      });
+    }
+    function shortest(arr) {
+      return arr.reduce(function(a, b) {
+        return a.length < b.length ? a : b;
+      });
+    }
+    function humanId(options) {
+      if (options === void 0) {
+        options = {};
+      }
+      if (typeof options === "string")
+        options = { separator: options };
+      if (typeof options === "boolean")
+        options = { capitalize: options };
+      var _a = options.separator, separator = _a === void 0 ? "" : _a, _b = options.capitalize, capitalize = _b === void 0 ? true : _b, _c = options.adjectiveCount, adjectiveCount = _c === void 0 ? 1 : _c, _d = options.addAdverb, addAdverb = _d === void 0 ? false : _d;
+      var res = __spreadArray(__spreadArray(__spreadArray([], __spreadArray([], Array(adjectiveCount), true).map(function(_) {
+        return random(exports.adjectives);
+      }), true), [
+        random(exports.nouns),
+        random(exports.verbs)
+      ], false), addAdverb ? [random(exports.adverbs)] : [], true);
+      if (capitalize)
+        res = res.map(function(r) {
+          return r.charAt(0).toUpperCase() + r.substr(1);
+        });
+      return res.join(separator);
+    }
+    exports.humanId = humanId;
+    function poolSize(options) {
+      if (options === void 0) {
+        options = {};
+      }
+      var _a = options.adjectiveCount, adjectiveCount = _a === void 0 ? 1 : _a, _b = options.addAdverb, addAdverb = _b === void 0 ? false : _b;
+      return exports.adjectives.length * adjectiveCount * exports.nouns.length * exports.verbs.length * (addAdverb ? exports.adverbs.length : 1);
+    }
+    exports.poolSize = poolSize;
+    function maxLength(options) {
+      if (options === void 0) {
+        options = {};
+      }
+      var _a = options.adjectiveCount, adjectiveCount = _a === void 0 ? 1 : _a, _b = options.addAdverb, addAdverb = _b === void 0 ? false : _b, _c = options.separator, separator = _c === void 0 ? "" : _c;
+      return longest(exports.adjectives).length * adjectiveCount + adjectiveCount * separator.length + longest(exports.nouns).length + separator.length + longest(exports.verbs).length + (addAdverb ? longest(exports.adverbs).length + separator.length : 0);
+    }
+    exports.maxLength = maxLength;
+    function minLength(options) {
+      if (options === void 0) {
+        options = {};
+      }
+      var _a = options.adjectiveCount, adjectiveCount = _a === void 0 ? 1 : _a, _b = options.addAdverb, addAdverb = _b === void 0 ? false : _b, _c = options.separator, separator = _c === void 0 ? "" : _c;
+      return shortest(exports.adjectives).length * adjectiveCount + adjectiveCount * separator.length + shortest(exports.nouns).length + separator.length + shortest(exports.verbs).length + (addAdverb ? shortest(exports.adverbs).length + separator.length : 0);
+    }
+    exports.minLength = minLength;
+    exports.default = humanId;
+  }
+});
+
 // .github/actions/generate-changeset/index.ts
 var import_core = __toESM(require_core(), 1);
 var import_exec = __toESM(require_exec(), 1);
@@ -27945,6 +28029,7 @@ _Maintainers or the PR author can modify the PR title to modify this entry._
 }
 
 // .github/actions/generate-changeset/index.ts
+var import_human_id = __toESM(require_dist(), 1);
 var dev_only_ignore_globs = [
   "!**/test/**",
   "!**/*.test.ts",
@@ -27975,7 +28060,8 @@ async function run() {
   } = response;
   console.log({ comments, labels: JSON.stringify(labels, null, 2), closes });
   const comment = find_comment(comments);
-  let version2 = find_version_label(labels) || get_version_bump(closes);
+  let version2 = get_version_from_label(labels) || get_version_from_linked_issues(closes);
+  let type = get_type_from_label(labels) || get_type_from_linked_issues(closes);
   const ref = import_github.context.payload.pull_request?.base?.sha || "refs/remotes/origin/main";
   const changed_pkgs = await (0, import_git.getChangedPackagesSinceRef)({
     cwd: process.cwd(),
@@ -28031,19 +28117,38 @@ async function run() {
   console.log({ title });
   console.log({ updated_pkgs });
   console.log({ version: version2 });
-  console.log({ type: "TODO" });
+  console.log({ type });
   const pr_comment_content = create_changeset_comment(
     Array.from(updated_pkgs),
     version2,
     title
   );
+  let filename = Array.from(changed_files).find(
+    (f) => f.startsWith(".changeset/")
+  );
+  let old_changeset_content = "";
+  if (filename) {
+    old_changeset_content = (await import_fs.promises.readFile(filename, "utf-8")).trim();
+  } else {
+    filename = `.changeset/${(0, import_human_id.default)({
+      separator: "-",
+      capitalize: false
+    })}.md`;
+  }
   const changeset_content = `---
-${Array.from(updated_pkgs).map((pkg) => `- ${pkg}: ${version2}`).join("\n")}
+${Array.from(updated_pkgs).map((pkg) => `"${pkg}": ${version2}`).join("\n")}
 ---
 
-${title}
+${type}:${title}
 	`;
-  console.log(comment);
+  if (changeset_content !== old_changeset_content) {
+    import_fs.promises.writeFile(filename, changeset_content);
+    await (0, import_exec.exec)("git", ["config", "--global", "user.email", "you@example.com"]);
+    await (0, import_exec.exec)("git", ["config", "--global", "user.name", "my name"]);
+    await (0, import_exec.exec)("git", ["add", "."]);
+    await (0, import_exec.exec)("git", ["commit", "-m", "add changeset"]);
+    await (0, import_exec.exec)("git", ["push"]);
+  }
   if (comment) {
     await octokit.rest.issues.updateComment({
       owner: import_github.context.repo.owner,
@@ -28059,19 +28164,17 @@ ${title}
       body: pr_comment_content
     });
   }
-  import_fs.promises.writeFile(".changeset/changeset.md", changeset_content);
-  const _ref = (0, import_core.getInput)("ref");
-  await (0, import_exec.exec)("git", ["config", "--global", "user.email", "you@example.com"]);
-  await (0, import_exec.exec)("git", ["config", "--global", "user.name", "my name"]);
-  await (0, import_exec.exec)("git", ["add", "."]);
-  await (0, import_exec.exec)("git", ["commit", "-m", "add changeset"]);
-  await (0, import_exec.exec)("git", ["push"]);
 }
 run();
-function find_version_label(labels) {
+function get_version_from_label(labels) {
   if (!labels.length)
     return void 0;
   return labels.filter((l) => l.name.startsWith("v:"))[0].name.slice(2).trim();
+}
+function get_type_from_label(labels) {
+  if (!labels.length)
+    return void 0;
+  return labels.filter((l) => l.name.startsWith("t:"))[0].name.slice(2).trim();
 }
 function find_comment(comments) {
   const comment = comments.find((comment2) => {
@@ -28083,7 +28186,7 @@ function find_comment(comments) {
     author: comment.author.login
   } : void 0;
 }
-function get_version_bump(closes) {
+function get_version_from_linked_issues(closes) {
   let version2 = "unknown";
   closes.forEach((c) => {
     const labels = c.labels.nodes.map((l) => l.name);
@@ -28094,6 +28197,18 @@ function get_version_bump(closes) {
     }
   });
   return version2;
+}
+function get_type_from_linked_issues(closes) {
+  let type = "fix";
+  closes.forEach((c) => {
+    const labels = c.labels.nodes.map((l) => l.name);
+    if (labels.includes("bug") && type !== "feat") {
+      type = "fix";
+    } else if (labels.includes("enhancement")) {
+      type = "feat";
+    }
+  });
+  return type;
 }
 /*! Bundled license information:
 

@@ -21,6 +21,7 @@
 		"@changesets/git": "^2.0.0",
 		"@manypkg/get-packages": "^2.2.0",
 		"esbuild": "^0.18.11",
+		"human-id": "^4.0.0",
 		"prettier": "^3.0.0",
 		"undici": "^5.22.1"
 	},

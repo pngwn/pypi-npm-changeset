@@ -7,6 +7,7 @@ import { promises as fs } from "fs";
 import { join } from "path";
 import { getChangedPackagesSinceRef } from "@changesets/git";
 import { gql_get_pr, create_changeset_comment } from "./gql";
+import human_id from "human-id";
 
 const dev_only_ignore_globs = [
 	"!**/test/**",
@@ -47,7 +48,9 @@ async function run() {
 	console.log({ comments, labels: JSON.stringify(labels, null, 2), closes });
 
 	const comment = find_comment(comments);
-	let version = find_version_label(labels) || get_version_bump(closes);
+	let version =
+		get_version_from_label(labels) || get_version_from_linked_issues(closes);
+	let type = get_type_from_label(labels) || get_type_from_linked_issues(closes);
 
 	// console.log(comment, version_label);
 
@@ -124,6 +127,7 @@ async function run() {
 	if (version === "unknown") {
 		if (changed_pkgs.length) {
 			version = "minor";
+			// typ;
 		} else if (changed_dependency_files.length) {
 			version = "patch";
 			title = "Update dependencies.";
@@ -143,21 +147,7 @@ async function run() {
 	console.log({ title });
 	console.log({ updated_pkgs });
 	console.log({ version });
-	console.log({ type: "TODO" });
-	// }
-
-	// if (
-	// 	context.payload.action === "labeled" ||
-	// 	context.payload.action === "unlabeled"
-	// ) {
-	// }
-	// console.log(JSON.stringify(context, null, 2));
-
-	// const changed_dependencies = await getChangedPackagesSinceRef({
-	// 	cwd: process.cwd(),
-	// 	ref,
-	// 	changedFilePatterns: dev_only_ignore_globs,
-	// });
+	console.log({ type });
 
 	const pr_comment_content = create_changeset_comment(
 		Array.from(updated_pkgs),
@@ -165,16 +155,39 @@ async function run() {
 		title,
 	);
 
+	let filename = Array.from(changed_files).find((f) =>
+		f.startsWith(".changeset/"),
+	);
+
+	let old_changeset_content = "";
+	if (filename) {
+		old_changeset_content = (await fs.readFile(filename, "utf-8")).trim();
+	} else {
+		filename = `.changeset/${human_id({
+			separator: "-",
+			capitalize: false,
+		})}.md`;
+	}
+
 	const changeset_content = `---
 ${Array.from(updated_pkgs)
-	.map((pkg) => `- ${pkg}: ${version}`)
+	.map((pkg) => `"${pkg}": ${version}`)
 	.join("\n")}
 ---
 
-${title}
+${type}:${title}
 	`;
 
-	console.log(comment);
+	if (changeset_content !== old_changeset_content) {
+		fs.writeFile(filename, changeset_content);
+
+		await exec("git", ["config", "--global", "user.email", "you@example.com"]);
+		await exec("git", ["config", "--global", "user.name", "my name"]);
+		await exec("git", ["add", "."]);
+		await exec("git", ["commit", "-m", "add changeset"]);
+		await exec("git", ["push"]);
+	}
+
 	if (comment) {
 		await octokit.rest.issues.updateComment({
 			owner: context.repo.owner,
@@ -190,20 +203,6 @@ ${title}
 			body: pr_comment_content,
 		});
 	}
-
-	fs.writeFile(".changeset/changeset.md", changeset_content);
-	const _ref = getInput("ref");
-
-	// git config --global user.email "you@example.com"
-	// git config --global user.name "Your Name"
-
-	await exec("git", ["config", "--global", "user.email", "you@example.com"]);
-	await exec("git", ["config", "--global", "user.name", "my name"]);
-	await exec("git", ["add", "."]);
-	await exec("git", ["commit", "-m", "add changeset"]);
-	await exec("git", ["push"]);
-
-	// context.payload.pull_request.
 }
 
 run();
@@ -232,10 +231,18 @@ interface Label {
 	id: string;
 }
 
-function find_version_label(labels: Label[]) {
+function get_version_from_label(labels: Label[]) {
 	if (!labels.length) return undefined;
 	return labels
 		.filter((l) => l.name.startsWith("v:"))[0]
+		.name.slice(2)
+		.trim();
+}
+
+function get_type_from_label(labels: Label[]) {
+	if (!labels.length) return undefined;
+	return labels
+		.filter((l) => l.name.startsWith("t:"))[0]
 		.name.slice(2)
 		.trim();
 }
@@ -272,7 +279,7 @@ interface ClosesLink {
 	};
 }
 
-function get_version_bump(closes: ClosesLink[]) {
+function get_version_from_linked_issues(closes: ClosesLink[]) {
 	let version = "unknown";
 	closes.forEach((c) => {
 		const labels = c.labels.nodes.map((l) => l.name);
@@ -284,4 +291,18 @@ function get_version_bump(closes: ClosesLink[]) {
 	});
 
 	return version;
+}
+
+function get_type_from_linked_issues(closes: ClosesLink[]) {
+	let type = "fix";
+	closes.forEach((c) => {
+		const labels = c.labels.nodes.map((l) => l.name);
+		if (labels.includes("bug") && type !== "feat") {
+			type = "fix";
+		} else if (labels.includes("enhancement")) {
+			type = "feat";
+		}
+	});
+
+	return type;
 }

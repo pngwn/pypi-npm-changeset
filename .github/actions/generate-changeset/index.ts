@@ -163,7 +163,9 @@ async function run() {
 	);
 
 	const changeset_content = `---
-${updated_pkgs.map((pkg) => `- ${pkg}: ${version}`).join("\n")}
+${Array.from(updated_pkgs)
+	.map((pkg) => `- ${pkg}: ${version}`)
+	.join("\n")}
 ---
 
 ${title}

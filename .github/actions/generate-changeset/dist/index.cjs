@@ -28036,7 +28036,7 @@ async function run() {
     title
   );
   const changeset_content = `---
-${updated_pkgs.map((pkg) => `- ${pkg}: ${version2}`).join("\n")}
+${Array.from(updated_pkgs).map((pkg) => `- ${pkg}: ${version2}`).join("\n")}
 ---
 
 ${title}

@@ -147,8 +147,18 @@ ${type}:${title}
 	if (changeset_content !== old_changeset_content) {
 		fs.writeFile(filename, changeset_content);
 
-		// await exec("git", ["config", "--global", "user.email", "you@example.com"]);
-		// await exec("git", ["config", "--global", "user.name", "my name"]);
+		await exec("git", [
+			"config",
+			"--global",
+			"user.email",
+			"41898282+github-actions[bot]@users.noreply.github.com",
+		]);
+		await exec("git", [
+			"config",
+			"--global",
+			"user.name",
+			"github-actions[bot]",
+		]);
 		await exec("git", ["add", "."]);
 		await exec("git", ["commit", "-m", "add changeset"]);
 		await exec("git", ["push"]);

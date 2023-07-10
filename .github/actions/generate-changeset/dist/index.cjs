@@ -28134,6 +28134,18 @@ ${type}:${title}
 	`;
   if (changeset_content !== old_changeset_content) {
     import_fs.promises.writeFile(filename, changeset_content);
+    await (0, import_exec.exec)("git", [
+      "config",
+      "--global",
+      "user.email",
+      "41898282+github-actions[bot]@users.noreply.github.com"
+    ]);
+    await (0, import_exec.exec)("git", [
+      "config",
+      "--global",
+      "user.name",
+      "github-actions[bot]"
+    ]);
     await (0, import_exec.exec)("git", ["add", "."]);
     await (0, import_exec.exec)("git", ["commit", "-m", "add changeset"]);
     await (0, import_exec.exec)("git", ["push"]);

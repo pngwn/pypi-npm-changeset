@@ -23871,11 +23871,11 @@ var require_github = __commonJS({
     var Context = __importStar(require_context());
     var utils_1 = require_utils9();
     exports.context = new Context.Context();
-    function getOctokit(token, options, ...additionalPlugins) {
+    function getOctokit2(token, options, ...additionalPlugins) {
       const GitHubWithPlugins = utils_1.GitHub.plugin(...additionalPlugins);
       return new GitHubWithPlugins(utils_1.getOctokitOptions(token, options));
     }
-    exports.getOctokit = getOctokit;
+    exports.getOctokit = getOctokit2;
   }
 });
 
@@ -27860,6 +27860,49 @@ var import_get_packages = __toESM(require_manypkg_get_packages_cjs(), 1);
 var import_github = __toESM(require_github(), 1);
 var import_path = require("path");
 var import_git = __toESM(require_git_cjs(), 1);
+
+// .github/actions/generate-changeset/gql.ts
+function gql_get_pr(pr_number) {
+  return `{
+    repository(owner: "pngwn", name: "pypi-npm-changeset") {
+      pullRequest(number: ${pr_number}) {
+        id
+        closingIssuesReferences(first: 50) {
+          edges {
+            node {
+              id
+              body
+              number
+              title
+            }
+          }
+        }
+        labels(first: 10) {
+          nodes {
+            name
+            id
+            description
+            color
+          }
+        }
+        title
+        comments(first: 10) {
+          edges {
+            node {
+              id
+              author {
+                login
+              }
+              body
+            }
+          }
+        }
+      }
+    }
+  }`;
+}
+
+// .github/actions/generate-changeset/index.ts
 var dev_only_ignore_globs = [
   "!**/test/**",
   "!**/*.test.ts",
@@ -27874,45 +27917,74 @@ async function run() {
   console.log(import_github.context.eventName);
   console.log(import_github.context.action);
   console.log(import_github.context.payload.action);
-  if (import_github.context.payload.action === "edited") {
-  }
-  const changed_pkgs = await (0, import_git.getChangedPackagesSinceRef)({
-    cwd: process.cwd(),
-    ref: "refs/remotes/origin/main",
-    changedFilePatterns: dev_only_ignore_globs
-  });
-  const { packages: pkgs } = (0, import_get_packages.getPackagesSync)(process.cwd());
-  const dependency_files = pkgs.map(({ dir, packageJson, relativeDir }) => {
-    if (packageJson.python) {
-      return [(0, import_path.join)(relativeDir, "..", "requirements.txt"), packageJson.name];
-    } else {
-      return [(0, import_path.join)(relativeDir, "package.json"), packageJson.name];
+  const octokit = (0, import_github.getOctokit)(process.env.GITHUB_TOKEN);
+  const {
+    data: {
+      closingIssuesReferences: { edges: closes },
+      labels: { nodes: labels },
+      title,
+      comments: { nodes: comments }
     }
-  });
-  const ref = import_github.context.payload.pull_request?.base?.sha || "refs/remotes/origin/main";
-  let output = "";
-  let error = "";
-  const options = {
-    listeners: {
-      stdout: (data) => {
-        output += data.toString();
-      },
-      stderr: (data) => {
-        error += data.toString();
-      }
-    }
-  };
-  await (0, import_exec.exec)("git", ["diff", "--name-only", ref], options);
-  console.log(output, error);
-  const changes = output.split("\n").map((s) => s.trim()).filter(Boolean).reduce((acc, next) => {
-    acc.add(next);
-    return acc;
-  }, /* @__PURE__ */ new Set());
-  const changed_dependency_files = dependency_files.filter(
-    ([f]) => changes.has(f)
+  } = await octokit.graphql(
+    gql_get_pr(import_github.context.issue.number)
   );
-  console.log(changed_dependency_files);
-  (0, import_core.info)(JSON.stringify(changed_pkgs, null, 2));
+  const the_comment = comments.data.find((comment) => {
+    const body = comment.body;
+    return body?.includes("<!-- tag=changesets_gradio -->");
+  });
+  console.log(JSON.stringify(the_comment, null, 2));
+  if (the_comment) {
+    console.log("found comment");
+  } else {
+    console.log("no comment");
+  }
+  console.log(JSON.stringify(closes, null, 2));
+  console.log(JSON.stringify(labels, null, 2));
+  console.log(title);
+  if (import_github.context.payload.action === "opened" || import_github.context.payload.action === "edited") {
+  }
+  if (import_github.context.payload.action === "closed") {
+  }
+  if (import_github.context.payload.action === "opened" || import_github.context.payload.action === "synchronize") {
+    const ref = import_github.context.payload.pull_request?.base?.sha || "refs/remotes/origin/main";
+    const changed_pkgs = await (0, import_git.getChangedPackagesSinceRef)({
+      cwd: process.cwd(),
+      ref,
+      changedFilePatterns: dev_only_ignore_globs
+    });
+    const { packages: pkgs } = (0, import_get_packages.getPackagesSync)(process.cwd());
+    const dependency_files = pkgs.map(({ packageJson, relativeDir }) => {
+      if (packageJson.python) {
+        return [(0, import_path.join)(relativeDir, "..", "requirements.txt"), packageJson.name];
+      } else {
+        return [(0, import_path.join)(relativeDir, "package.json"), packageJson.name];
+      }
+    });
+    let output = "";
+    let error = "";
+    const options = {
+      listeners: {
+        stdout: (data) => {
+          output += data.toString();
+        },
+        stderr: (data) => {
+          error += data.toString();
+        }
+      }
+    };
+    await (0, import_exec.exec)("git", ["diff", "--name-only", ref], options);
+    const changed_files = output.split("\n").map((s) => s.trim()).filter(Boolean).reduce((acc, next) => {
+      acc.add(next);
+      return acc;
+    }, /* @__PURE__ */ new Set());
+    const changed_dependency_files = dependency_files.filter(
+      ([f]) => changed_files.has(f)
+    );
+    console.log(changed_dependency_files);
+    (0, import_core.info)(JSON.stringify(changed_pkgs, null, 2));
+  }
+  if (import_github.context.payload.action === "labeled" || import_github.context.payload.action === "unlabeled") {
+  }
 }
 run();
 /*! Bundled license information:

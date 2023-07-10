@@ -27922,7 +27922,7 @@ async function run() {
   const response = await octokit.graphql(
     gql_get_pr(import_github.context.repo.owner, import_github.context.repo.repo, import_github.context.issue.number)
   );
-  const {
+  let {
     repository: {
       pullRequest: {
         closingIssuesReferences: { nodes: closes },
@@ -27933,58 +27933,67 @@ async function run() {
     }
   } = response;
   const comment = find_comment(comments);
-  const version_label = find_version_label(labels) || get_version_bump(closes);
-  console.log(comment, version_label);
-  console.log(title);
-  if (import_github.context.payload.action === "opened" || import_github.context.payload.action === "edited") {
-  }
-  if (import_github.context.payload.action === "closed") {
-  }
-  if (import_github.context.payload.action === "opened" || import_github.context.payload.action === "synchronize") {
-    const ref = import_github.context.payload.pull_request?.base?.sha || "refs/remotes/origin/main";
-    const changed_pkgs = await (0, import_git.getChangedPackagesSinceRef)({
-      cwd: process.cwd(),
-      ref,
-      changedFilePatterns: dev_only_ignore_globs
-    });
-    const { packages: pkgs } = (0, import_get_packages.getPackagesSync)(process.cwd());
-    const dependency_files = pkgs.map(({ packageJson, relativeDir }) => {
-      if (packageJson.python) {
-        return [(0, import_path.join)(relativeDir, "..", "requirements.txt"), packageJson.name];
-      } else {
-        return [(0, import_path.join)(relativeDir, "package.json"), packageJson.name];
+  let version2 = find_version_label(labels) || get_version_bump(closes);
+  const ref = import_github.context.payload.pull_request?.base?.sha || "refs/remotes/origin/main";
+  const changed_pkgs = await (0, import_git.getChangedPackagesSinceRef)({
+    cwd: process.cwd(),
+    ref,
+    changedFilePatterns: dev_only_ignore_globs
+  });
+  const { packages: pkgs } = (0, import_get_packages.getPackagesSync)(process.cwd());
+  const dependency_files = pkgs.map(({ packageJson, relativeDir }) => {
+    if (packageJson.python) {
+      return [(0, import_path.join)(relativeDir, "..", "requirements.txt"), packageJson.name];
+    } else {
+      return [(0, import_path.join)(relativeDir, "package.json"), packageJson.name];
+    }
+  });
+  let output = "";
+  let error = "";
+  const options = {
+    listeners: {
+      stdout: (data) => {
+        output += data.toString();
+      },
+      stderr: (data) => {
+        error += data.toString();
       }
-    });
-    let output = "";
-    let error = "";
-    const options = {
-      listeners: {
-        stdout: (data) => {
-          output += data.toString();
-        },
-        stderr: (data) => {
-          error += data.toString();
-        }
-      }
-    };
-    await (0, import_exec.exec)("git", ["diff", "--name-only", ref], options);
-    const changed_files = output.split("\n").map((s) => s.trim()).filter(Boolean).reduce((acc, next) => {
-      acc.add(next);
-      return acc;
-    }, /* @__PURE__ */ new Set());
-    const changed_dependency_files = dependency_files.filter(
-      ([f]) => changed_files.has(f)
-    );
-    console.log("changed deps", changed_dependency_files);
-    (0, import_core.info)("changed_pkgs");
-    (0, import_core.info)(JSON.stringify(changed_pkgs, null, 2));
+    }
+  };
+  await (0, import_exec.exec)("git", ["diff", "--name-only", ref], options);
+  const changed_files = output.split("\n").map((s) => s.trim()).filter(Boolean).reduce((acc, next) => {
+    acc.add(next);
+    return acc;
+  }, /* @__PURE__ */ new Set());
+  const changed_dependency_files = dependency_files.filter(
+    ([f]) => changed_files.has(f)
+  );
+  console.log("changed deps", changed_dependency_files);
+  (0, import_core.info)("changed_pkgs");
+  (0, import_core.info)(JSON.stringify(changed_pkgs, null, 2));
+  if (version2 === "unknown") {
+    if (changed_pkgs.length) {
+      version2 = "minor";
+    } else if (changed_dependency_files.length) {
+      version2 = "patch";
+      title = "Update dependencies.";
+    }
   }
-  if (import_github.context.payload.action === "labeled" || import_github.context.payload.action === "unlabeled") {
-  }
+  const updated_pkgs = /* @__PURE__ */ new Set();
+  changed_pkgs.forEach((pkg) => {
+    updated_pkgs.add(pkg.packageJson.name);
+  });
+  changed_dependency_files.forEach(([file, pkg]) => {
+    updated_pkgs.add(pkg);
+  });
+  console.log({ title });
+  console.log({ updated_pkgs });
+  console.log({ version: version2 });
+  console.log({ type: "TODO" });
 }
 run();
 function find_version_label(labels) {
-  return labels.filter((l) => l.name.startsWith("v:"))[0];
+  return labels.filter((l) => l.name.startsWith("v:"))[0].name.slice(2);
 }
 function find_comment(comments) {
   const comment = comments.find((comment2) => {
@@ -28000,7 +28009,7 @@ function get_version_bump(closes) {
   let version2 = "unknown";
   closes.forEach((c) => {
     const labels = c.labels.nodes.map((l) => l.name);
-    if (labels.includes("bug")) {
+    if (labels.includes("bug") && version2 !== "minor") {
       version2 = "patch";
     } else if (labels.includes("enhancement")) {
       version2 = "minor";

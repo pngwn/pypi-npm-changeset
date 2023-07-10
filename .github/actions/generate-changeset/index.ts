@@ -32,7 +32,7 @@ async function run() {
 		gql_get_pr(context.repo.owner, context.repo.repo, context.issue.number),
 	);
 
-	const {
+	let {
 		repository: {
 			pullRequest: {
 				closingIssuesReferences: { nodes: closes },
@@ -44,86 +44,110 @@ async function run() {
 	} = response;
 
 	const comment = find_comment(comments);
-	const version_label = find_version_label(labels) || get_version_bump(closes);
+	let version = find_version_label(labels) || get_version_bump(closes);
 
-	console.log(comment, version_label);
+	// console.log(comment, version_label);
 
-	console.log(title);
+	// console.log(title);
 
-	if (
-		context.payload.action === "opened" ||
-		context.payload.action === "edited"
-	) {
-		// TODO: check if context.payload.changes.title is defined
-		// if so load the changset file and check if the text is the same as context.payload.changes.title
-		// if not then the changelog file has been manually edited, abort
-		// else change the changelog text to the PR title in context.pull_request.title
-	}
+	// if (
+	// 	context.payload.action === "opened" ||
+	// 	context.payload.action === "edited"
+	// ) {
+	// TODO: check if context.payload.changes.title is defined
+	// if so load the changset file and check if the text is the same as context.payload.changes.title
+	// if not then the changelog file has been manually edited, abort
+	// else change the changelog text to the PR title in context.pull_request.title
+	// }
 
-	if (context.payload.action === "closed") {
-		// do we need to do anything here?
-	}
+	// if (context.payload.action === "closed") {
+	// 	// do we need to do anything here?
+	// }
 
-	if (
-		context.payload.action === "opened" ||
-		context.payload.action === "synchronize"
-	) {
-		const ref =
-			context.payload.pull_request?.base?.sha || "refs/remotes/origin/main";
+	// if (
+	// 	context.payload.action === "opened" ||
+	// 	context.payload.action === "synchronize"
+	// ) {
+	const ref =
+		context.payload.pull_request?.base?.sha || "refs/remotes/origin/main";
 
-		const changed_pkgs = await getChangedPackagesSinceRef({
-			cwd: process.cwd(),
-			ref,
-			changedFilePatterns: dev_only_ignore_globs,
-		});
+	const changed_pkgs = await getChangedPackagesSinceRef({
+		cwd: process.cwd(),
+		ref,
+		changedFilePatterns: dev_only_ignore_globs,
+	});
 
-		const { packages: pkgs } = getPackagesSync(process.cwd());
+	const { packages: pkgs } = getPackagesSync(process.cwd());
 
-		const dependency_files = pkgs.map(({ packageJson, relativeDir }) => {
-			if ((packageJson as PackageJson).python) {
-				return [join(relativeDir, "..", "requirements.txt"), packageJson.name];
-			} else {
-				return [join(relativeDir, "package.json"), packageJson.name];
-			}
-		});
+	const dependency_files = pkgs.map(({ packageJson, relativeDir }) => {
+		if ((packageJson as PackageJson).python) {
+			return [join(relativeDir, "..", "requirements.txt"), packageJson.name];
+		} else {
+			return [join(relativeDir, "package.json"), packageJson.name];
+		}
+	});
 
-		let output = "";
-		let error = "";
+	let output = "";
+	let error = "";
 
-		const options = {
-			listeners: {
-				stdout: (data: Buffer) => {
-					output += data.toString();
-				},
-				stderr: (data: Buffer) => {
-					error += data.toString();
-				},
+	const options = {
+		listeners: {
+			stdout: (data: Buffer) => {
+				output += data.toString();
 			},
-		};
-		await exec("git", ["diff", "--name-only", ref], options);
+			stderr: (data: Buffer) => {
+				error += data.toString();
+			},
+		},
+	};
+	await exec("git", ["diff", "--name-only", ref], options);
 
-		const changed_files = output
-			.split("\n")
-			.map((s) => s.trim())
-			.filter(Boolean)
-			.reduce<Set<string>>((acc, next) => {
-				acc.add(next);
-				return acc;
-			}, new Set());
+	const changed_files = output
+		.split("\n")
+		.map((s) => s.trim())
+		.filter(Boolean)
+		.reduce<Set<string>>((acc, next) => {
+			acc.add(next);
+			return acc;
+		}, new Set());
 
-		const changed_dependency_files = dependency_files.filter(([f]) =>
-			changed_files.has(f),
-		);
-		console.log("changed deps", changed_dependency_files);
-		info("changed_pkgs");
-		info(JSON.stringify(changed_pkgs, null, 2));
+	const changed_dependency_files = dependency_files.filter(([f]) =>
+		changed_files.has(f),
+	);
+	console.log("changed deps", changed_dependency_files);
+	info("changed_pkgs");
+	info(JSON.stringify(changed_pkgs, null, 2));
+
+	if (version === "unknown") {
+		if (changed_pkgs.length) {
+			version = "minor";
+		} else if (changed_dependency_files.length) {
+			version = "patch";
+			title = "Update dependencies.";
+		}
 	}
 
-	if (
-		context.payload.action === "labeled" ||
-		context.payload.action === "unlabeled"
-	) {
-	}
+	const updated_pkgs = new Set<string>();
+
+	changed_pkgs.forEach((pkg) => {
+		updated_pkgs.add(pkg.packageJson.name);
+	});
+
+	changed_dependency_files.forEach(([file, pkg]) => {
+		updated_pkgs.add(pkg);
+	});
+
+	console.log({ title });
+	console.log({ updated_pkgs });
+	console.log({ version });
+	console.log({ type: "TODO" });
+	// }
+
+	// if (
+	// 	context.payload.action === "labeled" ||
+	// 	context.payload.action === "unlabeled"
+	// ) {
+	// }
 	// console.log(JSON.stringify(context, null, 2));
 
 	// const changed_dependencies = await getChangedPackagesSinceRef({
@@ -160,7 +184,7 @@ interface Label {
 }
 
 function find_version_label(labels: Label[]) {
-	return labels.filter((l) => l.name.startsWith("v:"))[0];
+	return labels.filter((l) => l.name.startsWith("v:"))[0].name.slice(2);
 }
 
 interface Comment {
@@ -198,7 +222,7 @@ function get_version_bump(closes: ClosesLink[]) {
 	let version = "unknown";
 	closes.forEach((c) => {
 		const labels = c.labels.nodes.map((l) => l.name);
-		if (labels.includes("bug")) {
+		if (labels.includes("bug") && version !== "minor") {
 			version = "patch";
 		} else if (labels.includes("enhancement")) {
 			version = "minor";

@@ -83,7 +83,7 @@ const changelogFunctions = {
 			.split("\n")
 			.map((l) => l.trimRight());
 
-		// console.log(futureLines);
+		console.log(firstLine);
 
 		const links = await (async () => {
 			if (prFromSummary !== undefined) {

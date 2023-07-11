@@ -7,7 +7,7 @@
 		"ci:version": "changeset version && pnpm i --lockfile-only && node ./fix_changelogs.cjs",
 		"ci:publish": "pnpm publish --no-git-checks --access public -r --filter=@pngwn/*",
 		"refresh": "cp -r ./_changesets/*.md ./.changeset/",
-		"build-action": "esbuild .github/actions/publish-pypi/index.ts --bundle --platform=node --outfile=.github/actions/publish-pypi/dist/index.cjs"
+		"build-action": "esbuild .github/actions/publish-pypi/index.ts --bundle --platform=node --outfile=.github/actions/publish-pypi/dist/index.cjs && esbuild .github/actions/generate-changeset/index.ts --bundle --platform=node --outfile=.github/actions/generate-changeset/dist/index.cjs"
 	},
 	"keywords": [],
 	"author": "",
@@ -18,8 +18,10 @@
 		"@actions/github": "^5.1.1",
 		"@changesets/cli": "^2.26.2",
 		"@changesets/get-github-info": "^0.5.2",
+		"@changesets/git": "^2.0.0",
 		"@manypkg/get-packages": "^2.2.0",
 		"esbuild": "^0.18.11",
+		"human-id": "^4.0.0",
 		"prettier": "^3.0.0",
 		"undici": "^5.22.1"
 	},

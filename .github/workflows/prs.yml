@@ -1,0 +1,26 @@
+name: Changesets
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, edited, labeled, unlabeled, closed]
+    branches:
+      - main
+
+env:
+  CI: true
+  NODE_OPTIONS: "--max-old-space-size=4096"
+
+jobs:
+  publish:
+    permissions: write-all
+    name: static checks
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.ref }}
+      - name: generate changeset
+        uses: "./.github/actions/generate-changeset"
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          ref: ${{ github.ref_name }}

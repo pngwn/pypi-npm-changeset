@@ -1,6 +1,6 @@
 {
-  "name": "@pngwn/gradio-test-pkg-three",
-  "version": "0.48.0",
-  "description": "",
-  "main": "index.js"
+	"name": "@pngwn/gradio-test-pkg-three",
+	"version": "0.48.0",
+	"description": "",
+	"main": "index.js"
 }

@@ -23,12 +23,18 @@ importers:
       '@changesets/get-github-info':
         specifier: ^0.5.2
         version: 0.5.2
+      '@changesets/git':
+        specifier: ^2.0.0
+        version: 2.0.0
       '@manypkg/get-packages':
         specifier: ^2.2.0
         version: 2.2.0
       esbuild:
         specifier: ^0.18.11
         version: 0.18.11
+      human-id:
+        specifier: ^4.0.0
+        version: 4.0.0
       prettier:
         specifier: ^3.0.0
         version: 3.0.0
@@ -37,6 +43,8 @@ importers:
         version: 5.22.1
 
   client/js: {}
+
+  client/python/gradio-test-client-pypi: {}
 
   gradio: {}
 
@@ -1287,6 +1295,10 @@ packages:
 
   /human-id@1.0.2:
     resolution: {integrity: sha512-UNopramDEhHJD+VR+ehk8rOslwSfByxPIZyJRfV739NDhN5LF1fa1MqnzKm2lGTQRjNrjK19Q5fhkgIfjlVUKw==}
+    dev: false
+
+  /human-id@4.0.0:
+    resolution: {integrity: sha512-pui0xZRgeAlaRt0I9r8N2pNlbNmluvn71EfjKRpM7jOpZbuHe5mm76r67gcprjw/Nd+GpvB9C3OlTbh7ZKLg7A==}
     dev: false
 
   /iconv-lite@0.4.24:

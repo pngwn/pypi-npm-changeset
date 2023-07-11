@@ -120,8 +120,6 @@ async function run() {
 		}
 	});
 
-	// TODO: remove `_action_temp` directory at end of run
-
 	await fs.rmdir("_action_temp", { recursive: true });
 }
 
@@ -162,3 +160,5 @@ async function publish_package(user: string, password: string, dir: string) {
 		return false;
 	}
 }
+
+// hi

@@ -1,0 +1,7 @@
+name: "Generate changeset"
+
+description: "Generate changeset from history and labels"
+
+runs:
+  using: "node16"
+  main: "dist/index.cjs"

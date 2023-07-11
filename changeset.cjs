@@ -83,7 +83,7 @@ const changelogFunctions = {
 			.split("\n")
 			.map((l) => l.trimRight());
 
-		console.log(futureLines);
+		// console.log(futureLines);
 
 		const links = await (async () => {
 			if (prFromSummary !== undefined) {
@@ -115,7 +115,25 @@ const changelogFunctions = {
 		})();
 		// console.log(usersFromSummary)
 
-		// console.log(type)
+		const users =
+			usersFromSummary && usersFromSummary.length
+				? usersFromSummary
+						.map(
+							(userFromSummary) =>
+								`[@${userFromSummary}](https://github.com/${userFromSummary})`,
+						)
+						.join(", ")
+				: links.user;
+
+		const prefix = [
+			links.pull === null ? "" : ` ${links.pull}`,
+			links.commit === null ? "" : ` ${links.commit}`,
+			users === null ? "" : ` Thanks ${users}!`,
+		].join("");
+
+		// throw new Error('Not yet')
+
+		console.log({ prefix, firstLine, futureLines, links, usersFromSummary });
 
 		const fs = require("fs");
 		const { join } = require("path");
@@ -151,41 +169,13 @@ const changelogFunctions = {
 				/^(feat|fix|highlight)\s*:\s*([^]*)/im,
 			) || [, false, changeset.summary];
 
-			// console.log(_type, summary)
-
 			lines[release.name][_type || "other"].push({
 				summary,
 			});
-
-			// lines[release.name].push({
-			//   type,
-			//   firstLine,
-			//   futureLines,
-			//   links,
-			//   usersFromSummary
-			// })
 		});
 
 		// console.log(lines)
 		fs.writeFileSync("./_changelog.json", JSON.stringify(lines, null, 2));
-
-		const users =
-			usersFromSummary && usersFromSummary.length
-				? usersFromSummary
-						.map(
-							(userFromSummary) =>
-								`[@${userFromSummary}](https://github.com/${userFromSummary})`,
-						)
-						.join(", ")
-				: links.user;
-
-		const prefix = [
-			links.pull === null ? "" : ` ${links.pull}`,
-			links.commit === null ? "" : ` ${links.commit}`,
-			users === null ? "" : ` Thanks ${users}!`,
-		].join("");
-
-		// throw new Error('Not yet')
 
 		return `\n\n-${prefix ? `${prefix} -` : ""} ${firstLine}\n${futureLines
 			.map((l) => `  ${l}`)

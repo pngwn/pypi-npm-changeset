@@ -170,7 +170,7 @@ const changelogFunctions = {
 			) || [, false, changeset.summary];
 
 			lines[release.name][_type || "other"].push({
-				summary,
+				summary: `${prefix ? `${prefix} -` : ""} ${summary}`,
 			});
 		});
 

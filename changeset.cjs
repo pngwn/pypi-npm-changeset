@@ -4,8 +4,6 @@ const { getPackagesSync } = require("@manypkg/get-packages");
 const gh = require("@changesets/get-github-info");
 const { getInfo, getInfoFromPullRequest } = gh;
 const { tool, packages, rootPackage, rootDir } = getPackagesSync(process.cwd());
-// console.log(tool, packages, rootPackage, rootDir)
-// config();
 
 function find_packages_dirs(package_name) {
 	const _package = packages.find((p) => p.packageJson.name === package_name);
@@ -52,7 +50,6 @@ const changelogFunctions = {
 		return [changesetLink, ...updatedDepenenciesList].join("\n");
 	},
 	getReleaseLine: async (changeset, type, options) => {
-		// console.log(changeset, type, options)
 		if (!options || !options.repo) {
 			throw new Error(
 				'Please provide a repo to this changelog generator like this:\n"changelog": ["@changesets/changelog-github", { "repo": "org/repo" }]',
@@ -83,8 +80,6 @@ const changelogFunctions = {
 			.split("\n")
 			.map((l) => l.trimRight());
 
-		console.log(firstLine);
-
 		const links = await (async () => {
 			if (prFromSummary !== undefined) {
 				let { links } = await getInfoFromPullRequest({
@@ -113,7 +108,6 @@ const changelogFunctions = {
 				user: null,
 			};
 		})();
-		console.log(JSON.stringify(changeset, null, 2));
 
 		const users =
 			usersFromSummary && usersFromSummary.length
@@ -130,10 +124,6 @@ const changelogFunctions = {
 			links.commit === null ? "" : ` ${links.commit}`,
 			users === null ? "" : ` Thanks ${users}!`,
 		].join("");
-
-		// throw new Error('Not yet')
-
-		console.log({ prefix, firstLine, futureLines, links, usersFromSummary });
 
 		const fs = require("fs");
 		const { join } = require("path");
@@ -182,7 +172,6 @@ const changelogFunctions = {
 			});
 		});
 
-		// console.log(lines)
 		fs.writeFileSync("./_changelog.json", JSON.stringify(lines, null, 2));
 
 		return `\n\n-${prefix ? `${prefix} -` : ""} ${firstLine}\n${futureLines

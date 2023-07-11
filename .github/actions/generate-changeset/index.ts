@@ -23,10 +23,13 @@ const dev_only_ignore_globs = [
 type PackageJson = Packages["packages"][0]["packageJson"] & { python: boolean };
 
 async function run() {
+	if (context?.payload?.pull_request?.head.ref === "changeset-release/main") {
+		info("Release PR. Skipping changeset generation.");
+		return;
+	}
+
 	const token = getInput("github-token");
 	const octokit = getOctokit(token);
-
-	console.log(JSON.stringify(context.payload, null, 2));
 
 	const response = await octokit.graphql<Record<string, any>>(
 		gql_get_pr(context.repo.owner, context.repo.repo, context.issue.number),

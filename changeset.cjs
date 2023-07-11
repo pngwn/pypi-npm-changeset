@@ -123,8 +123,9 @@ const changelogFunctions = {
 		const prefix = [
 			links.pull === null ? "" : ` ${links.pull}`,
 			links.commit === null ? "" : ` ${links.commit}`,
-			users === null ? "" : ` Thanks ${users}!`,
 		].join("");
+
+		const suffix = users === null ? "" : ` Thanks ${users}!`;
 
 		const fs = require("fs");
 		const { join } = require("path");
@@ -169,7 +170,10 @@ const changelogFunctions = {
 			) || [, false, changeset.summary];
 
 			lines[release.name][_type || "other"].push({
-				summary: `${prefix ? `${prefix} -` : ""} ${summary}`,
+				summary: `${prefix ? `${prefix} -` : ""} ${summary.replace(
+					/s$/,
+					"",
+				)}. ${suffix}`,
 			});
 		});
 

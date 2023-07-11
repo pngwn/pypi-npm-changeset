@@ -1,4 +1,7 @@
 // @ts-ignore
+
+import { J } from "vitest/dist/types-198fd1d9";
+
 // import { config } from "dotenv";
 const { getPackagesSync } = require("@manypkg/get-packages");
 const gh = require("@changesets/get-github-info");
@@ -171,6 +174,8 @@ const changelogFunctions = {
 				summary: `${prefix ? `${prefix} -` : ""} ${summary}`,
 			});
 		});
+
+		console.log(JSON.stringify(lines, null, 2));
 
 		fs.writeFileSync("./_changelog.json", JSON.stringify(lines, null, 2));
 

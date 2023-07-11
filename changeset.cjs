@@ -142,7 +142,9 @@ const changelogFunctions = {
 		if (fs.existsSync("./_changelog.json")) {
 			lines = JSON.parse(fs.readFileSync("./_changelog.json", "utf-8"));
 		} else {
-			lines = {};
+			lines = {
+				_handled: [],
+			};
 		}
 
 		if (lines._handled.includes(changeset.id)) {

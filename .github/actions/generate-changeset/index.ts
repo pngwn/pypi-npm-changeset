@@ -26,6 +26,8 @@ async function run() {
 	const token = getInput("github-token");
 	const octokit = getOctokit(token);
 
+	console.log(JSON.stringify(context.payload, null, 2));
+
 	const response = await octokit.graphql<Record<string, any>>(
 		gql_get_pr(context.repo.owner, context.repo.repo, context.issue.number),
 	);

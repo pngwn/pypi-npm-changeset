@@ -28043,6 +28043,7 @@ var dev_only_ignore_globs = [
 async function run() {
   const token = (0, import_core.getInput)("github-token");
   const octokit = (0, import_github.getOctokit)(token);
+  console.log(JSON.stringify(import_github.context.payload, null, 2));
   const response = await octokit.graphql(
     gql_get_pr(import_github.context.repo.owner, import_github.context.repo.repo, import_github.context.issue.number)
   );

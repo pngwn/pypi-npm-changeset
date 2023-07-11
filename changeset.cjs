@@ -145,6 +145,12 @@ const changelogFunctions = {
 			lines = {};
 		}
 
+		if (lines._handled.includes(changeset.id)) {
+			return "done";
+		} else {
+			lines._handled.push(changeset.id);
+		}
+
 		changeset.releases.forEach((release) => {
 			if (!lines[release.name])
 				lines[release.name] = {

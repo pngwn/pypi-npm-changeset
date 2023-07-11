@@ -1,13 +1,13 @@
 const { join } = require("path");
 const { readFileSync, existsSync, writeFileSync, unlinkSync } = require("fs");
 
-const changeset = JSON.parse(
+const { _handled, ...packages } = JSON.parse(
 	readFileSync(join(__dirname, "./_changelog.json"), "utf-8"),
 );
 
-for (const pkg_name in changeset) {
+for (const pkg_name in packages) {
 	const { dirs, highlight, feat, fix, other, current_changelog } =
-		changeset[pkg_name];
+		packages[pkg_name];
 
 	const { version, python } = JSON.parse(
 		readFileSync(join(dirs[0], "./package.json"), "utf-8"),

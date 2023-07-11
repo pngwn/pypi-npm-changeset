@@ -1,7 +1,5 @@
 // @ts-ignore
 
-import { J } from "vitest/dist/types-198fd1d9";
-
 // import { config } from "dotenv";
 const { getPackagesSync } = require("@manypkg/get-packages");
 const gh = require("@changesets/get-github-info");

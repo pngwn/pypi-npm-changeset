@@ -28132,7 +28132,8 @@ ${Array.from(updated_pkgs).map((pkg) => `"${pkg}": ${version2}`).join("\n")}
 
 ${type}:${title}
 	`;
-  if (changeset_content !== old_changeset_content) {
+  console.log(changeset_content, old_changeset_content);
+  if (changeset_content.trim() !== old_changeset_content.trim()) {
     import_fs.promises.writeFile(filename, changeset_content);
     await (0, import_exec.exec)("git", [
       "config",

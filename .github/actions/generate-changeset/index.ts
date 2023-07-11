@@ -144,7 +144,9 @@ ${Array.from(updated_pkgs)
 ${type}:${title}
 	`;
 
-	if (changeset_content !== old_changeset_content) {
+	console.log(changeset_content, old_changeset_content);
+
+	if (changeset_content.trim() !== old_changeset_content.trim()) {
 		fs.writeFile(filename, changeset_content);
 
 		await exec("git", [

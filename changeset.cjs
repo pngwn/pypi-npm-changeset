@@ -113,7 +113,7 @@ const changelogFunctions = {
 				user: null,
 			};
 		})();
-		// console.log(usersFromSummary)
+		console.log(JSON.stringify(changeset, null, 2));
 
 		const users =
 			usersFromSummary && usersFromSummary.length

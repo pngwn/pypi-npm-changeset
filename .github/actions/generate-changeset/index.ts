@@ -23,6 +23,7 @@ const dev_only_ignore_globs = [
 type PackageJson = Packages["packages"][0]["packageJson"] & { python: boolean };
 
 async function run() {
+	console.log(JSON.stringify(context, null, 2));
 	if (context?.payload?.pull_request?.head.ref === "changeset-release/main") {
 		info("Release PR. Skipping changeset generation.");
 		return;

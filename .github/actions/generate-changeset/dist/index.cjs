@@ -28041,6 +28041,7 @@ var dev_only_ignore_globs = [
   "!**/requirements.txt"
 ];
 async function run() {
+  console.log(JSON.stringify(import_github.context, null, 2));
   if (import_github.context?.payload?.pull_request?.head.ref === "changeset-release/main") {
     (0, import_core.info)("Release PR. Skipping changeset generation.");
     return;

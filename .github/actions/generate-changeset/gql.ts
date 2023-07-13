@@ -168,9 +168,7 @@ export function check_for_interaction(md_src: string) {
 			!!find(
 				(node as ListItem)?.children[0],
 				(inner_node) =>
-					(inner_node as Text)?.value
-						?.trim()
-						?.startsWith("Maintainers can click this checkbox to"),
+					(inner_node as Text)?.value?.trim()?.startsWith("Maintainers can "),
 			)
 		);
 	});

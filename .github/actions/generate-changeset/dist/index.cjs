@@ -42826,7 +42826,7 @@ function check_for_interaction(md_src) {
   const manual_node = find(new_ast, (node2) => {
     return node2.type === "listItem" && node2?.checked != null && !!find(
       node2?.children[0],
-      (inner_node) => inner_node?.value?.trim()?.startsWith("Maintainers can click this checkbox to")
+      (inner_node) => inner_node?.value?.trim()?.startsWith("Maintainers can ")
     );
   });
   console.log(manual_node);

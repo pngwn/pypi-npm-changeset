@@ -42787,7 +42787,7 @@ function create_changeset_comment({
 
 ${create_version_table(changed_packages)}
 ${manual_version ? create_package_checklist(changed_packages, other_packages) : ""}
-- [${manual_version ? "x" : ""}] Maintainers can click this checkbox to ${get_version_interaction_text(
+- [${manual_version ? "x" : " "}] Maintainers can click this checkbox to ${get_version_interaction_text(
     manual_version
   )}.
 

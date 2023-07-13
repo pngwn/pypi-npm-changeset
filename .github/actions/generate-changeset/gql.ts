@@ -102,7 +102,7 @@ ${
 		: ""
 }
 - [${
-		manual_version ? "x" : ""
+		manual_version ? "x" : " "
 	}] Maintainers can click this checkbox to ${get_version_interaction_text(
 		manual_version,
 	)}.

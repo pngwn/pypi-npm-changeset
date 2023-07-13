@@ -42883,7 +42883,7 @@ async function run() {
     ref: base_sha,
     changedFilePatterns: dev_only_ignore_globs
   });
-  const { packages: pkgs } = (0, import_get_packages.getPackagesSync)(process.cwd());
+  const { packages: pkgs, rootDir } = (0, import_get_packages.getPackagesSync)(process.cwd());
   const main_package_json = pkgs.find(
     (p) => p.packageJson.name === main_pkg
   );
@@ -42944,6 +42944,8 @@ async function run() {
   let old_changeset_content = "";
   let manual_changeset = false;
   if (filename) {
+    console.log(await import_fs.promises.stat(filename));
+    console.log(await import_fs.promises.stat((0, import_path2.join)(rootDir, filename)));
     let output_data = "";
     const options2 = {
       listeners: {

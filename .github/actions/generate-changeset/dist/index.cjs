@@ -42948,9 +42948,11 @@ async function run() {
     const options2 = {
       listeners: {
         stdout: (data) => {
+          console.log(data.toString());
           output_data += data.toString();
         },
         stderr: (data) => {
+          console.log(data.toString());
           output_data += data.toString();
         }
       }

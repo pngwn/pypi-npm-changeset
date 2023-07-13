@@ -18,8 +18,9 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v3
-      - name: Checkout Pull Request
-        run: hub pr checkout ${{ github.event.number || github.event.issue.number }}
+        with:
+          ref: refs/pull/${{ github.event.number || github.event.issue.number }}/head
+          fetch-depth: 0
       - name: generate changeset
         uses: "./.github/actions/generate-changeset"
         with:

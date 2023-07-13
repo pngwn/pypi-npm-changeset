@@ -188,9 +188,9 @@ async function run() {
 
 		console.log("after git command");
 
-		const author = output_data.split("\n")[1].trim();
+		const last_change = output_data.trim();
 
-		if (!/github-actions\[bot\]/.test(author)) {
+		if (!/Author: github-actions\[bot\]/.test(last_change)) {
 			// do not generate changeset
 			warning(
 				`Changeset file was edited manually. Skipping changeset generation.`,

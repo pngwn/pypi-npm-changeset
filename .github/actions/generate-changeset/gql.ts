@@ -3,6 +3,10 @@ export function gql_get_pr(owner: string, repo: string, pr_number: number) {
     repository(owner: "${owner}", name: "${repo}") {
       pullRequest(number: ${pr_number}) {
         id
+        baseRefName
+        headRefName
+        baseRefOid
+        headRefOid
         closingIssuesReferences(first: 50) {
           nodes {
             labels(after: "", first: 10) {

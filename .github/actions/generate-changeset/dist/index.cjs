@@ -27952,6 +27952,10 @@ function gql_get_pr(owner, repo, pr_number) {
     repository(owner: "${owner}", name: "${repo}") {
       pullRequest(number: ${pr_number}) {
         id
+        baseRefName
+        headRefName
+        baseRefOid
+        headRefOid
         closingIssuesReferences(first: 50) {
           nodes {
             labels(after: "", first: 10) {
@@ -28054,6 +28058,10 @@ async function run() {
   let {
     repository: {
       pullRequest: {
+        baseRefName: base_branch_name,
+        headRefName: current_branch_name,
+        baseRefOid: base_sha,
+        headRefOid: head_sha,
         closingIssuesReferences: { nodes: closes },
         labels: { nodes: labels },
         title,
@@ -28064,10 +28072,9 @@ async function run() {
   const comment = find_comment(comments);
   let version2 = get_version_from_label(labels) || get_version_from_linked_issues(closes);
   let type = get_type_from_label(labels) || get_type_from_linked_issues(closes);
-  const ref = import_github.context.payload.pull_request?.base?.sha || "refs/remotes/origin/main";
   const changed_pkgs = await (0, import_git.getChangedPackagesSinceRef)({
     cwd: process.cwd(),
-    ref,
+    ref: base_sha,
     changedFilePatterns: dev_only_ignore_globs
   });
   const { packages: pkgs } = (0, import_get_packages.getPackagesSync)(process.cwd());
@@ -28090,7 +28097,7 @@ async function run() {
       }
     }
   };
-  await (0, import_exec.exec)("git", ["diff", "--name-only", ref], options);
+  await (0, import_exec.exec)("git", ["diff", "--name-only", base_sha], options);
   const changed_files = output.split("\n").map((s) => s.trim()).filter(Boolean).reduce((acc, next) => {
     acc.add(next);
     return acc;
@@ -28176,12 +28183,12 @@ run();
 function get_version_from_label(labels) {
   if (!labels.length)
     return void 0;
-  return labels.filter((l) => l.name.startsWith("v:"))[0].name.slice(2).trim();
+  return labels.filter((l) => l.name.startsWith("v:"))?.[0]?.name.slice(2).trim();
 }
 function get_type_from_label(labels) {
   if (!labels.length)
     return void 0;
-  return labels.filter((l) => l.name.startsWith("t:"))[0].name.slice(2).trim();
+  return labels.filter((l) => l.name.startsWith("t:"))?.[0]?.name.slice(2).trim();
 }
 function find_comment(comments) {
   const comment = comments.find((comment2) => {

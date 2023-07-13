@@ -28233,13 +28233,13 @@ var require_lodash = __commonJS({
     var nativeGetSymbols = Object.getOwnPropertySymbols;
     var nativeIsBuffer = Buffer2 ? Buffer2.isBuffer : void 0;
     var nativeKeys = overArg(Object.keys, Object);
-    var DataView2 = getNative(root, "DataView");
+    var DataView = getNative(root, "DataView");
     var Map2 = getNative(root, "Map");
     var Promise2 = getNative(root, "Promise");
     var Set2 = getNative(root, "Set");
     var WeakMap = getNative(root, "WeakMap");
     var nativeCreate = getNative(Object, "create");
-    var dataViewCtorString = toSource(DataView2);
+    var dataViewCtorString = toSource(DataView);
     var mapCtorString = toSource(Map2);
     var promiseCtorString = toSource(Promise2);
     var setCtorString = toSource(Set2);
@@ -28862,7 +28862,7 @@ var require_lodash = __commonJS({
     }
     var getSymbols = nativeGetSymbols ? overArg(nativeGetSymbols, Object) : stubArray;
     var getTag = baseGetTag;
-    if (DataView2 && getTag(new DataView2(new ArrayBuffer(1))) != dataViewTag || Map2 && getTag(new Map2()) != mapTag || Promise2 && getTag(Promise2.resolve()) != promiseTag || Set2 && getTag(new Set2()) != setTag || WeakMap && getTag(new WeakMap()) != weakMapTag) {
+    if (DataView && getTag(new DataView(new ArrayBuffer(1))) != dataViewTag || Map2 && getTag(new Map2()) != mapTag || Promise2 && getTag(Promise2.resolve()) != promiseTag || Set2 && getTag(new Set2()) != setTag || WeakMap && getTag(new WeakMap()) != weakMapTag) {
       getTag = function(value2) {
         var result = objectToString.call(value2), Ctor = result == objectTag ? value2.constructor : void 0, ctorString = Ctor ? toSource(Ctor) : void 0;
         if (ctorString) {
@@ -42771,7 +42771,7 @@ ${changed_packages_list.concat(other_packages_list).join("\n")}
 `;
 }
 function get_version_interaction_text(manual_version) {
-  return manual_version ? "manually select packages to update" : "enable automatic pacakge selection";
+  return manual_version ? "enable automatic package selection" : "manually select packages to update";
 }
 function create_changeset_comment({
   changed_packages,
@@ -42831,7 +42831,7 @@ function check_for_interaction(md_src) {
   const manual_node = find(new_ast, (node2) => {
     return node2.type === "listItem" && node2?.checked != null && !!find(
       node2?.children[0],
-      (inner_node) => inner_node?.value === "Maintainers can click this checkbox to manually select packages to update."
+      (inner_node) => inner_node?.value.trim().startsWith("Maintainers can click this checkbox to")
     );
   });
   console.log(manual_node);

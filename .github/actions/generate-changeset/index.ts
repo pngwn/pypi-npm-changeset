@@ -2,11 +2,15 @@ import { getInput, setFailed, info, warning } from "@actions/core";
 import { exec } from "@actions/exec";
 import { type Packages, getPackagesSync } from "@manypkg/get-packages";
 import { context, getOctokit } from "@actions/github";
-import { request } from "undici";
 import { promises as fs } from "fs";
 import { join } from "path";
 import { getChangedPackagesSinceRef } from "@changesets/git";
-import { gql_get_pr, create_changeset_comment } from "./gql";
+import {
+	gql_get_pr,
+	create_changeset_comment,
+	get_frontmatter_versions,
+	check_for_interaction,
+} from "./gql";
 import * as human_id from "human-id";
 
 const dev_only_ignore_globs = [
@@ -149,18 +153,43 @@ async function run() {
 		}
 	});
 
-	const pr_comment_content = create_changeset_comment(
-		Array.from(updated_pkgs),
-		version,
-		title,
-	);
-
 	let filename = Array.from(changed_files).find((f) =>
 		f.startsWith(".changeset/"),
 	);
 
 	let old_changeset_content = "";
+	let manual_changeset = false;
+
 	if (filename) {
+		//check author
+		// 	git --no-pager shortlog -p -1 -- .changeset/fresh-seals-lie.md
+		let output_data = "";
+		const options = {
+			listeners: {
+				stdout: (data: Buffer) => {
+					output_data += data.toString();
+				},
+				stderr: (data: Buffer) => {
+					output_data += data.toString();
+				},
+			},
+		};
+
+		await exec(
+			"git",
+			["--no-pager", "shortlog", "-p", "-1", "--", filename],
+			options,
+		);
+
+		const author = output_data.split("\n")[1].trim();
+
+		if (!/github-actions\[bot\]/.test(author)) {
+			// do not generate changeset
+			warning(
+				`Changeset file was edited manuall. Skipping changeset generation.`,
+			);
+			manual_changeset = true;
+		}
 		old_changeset_content = (await fs.readFile(filename, "utf-8")).trim();
 	} else {
 		const id = human_id.humanId({
@@ -171,7 +200,8 @@ async function run() {
 		filename = `.changeset/${id}.md`;
 	}
 
-	const changeset_content = `---
+	if (!manual_changeset) {
+		const changeset_content = `---
 ${Array.from(updated_pkgs)
 	.map((pkg) => `"${pkg}": ${version}`)
 	.join("\n")}
@@ -180,27 +210,51 @@ ${Array.from(updated_pkgs)
 ${type}:${title}
 	`;
 
-	console.log(changeset_content, old_changeset_content);
+		console.log(changeset_content, old_changeset_content);
 
-	if (changeset_content.trim() !== old_changeset_content.trim()) {
-		fs.writeFile(filename, changeset_content);
+		if (changeset_content.trim() !== old_changeset_content.trim()) {
+			fs.writeFile(filename, changeset_content);
 
-		await exec("git", [
-			"config",
-			"--global",
-			"user.email",
-			"41898282+github-actions[bot]@users.noreply.github.com",
-		]);
-		await exec("git", [
-			"config",
-			"--global",
-			"user.name",
-			"github-actions[bot]",
-		]);
-		await exec("git", ["add", "."]);
-		await exec("git", ["commit", "-m", "add changeset"]);
-		await exec("git", ["push"]);
+			await exec("git", [
+				"config",
+				"--global",
+				"user.email",
+				"41898282+github-actions[bot]@users.noreply.github.com",
+			]);
+			await exec("git", [
+				"config",
+				"--global",
+				"user.name",
+				"github-actions[bot]",
+			]);
+			await exec("git", ["add", "."]);
+			await exec("git", ["commit", "-m", "add changeset"]);
+			await exec("git", ["push"]);
+		}
 	}
+
+	const frontmatter_version = get_frontmatter_versions(old_changeset_content);
+	const other_packages = pkgs
+		.filter((p) => !p.packageJson.private)
+		.map((p) => p.packageJson.name)
+		.filter((p) => !updated_pkgs.has(p));
+
+	const { manual_version } =
+		context.eventName === "issue_comment"
+			? check_for_interaction(context.payload?.comment?.body)
+			: { manual_version: false };
+
+	console.log({ manual_version, body: context.payload?.comment?.body });
+
+	const pr_comment_content = create_changeset_comment({
+		changed_packages:
+			manual_changeset && frontmatter_version
+				? frontmatter_version
+				: Array.from(updated_pkgs).map((pkg) => [pkg, version]),
+		changelog: title,
+		manual_version,
+		other_packages,
+	});
 
 	if (comment) {
 		await octokit.rest.issues.updateComment({

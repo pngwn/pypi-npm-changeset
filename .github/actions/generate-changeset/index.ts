@@ -241,6 +241,8 @@ ${type}:${title}
 			? check_for_interaction(context.payload?.comment?.body)
 			: { manual_version: false };
 
+	console.log({ manual_version, body: context.payload?.comment?.body });
+
 	const pr_comment_content = create_changeset_comment({
 		changed_packages:
 			manual_changeset && frontmatter_version

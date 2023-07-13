@@ -2117,11 +2117,11 @@ Support boolean input list: \`true | True | TRUE | false | False | FALSE\``);
       command_1.issue("echo", enabled ? "on" : "off");
     }
     exports.setCommandEcho = setCommandEcho;
-    function setFailed(message) {
+    function setFailed2(message) {
       process.exitCode = ExitCode.Failure;
       error(message);
     }
-    exports.setFailed = setFailed;
+    exports.setFailed = setFailed2;
     function isDebug() {
       return process.env["RUNNER_DEBUG"] === "1";
     }
@@ -28051,6 +28051,7 @@ async function run() {
     return;
   }
   const token = (0, import_core.getInput)("github-token");
+  const main_pkg = (0, import_core.getInput)("main_pkg");
   const octokit = (0, import_github.getOctokit)(token);
   const response = await octokit.graphql(
     gql_get_pr(import_github.context.repo.owner, import_github.context.repo.repo, import_github.context.issue.number)
@@ -28078,6 +28079,12 @@ async function run() {
     changedFilePatterns: dev_only_ignore_globs
   });
   const { packages: pkgs } = (0, import_get_packages.getPackagesSync)(process.cwd());
+  const main_package_json = pkgs.find(
+    (p) => p.packageJson.name === main_pkg
+  );
+  if (!main_package_json) {
+    (0, import_core.setFailed)(`Could not find main package ${main_pkg}`);
+  }
   const dependency_files = pkgs.map(({ packageJson, relativeDir }) => {
     if (packageJson.python) {
       return [(0, import_path.join)(relativeDir, "..", "requirements.txt"), packageJson.name];
@@ -28119,6 +28126,9 @@ async function run() {
   });
   changed_dependency_files.forEach(([file, pkg]) => {
     updated_pkgs.add(pkg);
+    if (pkgs.find((p) => p.packageJson.name === pkg)?.packageJson?.main_changeset) {
+      updated_pkgs.add(main_pkg);
+    }
   });
   const pr_comment_content = create_changeset_comment(
     Array.from(updated_pkgs),

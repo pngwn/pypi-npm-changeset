@@ -25,4 +25,4 @@ jobs:
         uses: "./.github/actions/generate-changeset"
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          ref: ${{ github.ref_name }}
+          main_pkg: gradio-test-pypi

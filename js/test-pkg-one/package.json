@@ -1,6 +1,7 @@
 {
-  "name": "@pngwn/gradio-test-pkg-one",
-  "version": "0.0.49",
-  "description": "",
-  "main": "index.js"
+	"name": "@pngwn/gradio-test-pkg-one",
+	"version": "0.0.49",
+	"description": "",
+	"main": "index.js",
+	"main_changeset": true
 }

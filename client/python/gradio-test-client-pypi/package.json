@@ -2,5 +2,6 @@
 	"name": "gradio-test-client-pypi",
 	"version": "48.0.1",
 	"description": "",
-	"python": "true"
+	"python": "true",
+	"main_changeset": true
 }

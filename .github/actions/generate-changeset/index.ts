@@ -1,4 +1,4 @@
-import { getInput, info, warning } from "@actions/core";
+import { getInput, setFailed, info, warning } from "@actions/core";
 import { exec } from "@actions/exec";
 import { type Packages, getPackagesSync } from "@manypkg/get-packages";
 import { context, getOctokit } from "@actions/github";
@@ -20,7 +20,10 @@ const dev_only_ignore_globs = [
 	"!**/requirements.txt",
 ];
 
-type PackageJson = Packages["packages"][0]["packageJson"] & { python: boolean };
+type PackageJson = Packages["packages"][0]["packageJson"] & {
+	python: boolean;
+	main_changeset: boolean;
+};
 
 async function run() {
 	console.log(JSON.stringify(context, null, 2));
@@ -30,6 +33,7 @@ async function run() {
 	}
 
 	const token = getInput("github-token");
+	const main_pkg = getInput("main_pkg");
 	const octokit = getOctokit(token);
 
 	const response = await octokit.graphql<Record<string, any>>(
@@ -66,6 +70,14 @@ async function run() {
 	});
 
 	const { packages: pkgs } = getPackagesSync(process.cwd());
+
+	const main_package_json = pkgs.find(
+		(p) => p.packageJson.name === main_pkg,
+	) as Packages["packages"][0];
+
+	if (!main_package_json) {
+		setFailed(`Could not find main package ${main_pkg}`);
+	}
 
 	const dependency_files = pkgs.map(({ packageJson, relativeDir }) => {
 		if ((packageJson as PackageJson).python) {
@@ -113,6 +125,11 @@ async function run() {
 		}
 	}
 
+	interface PackageSimple {
+		name: string;
+		add_to_main_changeset: boolean;
+	}
+
 	const updated_pkgs = new Set<string>();
 
 	changed_pkgs.forEach((pkg) => {
@@ -121,6 +138,12 @@ async function run() {
 
 	changed_dependency_files.forEach(([file, pkg]) => {
 		updated_pkgs.add(pkg);
+		if (
+			(pkgs.find((p) => p.packageJson.name === pkg)?.packageJson as PackageJson)
+				?.main_changeset
+		) {
+			updated_pkgs.add(main_pkg);
+		}
 	});
 
 	const pr_comment_content = create_changeset_comment(

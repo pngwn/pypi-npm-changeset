@@ -42825,13 +42825,16 @@ function get_frontmatter_versions(md) {
 function check_for_interaction(md_src) {
   if (!md_src)
     return { manual_version: false };
+  console.log(md_src);
   const new_ast = md_parser.parse(md_src);
+  console.log(JSON.stringify(new_ast, null, 2));
   const manual_node = find(new_ast, (node2) => {
     return node2.type === "listItem" && node2?.checked != null && !!find(
       node2?.children[0],
       (inner_node) => inner_node?.value === "Maintainers can click this checkbox to manually select packages to update."
     );
   });
+  console.log(manual_node);
   return {
     manual_version: !!manual_node?.checked
   };
@@ -43010,6 +43013,7 @@ ${type2}:${title}
   }
   const frontmatter_version = get_frontmatter_versions(old_changeset_content);
   const other_packages = pkgs.filter((p) => !p.packageJson.private).map((p) => p.packageJson.name).filter((p) => !updated_pkgs.has(p));
+  console.log(import_github.context.eventName, import_github.context.eventName === "issue_comment");
   const { manual_version } = import_github.context.eventName === "issue_comment" ? check_for_interaction(import_github.context.payload?.comment?.body) : { manual_version: false };
   console.log({ manual_version, body: import_github.context.payload?.comment?.body });
   const pr_comment_content = create_changeset_comment({

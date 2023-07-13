@@ -28123,6 +28123,9 @@ async function run() {
   const updated_pkgs = /* @__PURE__ */ new Set();
   changed_pkgs.forEach((pkg) => {
     updated_pkgs.add(pkg.packageJson.name);
+    if (pkg.packageJson?.main_changeset) {
+      updated_pkgs.add(main_pkg);
+    }
   });
   changed_dependency_files.forEach(([file, pkg]) => {
     updated_pkgs.add(pkg);

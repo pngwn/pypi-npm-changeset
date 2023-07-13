@@ -134,6 +134,9 @@ async function run() {
 
 	changed_pkgs.forEach((pkg) => {
 		updated_pkgs.add(pkg.packageJson.name);
+		if ((pkg.packageJson as PackageJson)?.main_changeset) {
+			updated_pkgs.add(main_pkg);
+		}
 	});
 
 	changed_dependency_files.forEach(([file, pkg]) => {

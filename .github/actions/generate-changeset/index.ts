@@ -181,12 +181,14 @@ async function run() {
 			options,
 		);
 
+		console.log("after git command");
+
 		const author = output_data.split("\n")[1].trim();
 
 		if (!/github-actions\[bot\]/.test(author)) {
 			// do not generate changeset
 			warning(
-				`Changeset file was edited manuall. Skipping changeset generation.`,
+				`Changeset file was edited manually. Skipping changeset generation.`,
 			);
 			manual_changeset = true;
 		}
@@ -199,6 +201,8 @@ async function run() {
 
 		filename = `.changeset/${id}.md`;
 	}
+
+	console.log({ filename, old_changeset_content, manual_changeset });
 
 	if (!manual_changeset) {
 		const changeset_content = `---

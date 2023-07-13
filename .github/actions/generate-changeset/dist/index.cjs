@@ -42769,7 +42769,7 @@ function create_package_checklist(changed_packages, other_packages) {
 #### Select the correct packages:
 ${changed_packages_list.concat(other_packages_list).join("\n")}
 
--
+\\-
 `;
 }
 function get_version_interaction_text(manual_version) {

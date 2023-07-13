@@ -44,33 +44,60 @@ export function gql_get_pr(owner: string, repo: string, pr_number: number) {
   }`;
 }
 
-function get_title(packages: string[]) {
+function get_title(packages: [string, string][]) {
 	return packages.length ? `change detected` : `no changes detected`;
 }
 
-function create_version_table(packages: string[], version: string) {
-	return packages.map((p) => `|\`${p}\` | \`${version}\` |`).join("\n");
+function create_version_table(packages: [string, string][]) {
+	const rendered_packages = packages
+		.map(([p, v]) => `|\`${p}\` | \`${v}\` |`)
+		.join("\n");
+
+	return `| Package | Version |
+|--------|--------|
+${rendered_packages}`;
 }
 
-export function create_changeset_comment(
-	packages: string[],
-	version: string,
-	changelog: string,
+function create_package_checklist(
+	changed_packages: [string, string][],
+	other_packages: string[],
 ) {
+	const changed_packages_list = changed_packages.map(
+		([p, v]) => `- [x] \`${p}\``,
+	);
+	const other_packages_list = other_packages.map((p) => `- [ ] \`${p}\``);
+
+	return `\n#### Update the changed packaged by selecting from this list:
+${changed_packages_list.concat(other_packages_list).join("\n")}
+`;
+}
+
+export function create_changeset_comment({
+	changed_packages,
+	changelog,
+	manual_changeset,
+	other_packages,
+}: {
+	changed_packages: [string, string][];
+	changelog: string;
+	manual_changeset: boolean;
+	other_packages: string[];
+}) {
 	return `<!-- tag=changesets_gradio -->
 
-###  🦄 ${get_title(packages)}
+###  🦄 ${get_title(changed_packages)}
 
 #### This Pull Request includes changes to the following packages. 
 
-| Package | version |
-|--------|--------|
-${create_version_table(packages, version)}
-
+${create_version_table(changed_packages)}
+${
+	manual_changeset
+		? create_package_checklist(changed_packages, other_packages)
+		: ""
+}
 - [ ] Maintainers can click this checkbox to manually select packages to update.
 
 #### With the following changelog entry.
-
 
 > ${changelog}
 
@@ -93,14 +120,37 @@ _Maintainers or the PR author can modify the PR title to modify this entry._
 import { unified } from "unified";
 import remarkParse from "remark-parse";
 import remarkGfm from "remark-gfm";
+import frontmatter from "remark-frontmatter";
 import { dequal } from "dequal";
+import yaml from "js-yaml";
+
+const md_parser = unified().use(remarkParse).use(frontmatter).use(remarkGfm);
 
 async function parse(old_md: string, new_md: string) {
-	const md = unified().use(remarkParse).use(remarkGfm);
-
-	const old_ast = md.parse(old_md);
-	const new_ast = md.parse(new_md);
+	const old_ast = md_parser.parse(old_md);
+	const new_ast = md_parser.parse(new_md);
 	const changes = dequal(old_ast, new_ast);
 
 	console.log(changes);
+}
+
+export function get_frontmatter_versions(
+	md: string,
+): [string, string][] | false {
+	const ast = md_parser.parse(md);
+	const frontmatter_node = ast.children.find((n) => n.type === "yaml") as {
+		value: string;
+	};
+
+	if (frontmatter_node) {
+		const versions = (
+			Object.entries(yaml.load(frontmatter_node.value)) as [string, string][]
+		).map<[string, string]>(([key, value]) => {
+			return [key.trim(), value.trim()];
+		});
+
+		return versions;
+	}
+
+	return false;
 }

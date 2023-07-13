@@ -89,3 +89,18 @@ _Maintainers or the PR author can modify the PR title to modify this entry._
 
 </details> `;
 }
+
+import { unified } from "unified";
+import remarkParse from "remark-parse";
+import remarkGfm from "remark-gfm";
+import { dequal } from "dequal";
+
+async function parse(old_md: string, new_md: string) {
+	const md = unified().use(remarkParse).use(remarkGfm);
+
+	const old_ast = md.parse(old_md);
+	const new_ast = md.parse(new_md);
+	const changes = dequal(old_ast, new_ast);
+
+	console.log(changes);
+}

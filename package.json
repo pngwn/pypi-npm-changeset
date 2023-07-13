@@ -20,10 +20,14 @@
 		"@changesets/get-github-info": "^0.5.2",
 		"@changesets/git": "^2.0.0",
 		"@manypkg/get-packages": "^2.2.0",
+		"dequal": "^2.0.3",
 		"esbuild": "^0.18.11",
 		"human-id": "^4.0.0",
 		"prettier": "^3.0.0",
-		"undici": "^5.22.1"
+		"remark-gfm": "^3.0.1",
+		"remark-parse": "^10.0.2",
+		"undici": "^5.22.1",
+		"unified": "^10.1.2"
 	},
 	"type": "module",
 	"private": true

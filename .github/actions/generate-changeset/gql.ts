@@ -67,8 +67,10 @@ function create_package_checklist(
 	);
 	const other_packages_list = other_packages.map((p) => `- [ ] \`${p}\``);
 
-	return `\n#### Update the changed packaged by selecting from this list:
+	return `\n#### Select the correct packages:
 ${changed_packages_list.concat(other_packages_list).join("\n")}
+
+-
 `;
 }
 
@@ -101,11 +103,9 @@ ${
 		? create_package_checklist(changed_packages, other_packages)
 		: ""
 }
-- [${
-		manual_version ? "x" : " "
-	}] Maintainers can click this checkbox to ${get_version_interaction_text(
-		manual_version,
-	)}.
+- [${manual_version ? "x" : " "}] Maintainers can ${
+		manual_version ? "de" : " "
+	}select this checkbox to ${get_version_interaction_text(manual_version)}.
 
 #### With the following changelog entry.
 
@@ -118,11 +118,6 @@ _Maintainers or the PR author can modify the PR title to modify this entry._
 
 - Maintainers can change the version label to modify the version bump. 
 - If this pull request needs to update multiple packages to different versions or requires a more comprehensive changelog entry, maintainers can [update the changelog file directly]()
-
----
-
-- [ ] **Rerun the change detection bot.**
-  _This will replace the existing changeset file, reset the version(s) to unknown, set the changelog entry to the PR title, and remove all version labels_
 
 </details> `;
 }

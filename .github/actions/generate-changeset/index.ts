@@ -56,12 +56,12 @@ async function run() {
 		get_version_from_label(labels) || get_version_from_linked_issues(closes);
 	let type = get_type_from_label(labels) || get_type_from_linked_issues(closes);
 
-	const ref =
-		context.payload.pull_request?.base?.sha || "refs/remotes/origin/main";
+	// const ref =
+	// 	context.payload.pull_request?.base?.sha || "refs/remotes/origin/main";
 
 	const changed_pkgs = await getChangedPackagesSinceRef({
 		cwd: process.cwd(),
-		ref,
+		ref: base_sha,
 		changedFilePatterns: dev_only_ignore_globs,
 	});
 
@@ -88,7 +88,7 @@ async function run() {
 			},
 		},
 	};
-	await exec("git", ["diff", "--name-only", ref], options);
+	await exec("git", ["diff", "--name-only", base_sha], options);
 
 	const changed_files = output
 		.split("\n")
@@ -222,7 +222,7 @@ interface Label {
 function get_version_from_label(labels: Label[]) {
 	if (!labels.length) return undefined;
 	return labels
-		.filter((l) => l.name.startsWith("v:"))[0]
+		.filter((l) => l.name.startsWith("v:"))?.[0]
 		.name.slice(2)
 		.trim();
 }
@@ -230,7 +230,7 @@ function get_version_from_label(labels: Label[]) {
 function get_type_from_label(labels: Label[]) {
 	if (!labels.length) return undefined;
 	return labels
-		.filter((l) => l.name.startsWith("t:"))[0]
+		.filter((l) => l.name.startsWith("t:"))?.[0]
 		.name.slice(2)
 		.trim();
 }

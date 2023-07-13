@@ -42928,6 +42928,9 @@ async function run() {
   const updated_pkgs = /* @__PURE__ */ new Set();
   changed_pkgs.forEach((pkg) => {
     updated_pkgs.add(pkg.packageJson.name);
+    if (pkg.packageJson?.main_changeset) {
+      updated_pkgs.add(main_pkg);
+    }
   });
   changed_dependency_files.forEach(([file, pkg]) => {
     updated_pkgs.add(pkg);
@@ -42957,10 +42960,11 @@ async function run() {
       ["--no-pager", "shortlog", "-p", "-1", "--", filename],
       options2
     );
+    console.log("after git command");
     const author = output_data.split("\n")[1].trim();
     if (!/github-actions\[bot\]/.test(author)) {
       (0, import_core.warning)(
-        `Changeset file was edited manuall. Skipping changeset generation.`
+        `Changeset file was edited manually. Skipping changeset generation.`
       );
       manual_changeset = true;
     }
@@ -42972,6 +42976,7 @@ async function run() {
     });
     filename = `.changeset/${id}.md`;
   }
+  console.log({ filename, old_changeset_content, manual_changeset });
   if (!manual_changeset) {
     const changeset_content = `---
 ${Array.from(updated_pkgs).map((pkg) => `"${pkg}": ${version2}`).join("\n")}

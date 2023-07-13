@@ -42961,7 +42961,7 @@ async function run() {
     };
     await (0, import_exec.exec)(
       "git",
-      ["--no-pager", "shortlog", "-p", "-1", "--", filename],
+      ["--no-pager", "log", "-p", "-1", "--", filename],
       options2
     );
     console.log("after git command");

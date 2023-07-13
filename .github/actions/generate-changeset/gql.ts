@@ -74,8 +74,8 @@ ${changed_packages_list.concat(other_packages_list).join("\n")}
 
 function get_version_interaction_text(manual_version: boolean) {
 	return manual_version
-		? "manually select packages to update"
-		: "enable automatic pacakge selection";
+		? "enable automatic package selection"
+		: "manually select packages to update";
 }
 
 export function create_changeset_comment({
@@ -131,20 +131,11 @@ import { unified } from "unified";
 import remarkParse from "remark-parse";
 import remarkGfm from "remark-gfm";
 import frontmatter from "remark-frontmatter";
-import { dequal } from "dequal";
 import yaml from "js-yaml";
 import { find } from "unist-util-find";
 import { ListItem, Text } from "mdast";
 
 const md_parser = unified().use(remarkParse).use(frontmatter).use(remarkGfm);
-
-async function parse(old_md: string, new_md: string) {
-	const old_ast = md_parser.parse(old_md);
-	const new_ast = md_parser.parse(new_md);
-	const changes = dequal(old_ast, new_ast);
-
-	console.log(changes);
-}
 
 export function get_frontmatter_versions(
 	md: string,
@@ -182,8 +173,9 @@ export function check_for_interaction(md_src: string) {
 			!!find(
 				(node as ListItem)?.children[0],
 				(inner_node) =>
-					(inner_node as Text)?.value ===
-					"Maintainers can click this checkbox to manually select packages to update.",
+					(inner_node as Text)?.value
+						.trim()
+						.startsWith("Maintainers can click this checkbox to"),
 			)
 		);
 	});

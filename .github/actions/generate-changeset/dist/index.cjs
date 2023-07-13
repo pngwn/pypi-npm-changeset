@@ -28183,12 +28183,12 @@ run();
 function get_version_from_label(labels) {
   if (!labels.length)
     return void 0;
-  return labels.filter((l) => l.name.startsWith("v:"))?.[0].name.slice(2).trim();
+  return labels.filter((l) => l.name.startsWith("v:"))?.[0]?.name.slice(2).trim();
 }
 function get_type_from_label(labels) {
   if (!labels.length)
     return void 0;
-  return labels.filter((l) => l.name.startsWith("t:"))?.[0].name.slice(2).trim();
+  return labels.filter((l) => l.name.startsWith("t:"))?.[0]?.name.slice(2).trim();
 }
 function find_comment(comments) {
   const comment = comments.find((comment2) => {

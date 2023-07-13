@@ -223,7 +223,7 @@ function get_version_from_label(labels: Label[]) {
 	if (!labels.length) return undefined;
 	return labels
 		.filter((l) => l.name.startsWith("v:"))?.[0]
-		.name.slice(2)
+		?.name.slice(2)
 		.trim();
 }
 
@@ -231,7 +231,7 @@ function get_type_from_label(labels: Label[]) {
 	if (!labels.length) return undefined;
 	return labels
 		.filter((l) => l.name.startsWith("t:"))?.[0]
-		.name.slice(2)
+		?.name.slice(2)
 		.trim();
 }
 

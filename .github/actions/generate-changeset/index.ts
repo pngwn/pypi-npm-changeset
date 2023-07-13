@@ -248,6 +248,7 @@ ${type}:${title}
 		.map((p) => p.packageJson.name)
 		.filter((p) => !updated_pkgs.has(p));
 
+	console.log(context.eventName, context.eventName === "issue_comment");
 	const { manual_version } =
 		context.eventName === "issue_comment"
 			? check_for_interaction(context.payload?.comment?.body)

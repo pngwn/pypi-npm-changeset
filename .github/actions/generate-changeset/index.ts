@@ -73,7 +73,7 @@ async function run() {
 		changedFilePatterns: dev_only_ignore_globs,
 	});
 
-	const { packages: pkgs } = getPackagesSync(process.cwd());
+	const { packages: pkgs, rootDir } = getPackagesSync(process.cwd());
 
 	const main_package_json = pkgs.find(
 		(p) => p.packageJson.name === main_pkg,
@@ -161,6 +161,9 @@ async function run() {
 	let manual_changeset = false;
 
 	if (filename) {
+		console.log(await fs.stat(filename));
+		console.log(await fs.stat(join(rootDir, filename)));
+
 		//check author
 		// 	git --no-pager shortlog -p -1 -- .changeset/fresh-seals-lie.md
 		let output_data = "";

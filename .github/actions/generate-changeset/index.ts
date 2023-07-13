@@ -167,9 +167,11 @@ async function run() {
 		const options = {
 			listeners: {
 				stdout: (data: Buffer) => {
+					console.log(data.toString());
 					output_data += data.toString();
 				},
 				stderr: (data: Buffer) => {
+					console.log(data.toString());
 					output_data += data.toString();
 				},
 			},

@@ -72,15 +72,21 @@ ${changed_packages_list.concat(other_packages_list).join("\n")}
 `;
 }
 
+function get_version_interaction_text(manual_version: boolean) {
+	return manual_version
+		? "manually select packages to update"
+		: "enable automatic pacakge selection";
+}
+
 export function create_changeset_comment({
 	changed_packages,
 	changelog,
-	manual_changeset,
+	manual_version,
 	other_packages,
 }: {
 	changed_packages: [string, string][];
 	changelog: string;
-	manual_changeset: boolean;
+	manual_version: boolean;
 	other_packages: string[];
 }) {
 	return `<!-- tag=changesets_gradio -->
@@ -91,11 +97,15 @@ export function create_changeset_comment({
 
 ${create_version_table(changed_packages)}
 ${
-	manual_changeset
+	manual_version
 		? create_package_checklist(changed_packages, other_packages)
 		: ""
 }
-- [ ] Maintainers can click this checkbox to manually select packages to update.
+- [${
+		manual_version ? "x" : ""
+	}] Maintainers can click this checkbox to ${get_version_interaction_text(
+		manual_version,
+	)}.
 
 #### With the following changelog entry.
 
@@ -123,6 +133,8 @@ import remarkGfm from "remark-gfm";
 import frontmatter from "remark-frontmatter";
 import { dequal } from "dequal";
 import yaml from "js-yaml";
+import { find } from "unist-util-find";
+import { ListItem, Text } from "mdast";
 
 const md_parser = unified().use(remarkParse).use(frontmatter).use(remarkGfm);
 
@@ -153,4 +165,26 @@ export function get_frontmatter_versions(
 	}
 
 	return false;
+}
+
+export function check_for_interaction(md_src: string) {
+	if (!md_src) return { manual_version: false };
+
+	const new_ast = md_parser.parse(md_src);
+	const manual_node: ListItem | undefined = find(new_ast, (node) => {
+		return (
+			node.type === "listItem" &&
+			(node as ListItem)?.checked != null &&
+			!!find(
+				(node as ListItem)?.children[0],
+				(inner_node) =>
+					(inner_node as Text)?.value ===
+					"Maintainers can click this checkbox to manually select packages to update.",
+			)
+		);
+	});
+
+	return {
+		manual_version: !!manual_node?.checked,
+	};
 }

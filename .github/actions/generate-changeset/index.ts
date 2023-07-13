@@ -9,6 +9,7 @@ import {
 	gql_get_pr,
 	create_changeset_comment,
 	get_frontmatter_versions,
+	check_for_interaction,
 } from "./gql";
 import * as human_id from "human-id";
 
@@ -235,13 +236,18 @@ ${type}:${title}
 		.map((p) => p.packageJson.name)
 		.filter((p) => !updated_pkgs.has(p));
 
+	const { manual_version } =
+		context.eventName === "issue_comment"
+			? check_for_interaction(context.payload?.comment?.body)
+			: { manual_version: false };
+
 	const pr_comment_content = create_changeset_comment({
 		changed_packages:
 			manual_changeset && frontmatter_version
 				? frontmatter_version
 				: Array.from(updated_pkgs).map((pkg) => [pkg, version]),
 		changelog: title,
-		manual_changeset,
+		manual_version,
 		other_packages,
 	});
 

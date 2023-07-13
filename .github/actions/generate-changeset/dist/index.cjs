@@ -21165,7 +21165,7 @@ var require_lib4 = __commonJS({
         throw new TypeError(`${value2} is not a legal HTTP header value`);
       }
     }
-    function find(map3, name) {
+    function find2(map3, name) {
       name = name.toLowerCase();
       for (const key in map3) {
         if (key.toLowerCase() === name) {
@@ -21235,7 +21235,7 @@ var require_lib4 = __commonJS({
       get(name) {
         name = `${name}`;
         validateName(name);
-        const key = find(this[MAP], name);
+        const key = find2(this[MAP], name);
         if (key === void 0) {
           return null;
         }
@@ -21272,7 +21272,7 @@ var require_lib4 = __commonJS({
         value2 = `${value2}`;
         validateName(name);
         validateValue(value2);
-        const key = find(this[MAP], name);
+        const key = find2(this[MAP], name);
         this[MAP][key !== void 0 ? key : name] = [value2];
       }
       /**
@@ -21287,7 +21287,7 @@ var require_lib4 = __commonJS({
         value2 = `${value2}`;
         validateName(name);
         validateValue(value2);
-        const key = find(this[MAP], name);
+        const key = find2(this[MAP], name);
         if (key !== void 0) {
           this[MAP][key].push(value2);
         } else {
@@ -21303,7 +21303,7 @@ var require_lib4 = __commonJS({
       has(name) {
         name = `${name}`;
         validateName(name);
-        return find(this[MAP], name) !== void 0;
+        return find2(this[MAP], name) !== void 0;
       }
       /**
        * Delete all header values given name
@@ -21314,7 +21314,7 @@ var require_lib4 = __commonJS({
       delete(name) {
         name = `${name}`;
         validateName(name);
-        const key = find(this[MAP], name);
+        const key = find2(this[MAP], name);
         if (key !== void 0) {
           delete this[MAP][key];
         }
@@ -21423,7 +21423,7 @@ var require_lib4 = __commonJS({
     });
     function exportNodeCompatibleHeaders(headers) {
       const obj = Object.assign({ __proto__: null }, headers[MAP]);
-      const hostHeaderKey = find(headers[MAP], "Host");
+      const hostHeaderKey = find2(headers[MAP], "Host");
       if (hostHeaderKey !== void 0) {
         obj[hostHeaderKey] = obj[hostHeaderKey][0];
       }
@@ -24152,17 +24152,17 @@ var require_pseudomap = __commonJS({
       }, this);
     };
     PseudoMap.prototype.has = function(k) {
-      return !!find(this._data, k);
+      return !!find2(this._data, k);
     };
     PseudoMap.prototype.get = function(k) {
-      var res = find(this._data, k);
+      var res = find2(this._data, k);
       return res && res.value;
     };
     PseudoMap.prototype.set = function(k, v) {
       set2(this._data, k, v);
     };
     PseudoMap.prototype.delete = function(k) {
-      var res = find(this._data, k);
+      var res = find2(this._data, k);
       if (res) {
         delete this._data[res._index];
         this._data.size--;
@@ -24198,7 +24198,7 @@ var require_pseudomap = __commonJS({
       this.value = v;
       this._index = i;
     }
-    function find(data, k) {
+    function find2(data, k) {
       for (var i = 0, s = "_" + k, key = s; hasOwnProperty2.call(data, key); key = s + i++) {
         if (same(data[key].key, k))
           return data[key];
@@ -28048,6 +28048,1045 @@ var require_format = __commonJS({
         return result;
       }
     })();
+  }
+});
+
+// node_modules/.pnpm/lodash.iteratee@4.7.0/node_modules/lodash.iteratee/index.js
+var require_lodash = __commonJS({
+  "node_modules/.pnpm/lodash.iteratee@4.7.0/node_modules/lodash.iteratee/index.js"(exports, module2) {
+    var LARGE_ARRAY_SIZE = 200;
+    var FUNC_ERROR_TEXT = "Expected a function";
+    var HASH_UNDEFINED = "__lodash_hash_undefined__";
+    var UNORDERED_COMPARE_FLAG = 1;
+    var PARTIAL_COMPARE_FLAG = 2;
+    var INFINITY = 1 / 0;
+    var MAX_SAFE_INTEGER = 9007199254740991;
+    var argsTag = "[object Arguments]";
+    var arrayTag = "[object Array]";
+    var boolTag = "[object Boolean]";
+    var dateTag = "[object Date]";
+    var errorTag = "[object Error]";
+    var funcTag = "[object Function]";
+    var genTag = "[object GeneratorFunction]";
+    var mapTag = "[object Map]";
+    var numberTag = "[object Number]";
+    var objectTag = "[object Object]";
+    var promiseTag = "[object Promise]";
+    var regexpTag = "[object RegExp]";
+    var setTag = "[object Set]";
+    var stringTag = "[object String]";
+    var symbolTag = "[object Symbol]";
+    var weakMapTag = "[object WeakMap]";
+    var arrayBufferTag = "[object ArrayBuffer]";
+    var dataViewTag = "[object DataView]";
+    var float32Tag = "[object Float32Array]";
+    var float64Tag = "[object Float64Array]";
+    var int8Tag = "[object Int8Array]";
+    var int16Tag = "[object Int16Array]";
+    var int32Tag = "[object Int32Array]";
+    var uint8Tag = "[object Uint8Array]";
+    var uint8ClampedTag = "[object Uint8ClampedArray]";
+    var uint16Tag = "[object Uint16Array]";
+    var uint32Tag = "[object Uint32Array]";
+    var reIsDeepProp = /\.|\[(?:[^[\]]*|(["'])(?:(?!\1)[^\\]|\\.)*?\1)\]/;
+    var reIsPlainProp = /^\w*$/;
+    var reLeadingDot = /^\./;
+    var rePropName = /[^.[\]]+|\[(?:(-?\d+(?:\.\d+)?)|(["'])((?:(?!\2)[^\\]|\\.)*?)\2)\]|(?=(?:\.|\[\])(?:\.|\[\]|$))/g;
+    var reRegExpChar = /[\\^$.*+?()[\]{}|]/g;
+    var reEscapeChar = /\\(\\)?/g;
+    var reFlags = /\w*$/;
+    var reIsHostCtor = /^\[object .+?Constructor\]$/;
+    var reIsUint = /^(?:0|[1-9]\d*)$/;
+    var typedArrayTags = {};
+    typedArrayTags[float32Tag] = typedArrayTags[float64Tag] = typedArrayTags[int8Tag] = typedArrayTags[int16Tag] = typedArrayTags[int32Tag] = typedArrayTags[uint8Tag] = typedArrayTags[uint8ClampedTag] = typedArrayTags[uint16Tag] = typedArrayTags[uint32Tag] = true;
+    typedArrayTags[argsTag] = typedArrayTags[arrayTag] = typedArrayTags[arrayBufferTag] = typedArrayTags[boolTag] = typedArrayTags[dataViewTag] = typedArrayTags[dateTag] = typedArrayTags[errorTag] = typedArrayTags[funcTag] = typedArrayTags[mapTag] = typedArrayTags[numberTag] = typedArrayTags[objectTag] = typedArrayTags[regexpTag] = typedArrayTags[setTag] = typedArrayTags[stringTag] = typedArrayTags[weakMapTag] = false;
+    var cloneableTags = {};
+    cloneableTags[argsTag] = cloneableTags[arrayTag] = cloneableTags[arrayBufferTag] = cloneableTags[dataViewTag] = cloneableTags[boolTag] = cloneableTags[dateTag] = cloneableTags[float32Tag] = cloneableTags[float64Tag] = cloneableTags[int8Tag] = cloneableTags[int16Tag] = cloneableTags[int32Tag] = cloneableTags[mapTag] = cloneableTags[numberTag] = cloneableTags[objectTag] = cloneableTags[regexpTag] = cloneableTags[setTag] = cloneableTags[stringTag] = cloneableTags[symbolTag] = cloneableTags[uint8Tag] = cloneableTags[uint8ClampedTag] = cloneableTags[uint16Tag] = cloneableTags[uint32Tag] = true;
+    cloneableTags[errorTag] = cloneableTags[funcTag] = cloneableTags[weakMapTag] = false;
+    var freeGlobal = typeof global == "object" && global && global.Object === Object && global;
+    var freeSelf = typeof self == "object" && self && self.Object === Object && self;
+    var root = freeGlobal || freeSelf || Function("return this")();
+    var freeExports = typeof exports == "object" && exports && !exports.nodeType && exports;
+    var freeModule = freeExports && typeof module2 == "object" && module2 && !module2.nodeType && module2;
+    var moduleExports = freeModule && freeModule.exports === freeExports;
+    var freeProcess = moduleExports && freeGlobal.process;
+    var nodeUtil = function() {
+      try {
+        return freeProcess && freeProcess.binding("util");
+      } catch (e) {
+      }
+    }();
+    var nodeIsTypedArray = nodeUtil && nodeUtil.isTypedArray;
+    function addMapEntry(map3, pair) {
+      map3.set(pair[0], pair[1]);
+      return map3;
+    }
+    function addSetEntry(set2, value2) {
+      set2.add(value2);
+      return set2;
+    }
+    function arrayEach(array, iteratee3) {
+      var index2 = -1, length = array ? array.length : 0;
+      while (++index2 < length) {
+        if (iteratee3(array[index2], index2, array) === false) {
+          break;
+        }
+      }
+      return array;
+    }
+    function arrayPush(array, values) {
+      var index2 = -1, length = values.length, offset = array.length;
+      while (++index2 < length) {
+        array[offset + index2] = values[index2];
+      }
+      return array;
+    }
+    function arrayReduce(array, iteratee3, accumulator, initAccum) {
+      var index2 = -1, length = array ? array.length : 0;
+      if (initAccum && length) {
+        accumulator = array[++index2];
+      }
+      while (++index2 < length) {
+        accumulator = iteratee3(accumulator, array[index2], index2, array);
+      }
+      return accumulator;
+    }
+    function arraySome(array, predicate) {
+      var index2 = -1, length = array ? array.length : 0;
+      while (++index2 < length) {
+        if (predicate(array[index2], index2, array)) {
+          return true;
+        }
+      }
+      return false;
+    }
+    function baseProperty(key) {
+      return function(object) {
+        return object == null ? void 0 : object[key];
+      };
+    }
+    function baseTimes(n, iteratee3) {
+      var index2 = -1, result = Array(n);
+      while (++index2 < n) {
+        result[index2] = iteratee3(index2);
+      }
+      return result;
+    }
+    function baseUnary(func) {
+      return function(value2) {
+        return func(value2);
+      };
+    }
+    function getValue(object, key) {
+      return object == null ? void 0 : object[key];
+    }
+    function isHostObject(value2) {
+      var result = false;
+      if (value2 != null && typeof value2.toString != "function") {
+        try {
+          result = !!(value2 + "");
+        } catch (e) {
+        }
+      }
+      return result;
+    }
+    function mapToArray(map3) {
+      var index2 = -1, result = Array(map3.size);
+      map3.forEach(function(value2, key) {
+        result[++index2] = [key, value2];
+      });
+      return result;
+    }
+    function overArg(func, transform) {
+      return function(arg) {
+        return func(transform(arg));
+      };
+    }
+    function setToArray(set2) {
+      var index2 = -1, result = Array(set2.size);
+      set2.forEach(function(value2) {
+        result[++index2] = value2;
+      });
+      return result;
+    }
+    var arrayProto = Array.prototype;
+    var funcProto = Function.prototype;
+    var objectProto = Object.prototype;
+    var coreJsData = root["__core-js_shared__"];
+    var maskSrcKey = function() {
+      var uid = /[^.]+$/.exec(coreJsData && coreJsData.keys && coreJsData.keys.IE_PROTO || "");
+      return uid ? "Symbol(src)_1." + uid : "";
+    }();
+    var funcToString = funcProto.toString;
+    var hasOwnProperty2 = objectProto.hasOwnProperty;
+    var objectToString = objectProto.toString;
+    var reIsNative = RegExp(
+      "^" + funcToString.call(hasOwnProperty2).replace(reRegExpChar, "\\$&").replace(/hasOwnProperty|(function).*?(?=\\\()| for .+?(?=\\\])/g, "$1.*?") + "$"
+    );
+    var Buffer2 = moduleExports ? root.Buffer : void 0;
+    var Symbol2 = root.Symbol;
+    var Uint8Array2 = root.Uint8Array;
+    var getPrototype = overArg(Object.getPrototypeOf, Object);
+    var objectCreate = Object.create;
+    var propertyIsEnumerable = objectProto.propertyIsEnumerable;
+    var splice2 = arrayProto.splice;
+    var nativeGetSymbols = Object.getOwnPropertySymbols;
+    var nativeIsBuffer = Buffer2 ? Buffer2.isBuffer : void 0;
+    var nativeKeys = overArg(Object.keys, Object);
+    var DataView2 = getNative(root, "DataView");
+    var Map2 = getNative(root, "Map");
+    var Promise2 = getNative(root, "Promise");
+    var Set2 = getNative(root, "Set");
+    var WeakMap = getNative(root, "WeakMap");
+    var nativeCreate = getNative(Object, "create");
+    var dataViewCtorString = toSource(DataView2);
+    var mapCtorString = toSource(Map2);
+    var promiseCtorString = toSource(Promise2);
+    var setCtorString = toSource(Set2);
+    var weakMapCtorString = toSource(WeakMap);
+    var symbolProto = Symbol2 ? Symbol2.prototype : void 0;
+    var symbolValueOf = symbolProto ? symbolProto.valueOf : void 0;
+    var symbolToString = symbolProto ? symbolProto.toString : void 0;
+    function Hash(entries) {
+      var index2 = -1, length = entries ? entries.length : 0;
+      this.clear();
+      while (++index2 < length) {
+        var entry = entries[index2];
+        this.set(entry[0], entry[1]);
+      }
+    }
+    function hashClear() {
+      this.__data__ = nativeCreate ? nativeCreate(null) : {};
+    }
+    function hashDelete(key) {
+      return this.has(key) && delete this.__data__[key];
+    }
+    function hashGet(key) {
+      var data = this.__data__;
+      if (nativeCreate) {
+        var result = data[key];
+        return result === HASH_UNDEFINED ? void 0 : result;
+      }
+      return hasOwnProperty2.call(data, key) ? data[key] : void 0;
+    }
+    function hashHas(key) {
+      var data = this.__data__;
+      return nativeCreate ? data[key] !== void 0 : hasOwnProperty2.call(data, key);
+    }
+    function hashSet(key, value2) {
+      var data = this.__data__;
+      data[key] = nativeCreate && value2 === void 0 ? HASH_UNDEFINED : value2;
+      return this;
+    }
+    Hash.prototype.clear = hashClear;
+    Hash.prototype["delete"] = hashDelete;
+    Hash.prototype.get = hashGet;
+    Hash.prototype.has = hashHas;
+    Hash.prototype.set = hashSet;
+    function ListCache(entries) {
+      var index2 = -1, length = entries ? entries.length : 0;
+      this.clear();
+      while (++index2 < length) {
+        var entry = entries[index2];
+        this.set(entry[0], entry[1]);
+      }
+    }
+    function listCacheClear() {
+      this.__data__ = [];
+    }
+    function listCacheDelete(key) {
+      var data = this.__data__, index2 = assocIndexOf(data, key);
+      if (index2 < 0) {
+        return false;
+      }
+      var lastIndex = data.length - 1;
+      if (index2 == lastIndex) {
+        data.pop();
+      } else {
+        splice2.call(data, index2, 1);
+      }
+      return true;
+    }
+    function listCacheGet(key) {
+      var data = this.__data__, index2 = assocIndexOf(data, key);
+      return index2 < 0 ? void 0 : data[index2][1];
+    }
+    function listCacheHas(key) {
+      return assocIndexOf(this.__data__, key) > -1;
+    }
+    function listCacheSet(key, value2) {
+      var data = this.__data__, index2 = assocIndexOf(data, key);
+      if (index2 < 0) {
+        data.push([key, value2]);
+      } else {
+        data[index2][1] = value2;
+      }
+      return this;
+    }
+    ListCache.prototype.clear = listCacheClear;
+    ListCache.prototype["delete"] = listCacheDelete;
+    ListCache.prototype.get = listCacheGet;
+    ListCache.prototype.has = listCacheHas;
+    ListCache.prototype.set = listCacheSet;
+    function MapCache(entries) {
+      var index2 = -1, length = entries ? entries.length : 0;
+      this.clear();
+      while (++index2 < length) {
+        var entry = entries[index2];
+        this.set(entry[0], entry[1]);
+      }
+    }
+    function mapCacheClear() {
+      this.__data__ = {
+        "hash": new Hash(),
+        "map": new (Map2 || ListCache)(),
+        "string": new Hash()
+      };
+    }
+    function mapCacheDelete(key) {
+      return getMapData(this, key)["delete"](key);
+    }
+    function mapCacheGet(key) {
+      return getMapData(this, key).get(key);
+    }
+    function mapCacheHas(key) {
+      return getMapData(this, key).has(key);
+    }
+    function mapCacheSet(key, value2) {
+      getMapData(this, key).set(key, value2);
+      return this;
+    }
+    MapCache.prototype.clear = mapCacheClear;
+    MapCache.prototype["delete"] = mapCacheDelete;
+    MapCache.prototype.get = mapCacheGet;
+    MapCache.prototype.has = mapCacheHas;
+    MapCache.prototype.set = mapCacheSet;
+    function SetCache(values) {
+      var index2 = -1, length = values ? values.length : 0;
+      this.__data__ = new MapCache();
+      while (++index2 < length) {
+        this.add(values[index2]);
+      }
+    }
+    function setCacheAdd(value2) {
+      this.__data__.set(value2, HASH_UNDEFINED);
+      return this;
+    }
+    function setCacheHas(value2) {
+      return this.__data__.has(value2);
+    }
+    SetCache.prototype.add = SetCache.prototype.push = setCacheAdd;
+    SetCache.prototype.has = setCacheHas;
+    function Stack(entries) {
+      this.__data__ = new ListCache(entries);
+    }
+    function stackClear() {
+      this.__data__ = new ListCache();
+    }
+    function stackDelete(key) {
+      return this.__data__["delete"](key);
+    }
+    function stackGet(key) {
+      return this.__data__.get(key);
+    }
+    function stackHas(key) {
+      return this.__data__.has(key);
+    }
+    function stackSet(key, value2) {
+      var cache = this.__data__;
+      if (cache instanceof ListCache) {
+        var pairs2 = cache.__data__;
+        if (!Map2 || pairs2.length < LARGE_ARRAY_SIZE - 1) {
+          pairs2.push([key, value2]);
+          return this;
+        }
+        cache = this.__data__ = new MapCache(pairs2);
+      }
+      cache.set(key, value2);
+      return this;
+    }
+    Stack.prototype.clear = stackClear;
+    Stack.prototype["delete"] = stackDelete;
+    Stack.prototype.get = stackGet;
+    Stack.prototype.has = stackHas;
+    Stack.prototype.set = stackSet;
+    function arrayLikeKeys(value2, inherited) {
+      var result = isArray(value2) || isArguments(value2) ? baseTimes(value2.length, String) : [];
+      var length = result.length, skipIndexes = !!length;
+      for (var key in value2) {
+        if ((inherited || hasOwnProperty2.call(value2, key)) && !(skipIndexes && (key == "length" || isIndex(key, length)))) {
+          result.push(key);
+        }
+      }
+      return result;
+    }
+    function assignValue(object, key, value2) {
+      var objValue = object[key];
+      if (!(hasOwnProperty2.call(object, key) && eq(objValue, value2)) || value2 === void 0 && !(key in object)) {
+        object[key] = value2;
+      }
+    }
+    function assocIndexOf(array, key) {
+      var length = array.length;
+      while (length--) {
+        if (eq(array[length][0], key)) {
+          return length;
+        }
+      }
+      return -1;
+    }
+    function baseAssign(object, source) {
+      return object && copyObject(source, keys2(source), object);
+    }
+    function baseClone(value2, isDeep, isFull, customizer, key, object, stack) {
+      var result;
+      if (customizer) {
+        result = object ? customizer(value2, key, object, stack) : customizer(value2);
+      }
+      if (result !== void 0) {
+        return result;
+      }
+      if (!isObject2(value2)) {
+        return value2;
+      }
+      var isArr = isArray(value2);
+      if (isArr) {
+        result = initCloneArray(value2);
+        if (!isDeep) {
+          return copyArray(value2, result);
+        }
+      } else {
+        var tag = getTag(value2), isFunc = tag == funcTag || tag == genTag;
+        if (isBuffer2(value2)) {
+          return cloneBuffer(value2, isDeep);
+        }
+        if (tag == objectTag || tag == argsTag || isFunc && !object) {
+          if (isHostObject(value2)) {
+            return object ? value2 : {};
+          }
+          result = initCloneObject(isFunc ? {} : value2);
+          if (!isDeep) {
+            return copySymbols(value2, baseAssign(result, value2));
+          }
+        } else {
+          if (!cloneableTags[tag]) {
+            return object ? value2 : {};
+          }
+          result = initCloneByTag(value2, tag, baseClone, isDeep);
+        }
+      }
+      stack || (stack = new Stack());
+      var stacked = stack.get(value2);
+      if (stacked) {
+        return stacked;
+      }
+      stack.set(value2, result);
+      if (!isArr) {
+        var props = isFull ? getAllKeys(value2) : keys2(value2);
+      }
+      arrayEach(props || value2, function(subValue, key2) {
+        if (props) {
+          key2 = subValue;
+          subValue = value2[key2];
+        }
+        assignValue(result, key2, baseClone(subValue, isDeep, isFull, customizer, key2, value2, stack));
+      });
+      return result;
+    }
+    function baseCreate(proto) {
+      return isObject2(proto) ? objectCreate(proto) : {};
+    }
+    function baseGet(object, path2) {
+      path2 = isKey(path2, object) ? [path2] : castPath(path2);
+      var index2 = 0, length = path2.length;
+      while (object != null && index2 < length) {
+        object = object[toKey(path2[index2++])];
+      }
+      return index2 && index2 == length ? object : void 0;
+    }
+    function baseGetAllKeys(object, keysFunc, symbolsFunc) {
+      var result = keysFunc(object);
+      return isArray(object) ? result : arrayPush(result, symbolsFunc(object));
+    }
+    function baseGetTag(value2) {
+      return objectToString.call(value2);
+    }
+    function baseHasIn(object, key) {
+      return object != null && key in Object(object);
+    }
+    function baseIsEqual(value2, other, customizer, bitmask, stack) {
+      if (value2 === other) {
+        return true;
+      }
+      if (value2 == null || other == null || !isObject2(value2) && !isObjectLike(other)) {
+        return value2 !== value2 && other !== other;
+      }
+      return baseIsEqualDeep(value2, other, baseIsEqual, customizer, bitmask, stack);
+    }
+    function baseIsEqualDeep(object, other, equalFunc, customizer, bitmask, stack) {
+      var objIsArr = isArray(object), othIsArr = isArray(other), objTag = arrayTag, othTag = arrayTag;
+      if (!objIsArr) {
+        objTag = getTag(object);
+        objTag = objTag == argsTag ? objectTag : objTag;
+      }
+      if (!othIsArr) {
+        othTag = getTag(other);
+        othTag = othTag == argsTag ? objectTag : othTag;
+      }
+      var objIsObj = objTag == objectTag && !isHostObject(object), othIsObj = othTag == objectTag && !isHostObject(other), isSameTag = objTag == othTag;
+      if (isSameTag && !objIsObj) {
+        stack || (stack = new Stack());
+        return objIsArr || isTypedArray(object) ? equalArrays(object, other, equalFunc, customizer, bitmask, stack) : equalByTag(object, other, objTag, equalFunc, customizer, bitmask, stack);
+      }
+      if (!(bitmask & PARTIAL_COMPARE_FLAG)) {
+        var objIsWrapped = objIsObj && hasOwnProperty2.call(object, "__wrapped__"), othIsWrapped = othIsObj && hasOwnProperty2.call(other, "__wrapped__");
+        if (objIsWrapped || othIsWrapped) {
+          var objUnwrapped = objIsWrapped ? object.value() : object, othUnwrapped = othIsWrapped ? other.value() : other;
+          stack || (stack = new Stack());
+          return equalFunc(objUnwrapped, othUnwrapped, customizer, bitmask, stack);
+        }
+      }
+      if (!isSameTag) {
+        return false;
+      }
+      stack || (stack = new Stack());
+      return equalObjects(object, other, equalFunc, customizer, bitmask, stack);
+    }
+    function baseIsMatch(object, source, matchData, customizer) {
+      var index2 = matchData.length, length = index2, noCustomizer = !customizer;
+      if (object == null) {
+        return !length;
+      }
+      object = Object(object);
+      while (index2--) {
+        var data = matchData[index2];
+        if (noCustomizer && data[2] ? data[1] !== object[data[0]] : !(data[0] in object)) {
+          return false;
+        }
+      }
+      while (++index2 < length) {
+        data = matchData[index2];
+        var key = data[0], objValue = object[key], srcValue = data[1];
+        if (noCustomizer && data[2]) {
+          if (objValue === void 0 && !(key in object)) {
+            return false;
+          }
+        } else {
+          var stack = new Stack();
+          if (customizer) {
+            var result = customizer(objValue, srcValue, key, object, source, stack);
+          }
+          if (!(result === void 0 ? baseIsEqual(srcValue, objValue, customizer, UNORDERED_COMPARE_FLAG | PARTIAL_COMPARE_FLAG, stack) : result)) {
+            return false;
+          }
+        }
+      }
+      return true;
+    }
+    function baseIsNative(value2) {
+      if (!isObject2(value2) || isMasked(value2)) {
+        return false;
+      }
+      var pattern = isFunction(value2) || isHostObject(value2) ? reIsNative : reIsHostCtor;
+      return pattern.test(toSource(value2));
+    }
+    function baseIsTypedArray(value2) {
+      return isObjectLike(value2) && isLength(value2.length) && !!typedArrayTags[objectToString.call(value2)];
+    }
+    function baseIteratee(value2) {
+      if (typeof value2 == "function") {
+        return value2;
+      }
+      if (value2 == null) {
+        return identity;
+      }
+      if (typeof value2 == "object") {
+        return isArray(value2) ? baseMatchesProperty(value2[0], value2[1]) : baseMatches(value2);
+      }
+      return property(value2);
+    }
+    function baseKeys(object) {
+      if (!isPrototype(object)) {
+        return nativeKeys(object);
+      }
+      var result = [];
+      for (var key in Object(object)) {
+        if (hasOwnProperty2.call(object, key) && key != "constructor") {
+          result.push(key);
+        }
+      }
+      return result;
+    }
+    function baseMatches(source) {
+      var matchData = getMatchData(source);
+      if (matchData.length == 1 && matchData[0][2]) {
+        return matchesStrictComparable(matchData[0][0], matchData[0][1]);
+      }
+      return function(object) {
+        return object === source || baseIsMatch(object, source, matchData);
+      };
+    }
+    function baseMatchesProperty(path2, srcValue) {
+      if (isKey(path2) && isStrictComparable(srcValue)) {
+        return matchesStrictComparable(toKey(path2), srcValue);
+      }
+      return function(object) {
+        var objValue = get(object, path2);
+        return objValue === void 0 && objValue === srcValue ? hasIn(object, path2) : baseIsEqual(srcValue, objValue, void 0, UNORDERED_COMPARE_FLAG | PARTIAL_COMPARE_FLAG);
+      };
+    }
+    function basePropertyDeep(path2) {
+      return function(object) {
+        return baseGet(object, path2);
+      };
+    }
+    function baseToString(value2) {
+      if (typeof value2 == "string") {
+        return value2;
+      }
+      if (isSymbol(value2)) {
+        return symbolToString ? symbolToString.call(value2) : "";
+      }
+      var result = value2 + "";
+      return result == "0" && 1 / value2 == -INFINITY ? "-0" : result;
+    }
+    function castPath(value2) {
+      return isArray(value2) ? value2 : stringToPath(value2);
+    }
+    function cloneBuffer(buffer2, isDeep) {
+      if (isDeep) {
+        return buffer2.slice();
+      }
+      var result = new buffer2.constructor(buffer2.length);
+      buffer2.copy(result);
+      return result;
+    }
+    function cloneArrayBuffer(arrayBuffer) {
+      var result = new arrayBuffer.constructor(arrayBuffer.byteLength);
+      new Uint8Array2(result).set(new Uint8Array2(arrayBuffer));
+      return result;
+    }
+    function cloneDataView(dataView, isDeep) {
+      var buffer2 = isDeep ? cloneArrayBuffer(dataView.buffer) : dataView.buffer;
+      return new dataView.constructor(buffer2, dataView.byteOffset, dataView.byteLength);
+    }
+    function cloneMap(map3, isDeep, cloneFunc) {
+      var array = isDeep ? cloneFunc(mapToArray(map3), true) : mapToArray(map3);
+      return arrayReduce(array, addMapEntry, new map3.constructor());
+    }
+    function cloneRegExp(regexp) {
+      var result = new regexp.constructor(regexp.source, reFlags.exec(regexp));
+      result.lastIndex = regexp.lastIndex;
+      return result;
+    }
+    function cloneSet(set2, isDeep, cloneFunc) {
+      var array = isDeep ? cloneFunc(setToArray(set2), true) : setToArray(set2);
+      return arrayReduce(array, addSetEntry, new set2.constructor());
+    }
+    function cloneSymbol(symbol) {
+      return symbolValueOf ? Object(symbolValueOf.call(symbol)) : {};
+    }
+    function cloneTypedArray(typedArray, isDeep) {
+      var buffer2 = isDeep ? cloneArrayBuffer(typedArray.buffer) : typedArray.buffer;
+      return new typedArray.constructor(buffer2, typedArray.byteOffset, typedArray.length);
+    }
+    function copyArray(source, array) {
+      var index2 = -1, length = source.length;
+      array || (array = Array(length));
+      while (++index2 < length) {
+        array[index2] = source[index2];
+      }
+      return array;
+    }
+    function copyObject(source, props, object, customizer) {
+      object || (object = {});
+      var index2 = -1, length = props.length;
+      while (++index2 < length) {
+        var key = props[index2];
+        var newValue = customizer ? customizer(object[key], source[key], key, object, source) : void 0;
+        assignValue(object, key, newValue === void 0 ? source[key] : newValue);
+      }
+      return object;
+    }
+    function copySymbols(source, object) {
+      return copyObject(source, getSymbols(source), object);
+    }
+    function equalArrays(array, other, equalFunc, customizer, bitmask, stack) {
+      var isPartial = bitmask & PARTIAL_COMPARE_FLAG, arrLength = array.length, othLength = other.length;
+      if (arrLength != othLength && !(isPartial && othLength > arrLength)) {
+        return false;
+      }
+      var stacked = stack.get(array);
+      if (stacked && stack.get(other)) {
+        return stacked == other;
+      }
+      var index2 = -1, result = true, seen = bitmask & UNORDERED_COMPARE_FLAG ? new SetCache() : void 0;
+      stack.set(array, other);
+      stack.set(other, array);
+      while (++index2 < arrLength) {
+        var arrValue = array[index2], othValue = other[index2];
+        if (customizer) {
+          var compared = isPartial ? customizer(othValue, arrValue, index2, other, array, stack) : customizer(arrValue, othValue, index2, array, other, stack);
+        }
+        if (compared !== void 0) {
+          if (compared) {
+            continue;
+          }
+          result = false;
+          break;
+        }
+        if (seen) {
+          if (!arraySome(other, function(othValue2, othIndex) {
+            if (!seen.has(othIndex) && (arrValue === othValue2 || equalFunc(arrValue, othValue2, customizer, bitmask, stack))) {
+              return seen.add(othIndex);
+            }
+          })) {
+            result = false;
+            break;
+          }
+        } else if (!(arrValue === othValue || equalFunc(arrValue, othValue, customizer, bitmask, stack))) {
+          result = false;
+          break;
+        }
+      }
+      stack["delete"](array);
+      stack["delete"](other);
+      return result;
+    }
+    function equalByTag(object, other, tag, equalFunc, customizer, bitmask, stack) {
+      switch (tag) {
+        case dataViewTag:
+          if (object.byteLength != other.byteLength || object.byteOffset != other.byteOffset) {
+            return false;
+          }
+          object = object.buffer;
+          other = other.buffer;
+        case arrayBufferTag:
+          if (object.byteLength != other.byteLength || !equalFunc(new Uint8Array2(object), new Uint8Array2(other))) {
+            return false;
+          }
+          return true;
+        case boolTag:
+        case dateTag:
+        case numberTag:
+          return eq(+object, +other);
+        case errorTag:
+          return object.name == other.name && object.message == other.message;
+        case regexpTag:
+        case stringTag:
+          return object == other + "";
+        case mapTag:
+          var convert2 = mapToArray;
+        case setTag:
+          var isPartial = bitmask & PARTIAL_COMPARE_FLAG;
+          convert2 || (convert2 = setToArray);
+          if (object.size != other.size && !isPartial) {
+            return false;
+          }
+          var stacked = stack.get(object);
+          if (stacked) {
+            return stacked == other;
+          }
+          bitmask |= UNORDERED_COMPARE_FLAG;
+          stack.set(object, other);
+          var result = equalArrays(convert2(object), convert2(other), equalFunc, customizer, bitmask, stack);
+          stack["delete"](object);
+          return result;
+        case symbolTag:
+          if (symbolValueOf) {
+            return symbolValueOf.call(object) == symbolValueOf.call(other);
+          }
+      }
+      return false;
+    }
+    function equalObjects(object, other, equalFunc, customizer, bitmask, stack) {
+      var isPartial = bitmask & PARTIAL_COMPARE_FLAG, objProps = keys2(object), objLength = objProps.length, othProps = keys2(other), othLength = othProps.length;
+      if (objLength != othLength && !isPartial) {
+        return false;
+      }
+      var index2 = objLength;
+      while (index2--) {
+        var key = objProps[index2];
+        if (!(isPartial ? key in other : hasOwnProperty2.call(other, key))) {
+          return false;
+        }
+      }
+      var stacked = stack.get(object);
+      if (stacked && stack.get(other)) {
+        return stacked == other;
+      }
+      var result = true;
+      stack.set(object, other);
+      stack.set(other, object);
+      var skipCtor = isPartial;
+      while (++index2 < objLength) {
+        key = objProps[index2];
+        var objValue = object[key], othValue = other[key];
+        if (customizer) {
+          var compared = isPartial ? customizer(othValue, objValue, key, other, object, stack) : customizer(objValue, othValue, key, object, other, stack);
+        }
+        if (!(compared === void 0 ? objValue === othValue || equalFunc(objValue, othValue, customizer, bitmask, stack) : compared)) {
+          result = false;
+          break;
+        }
+        skipCtor || (skipCtor = key == "constructor");
+      }
+      if (result && !skipCtor) {
+        var objCtor = object.constructor, othCtor = other.constructor;
+        if (objCtor != othCtor && ("constructor" in object && "constructor" in other) && !(typeof objCtor == "function" && objCtor instanceof objCtor && typeof othCtor == "function" && othCtor instanceof othCtor)) {
+          result = false;
+        }
+      }
+      stack["delete"](object);
+      stack["delete"](other);
+      return result;
+    }
+    function getAllKeys(object) {
+      return baseGetAllKeys(object, keys2, getSymbols);
+    }
+    function getMapData(map3, key) {
+      var data = map3.__data__;
+      return isKeyable(key) ? data[typeof key == "string" ? "string" : "hash"] : data.map;
+    }
+    function getMatchData(object) {
+      var result = keys2(object), length = result.length;
+      while (length--) {
+        var key = result[length], value2 = object[key];
+        result[length] = [key, value2, isStrictComparable(value2)];
+      }
+      return result;
+    }
+    function getNative(object, key) {
+      var value2 = getValue(object, key);
+      return baseIsNative(value2) ? value2 : void 0;
+    }
+    var getSymbols = nativeGetSymbols ? overArg(nativeGetSymbols, Object) : stubArray;
+    var getTag = baseGetTag;
+    if (DataView2 && getTag(new DataView2(new ArrayBuffer(1))) != dataViewTag || Map2 && getTag(new Map2()) != mapTag || Promise2 && getTag(Promise2.resolve()) != promiseTag || Set2 && getTag(new Set2()) != setTag || WeakMap && getTag(new WeakMap()) != weakMapTag) {
+      getTag = function(value2) {
+        var result = objectToString.call(value2), Ctor = result == objectTag ? value2.constructor : void 0, ctorString = Ctor ? toSource(Ctor) : void 0;
+        if (ctorString) {
+          switch (ctorString) {
+            case dataViewCtorString:
+              return dataViewTag;
+            case mapCtorString:
+              return mapTag;
+            case promiseCtorString:
+              return promiseTag;
+            case setCtorString:
+              return setTag;
+            case weakMapCtorString:
+              return weakMapTag;
+          }
+        }
+        return result;
+      };
+    }
+    function hasPath(object, path2, hasFunc) {
+      path2 = isKey(path2, object) ? [path2] : castPath(path2);
+      var result, index2 = -1, length = path2.length;
+      while (++index2 < length) {
+        var key = toKey(path2[index2]);
+        if (!(result = object != null && hasFunc(object, key))) {
+          break;
+        }
+        object = object[key];
+      }
+      if (result) {
+        return result;
+      }
+      var length = object ? object.length : 0;
+      return !!length && isLength(length) && isIndex(key, length) && (isArray(object) || isArguments(object));
+    }
+    function initCloneArray(array) {
+      var length = array.length, result = array.constructor(length);
+      if (length && typeof array[0] == "string" && hasOwnProperty2.call(array, "index")) {
+        result.index = array.index;
+        result.input = array.input;
+      }
+      return result;
+    }
+    function initCloneObject(object) {
+      return typeof object.constructor == "function" && !isPrototype(object) ? baseCreate(getPrototype(object)) : {};
+    }
+    function initCloneByTag(object, tag, cloneFunc, isDeep) {
+      var Ctor = object.constructor;
+      switch (tag) {
+        case arrayBufferTag:
+          return cloneArrayBuffer(object);
+        case boolTag:
+        case dateTag:
+          return new Ctor(+object);
+        case dataViewTag:
+          return cloneDataView(object, isDeep);
+        case float32Tag:
+        case float64Tag:
+        case int8Tag:
+        case int16Tag:
+        case int32Tag:
+        case uint8Tag:
+        case uint8ClampedTag:
+        case uint16Tag:
+        case uint32Tag:
+          return cloneTypedArray(object, isDeep);
+        case mapTag:
+          return cloneMap(object, isDeep, cloneFunc);
+        case numberTag:
+        case stringTag:
+          return new Ctor(object);
+        case regexpTag:
+          return cloneRegExp(object);
+        case setTag:
+          return cloneSet(object, isDeep, cloneFunc);
+        case symbolTag:
+          return cloneSymbol(object);
+      }
+    }
+    function isIndex(value2, length) {
+      length = length == null ? MAX_SAFE_INTEGER : length;
+      return !!length && (typeof value2 == "number" || reIsUint.test(value2)) && (value2 > -1 && value2 % 1 == 0 && value2 < length);
+    }
+    function isKey(value2, object) {
+      if (isArray(value2)) {
+        return false;
+      }
+      var type2 = typeof value2;
+      if (type2 == "number" || type2 == "symbol" || type2 == "boolean" || value2 == null || isSymbol(value2)) {
+        return true;
+      }
+      return reIsPlainProp.test(value2) || !reIsDeepProp.test(value2) || object != null && value2 in Object(object);
+    }
+    function isKeyable(value2) {
+      var type2 = typeof value2;
+      return type2 == "string" || type2 == "number" || type2 == "symbol" || type2 == "boolean" ? value2 !== "__proto__" : value2 === null;
+    }
+    function isMasked(func) {
+      return !!maskSrcKey && maskSrcKey in func;
+    }
+    function isPrototype(value2) {
+      var Ctor = value2 && value2.constructor, proto = typeof Ctor == "function" && Ctor.prototype || objectProto;
+      return value2 === proto;
+    }
+    function isStrictComparable(value2) {
+      return value2 === value2 && !isObject2(value2);
+    }
+    function matchesStrictComparable(key, srcValue) {
+      return function(object) {
+        if (object == null) {
+          return false;
+        }
+        return object[key] === srcValue && (srcValue !== void 0 || key in Object(object));
+      };
+    }
+    var stringToPath = memoize(function(string3) {
+      string3 = toString3(string3);
+      var result = [];
+      if (reLeadingDot.test(string3)) {
+        result.push("");
+      }
+      string3.replace(rePropName, function(match, number, quote, string4) {
+        result.push(quote ? string4.replace(reEscapeChar, "$1") : number || match);
+      });
+      return result;
+    });
+    function toKey(value2) {
+      if (typeof value2 == "string" || isSymbol(value2)) {
+        return value2;
+      }
+      var result = value2 + "";
+      return result == "0" && 1 / value2 == -INFINITY ? "-0" : result;
+    }
+    function toSource(func) {
+      if (func != null) {
+        try {
+          return funcToString.call(func);
+        } catch (e) {
+        }
+        try {
+          return func + "";
+        } catch (e) {
+        }
+      }
+      return "";
+    }
+    function memoize(func, resolver2) {
+      if (typeof func != "function" || resolver2 && typeof resolver2 != "function") {
+        throw new TypeError(FUNC_ERROR_TEXT);
+      }
+      var memoized = function() {
+        var args = arguments, key = resolver2 ? resolver2.apply(this, args) : args[0], cache = memoized.cache;
+        if (cache.has(key)) {
+          return cache.get(key);
+        }
+        var result = func.apply(this, args);
+        memoized.cache = cache.set(key, result);
+        return result;
+      };
+      memoized.cache = new (memoize.Cache || MapCache)();
+      return memoized;
+    }
+    memoize.Cache = MapCache;
+    function eq(value2, other) {
+      return value2 === other || value2 !== value2 && other !== other;
+    }
+    function isArguments(value2) {
+      return isArrayLikeObject(value2) && hasOwnProperty2.call(value2, "callee") && (!propertyIsEnumerable.call(value2, "callee") || objectToString.call(value2) == argsTag);
+    }
+    var isArray = Array.isArray;
+    function isArrayLike(value2) {
+      return value2 != null && isLength(value2.length) && !isFunction(value2);
+    }
+    function isArrayLikeObject(value2) {
+      return isObjectLike(value2) && isArrayLike(value2);
+    }
+    var isBuffer2 = nativeIsBuffer || stubFalse;
+    function isFunction(value2) {
+      var tag = isObject2(value2) ? objectToString.call(value2) : "";
+      return tag == funcTag || tag == genTag;
+    }
+    function isLength(value2) {
+      return typeof value2 == "number" && value2 > -1 && value2 % 1 == 0 && value2 <= MAX_SAFE_INTEGER;
+    }
+    function isObject2(value2) {
+      var type2 = typeof value2;
+      return !!value2 && (type2 == "object" || type2 == "function");
+    }
+    function isObjectLike(value2) {
+      return !!value2 && typeof value2 == "object";
+    }
+    function isSymbol(value2) {
+      return typeof value2 == "symbol" || isObjectLike(value2) && objectToString.call(value2) == symbolTag;
+    }
+    var isTypedArray = nodeIsTypedArray ? baseUnary(nodeIsTypedArray) : baseIsTypedArray;
+    function toString3(value2) {
+      return value2 == null ? "" : baseToString(value2);
+    }
+    function get(object, path2, defaultValue) {
+      var result = object == null ? void 0 : baseGet(object, path2);
+      return result === void 0 ? defaultValue : result;
+    }
+    function hasIn(object, path2) {
+      return object != null && hasPath(object, path2, baseHasIn);
+    }
+    function keys2(object) {
+      return isArrayLike(object) ? arrayLikeKeys(object) : baseKeys(object);
+    }
+    function identity(value2) {
+      return value2;
+    }
+    function iteratee2(func) {
+      return baseIteratee(typeof func == "function" ? func : baseClone(func, true));
+    }
+    function property(path2) {
+      return isKey(path2) ? baseProperty(toKey(path2)) : basePropertyDeep(path2);
+    }
+    function stubArray() {
+      return [];
+    }
+    function stubFalse() {
+      return false;
+    }
+    module2.exports = iteratee2;
   }
 });
 
@@ -37338,12 +38377,12 @@ var visitParents = (
             typeof value2.name === "string" ? value2.name : void 0
           )
         );
-        Object.defineProperty(visit, "name", {
+        Object.defineProperty(visit2, "name", {
           value: "node (" + color(node2.type + (name ? "<" + name + ">" : "")) + ")"
         });
       }
-      return visit;
-      function visit() {
+      return visit2;
+      function visit2() {
         let result = [];
         let subresult;
         let offset;
@@ -37397,14 +38436,14 @@ var findAndReplace = (
    * @param {Options | null | undefined} [options]
    * @returns {Tree}
    */
-  function(tree, find, replace2, options) {
+  function(tree, find2, replace2, options) {
     let settings;
     let schema2;
-    if (typeof find === "string" || find instanceof RegExp) {
-      schema2 = [[find, replace2]];
+    if (typeof find2 === "string" || find2 instanceof RegExp) {
+      schema2 = [[find2, replace2]];
       settings = options;
     } else {
-      schema2 = find;
+      schema2 = find2;
       settings = replace2;
     }
     if (!settings) {
@@ -37438,14 +38477,14 @@ var findAndReplace = (
     }
     function handler2(node2, parents) {
       const parent = parents[parents.length - 1];
-      const find2 = pairs2[pairIndex][0];
+      const find3 = pairs2[pairIndex][0];
       const replace3 = pairs2[pairIndex][1];
       let start = 0;
       const index2 = parent.children.indexOf(node2);
       let change = false;
       let nodes = [];
-      find2.lastIndex = 0;
-      let match = find2.exec(node2.value);
+      find3.lastIndex = 0;
+      let match = find3.exec(node2.value);
       while (match) {
         const position2 = match.index;
         const matchObject = {
@@ -37473,10 +38512,10 @@ var findAndReplace = (
           start = position2 + match[0].length;
           change = true;
         }
-        if (!find2.global) {
+        if (!find3.global) {
           break;
         }
-        match = find2.exec(node2.value);
+        match = find3.exec(node2.value);
       }
       if (change) {
         if (start < node2.value.length) {
@@ -37513,8 +38552,8 @@ function toPairs(schema2) {
   }
   return result;
 }
-function toExpression(find) {
-  return typeof find === "string" ? new RegExp(escapeStringRegexp(find), "g") : find;
+function toExpression(find2) {
+  return typeof find2 === "string" ? new RegExp(escapeStringRegexp(find2), "g") : find2;
 }
 function toFunction(replace2) {
   return typeof replace2 === "function" ? replace2 : () => replace2;
@@ -41615,6 +42654,57 @@ var jsYaml = {
 };
 var js_yaml_default = jsYaml;
 
+// node_modules/.pnpm/unist-util-visit@4.1.2/node_modules/unist-util-visit/lib/index.js
+var visit = (
+  /**
+   * @type {(
+   *   (<Tree extends Node, Check extends Test>(tree: Tree, test: Check, visitor: BuildVisitor<Tree, Check>, reverse?: boolean | null | undefined) => void) &
+   *   (<Tree extends Node>(tree: Tree, visitor: BuildVisitor<Tree>, reverse?: boolean | null | undefined) => void)
+   * )}
+   */
+  /**
+   * @param {Node} tree
+   * @param {Test} test
+   * @param {Visitor} visitor
+   * @param {boolean | null | undefined} [reverse]
+   * @returns {void}
+   */
+  function(tree, test, visitor, reverse) {
+    if (typeof test === "function" && typeof visitor !== "function") {
+      reverse = visitor;
+      visitor = test;
+      test = null;
+    }
+    visitParents(tree, test, overload, reverse);
+    function overload(node2, parents) {
+      const parent = parents[parents.length - 1];
+      return visitor(
+        node2,
+        parent ? parent.children.indexOf(node2) : null,
+        parent
+      );
+    }
+  }
+);
+
+// node_modules/.pnpm/unist-util-find@2.0.0/node_modules/unist-util-find/index.js
+var import_lodash = __toESM(require_lodash(), 1);
+function find(tree, condition) {
+  if (!tree)
+    throw new Error("unist-util-find requires a tree to search");
+  if (!condition)
+    throw new Error("unist-util-find requires a condition");
+  const predicate = (0, import_lodash.default)(condition);
+  let result;
+  visit(tree, function(node2) {
+    if (predicate(node2)) {
+      result = node2;
+      return false;
+    }
+  });
+  return result;
+}
+
 // .github/actions/generate-changeset/gql.ts
 function gql_get_pr(owner, repo, pr_number) {
   return `{
@@ -41680,10 +42770,13 @@ function create_package_checklist(changed_packages, other_packages) {
 ${changed_packages_list.concat(other_packages_list).join("\n")}
 `;
 }
+function get_version_interaction_text(manual_version) {
+  return manual_version ? "manually select packages to update" : "enable automatic pacakge selection";
+}
 function create_changeset_comment({
   changed_packages,
   changelog,
-  manual_changeset,
+  manual_version,
   other_packages
 }) {
   return `<!-- tag=changesets_gradio -->
@@ -41693,8 +42786,10 @@ function create_changeset_comment({
 #### This Pull Request includes changes to the following packages. 
 
 ${create_version_table(changed_packages)}
-${manual_changeset ? create_package_checklist(changed_packages, other_packages) : ""}
-- [ ] Maintainers can click this checkbox to manually select packages to update.
+${manual_version ? create_package_checklist(changed_packages, other_packages) : ""}
+- [${manual_version ? "x" : ""}] Maintainers can click this checkbox to ${get_version_interaction_text(
+    manual_version
+  )}.
 
 #### With the following changelog entry.
 
@@ -41726,6 +42821,20 @@ function get_frontmatter_versions(md) {
     return versions;
   }
   return false;
+}
+function check_for_interaction(md_src) {
+  if (!md_src)
+    return { manual_version: false };
+  const new_ast = md_parser.parse(md_src);
+  const manual_node = find(new_ast, (node2) => {
+    return node2.type === "listItem" && node2?.checked != null && !!find(
+      node2?.children[0],
+      (inner_node) => inner_node?.value === "Maintainers can click this checkbox to manually select packages to update."
+    );
+  });
+  return {
+    manual_version: !!manual_node?.checked
+  };
 }
 
 // .github/actions/generate-changeset/index.ts
@@ -41892,10 +43001,11 @@ ${type2}:${title}
   }
   const frontmatter_version = get_frontmatter_versions(old_changeset_content);
   const other_packages = pkgs.filter((p) => !p.packageJson.private).map((p) => p.packageJson.name).filter((p) => !updated_pkgs.has(p));
+  const { manual_version } = import_github.context.eventName === "issue_comment" ? check_for_interaction(import_github.context.payload?.comment?.body) : { manual_version: false };
   const pr_comment_content = create_changeset_comment({
     changed_packages: manual_changeset && frontmatter_version ? frontmatter_version : Array.from(updated_pkgs).map((pkg) => [pkg, version2]),
     changelog: title,
-    manual_changeset,
+    manual_version,
     other_packages
   });
   if (comment) {

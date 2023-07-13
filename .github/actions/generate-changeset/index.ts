@@ -39,6 +39,10 @@ async function run() {
 	let {
 		repository: {
 			pullRequest: {
+				baseRefName: base_branch_name,
+				headRefName: current_branch_name,
+				baseRefOid: base_sha,
+				headRefOid: head_sha,
 				closingIssuesReferences: { nodes: closes },
 				labels: { nodes: labels },
 				title,

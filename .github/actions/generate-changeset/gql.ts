@@ -69,6 +69,8 @@ function create_package_checklist(
 
 	return `\n#### Select the correct packages:
 ${changed_packages_list.concat(other_packages_list).join("\n")}
+
+-
 `;
 }
 

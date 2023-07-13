@@ -182,7 +182,7 @@ async function run() {
 
 		await exec(
 			"git",
-			["--no-pager", "shortlog", "-p", "-1", "--", filename],
+			["--no-pager", "log", "-p", "-1", "--", filename],
 			options,
 		);
 

@@ -98,7 +98,7 @@ async function run() {
 		info("Changeset comment updated.");
 	}
 
-	const { packages: pkgs, rootDir } = getPackagesSync(process.cwd());
+	const { packages: pkgs } = getPackagesSync(process.cwd());
 
 	let packages_versions: undefined | [string, string | boolean][] = undefined;
 	let manual_package_selection = false;
@@ -151,7 +151,11 @@ async function run() {
 
 	let type = get_type_from_label(labels) || get_type_from_linked_issues(closes);
 
-	const changeset_content = generate_changeset(packages_versions, type, title);
+	const changeset_content = await generate_changeset(
+		packages_versions,
+		type,
+		title,
+	);
 
 	if (changeset_content.trim() !== old_changeset_content.trim()) {
 		const operation =

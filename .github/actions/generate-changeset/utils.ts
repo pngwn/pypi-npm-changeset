@@ -1,3 +1,5 @@
+import { format } from "prettier";
+
 export function gql_get_pr(owner: string, repo: string, pr_number: number) {
 	return `{
     repository(owner: "${owner}", name: "${repo}") {
@@ -52,7 +54,9 @@ function create_version_table(packages: [string, string | boolean][]) {
 	if (!packages.length) return "__No changes detected. __";
 	const rendered_packages = packages
 		.filter(([p, v]) => p && v)
+		.sort((a, b) => a[0].localeCompare(b[0]))
 		.map(([p, v]) => `|\`${p}\` | \`${v}\` |`)
+
 		.join("\n");
 
 	return `| Package | Version |
@@ -61,9 +65,9 @@ ${rendered_packages}`;
 }
 
 function create_package_checklist(packages: [string, string | boolean][]) {
-	const changed_packages_list = packages.map(
-		([p, v]) => `- [${!!v ? "x" : " "}] \`${p}\``,
-	);
+	const changed_packages_list = packages
+		.sort((a, b) => a[0].localeCompare(b[0]))
+		.map(([p, v]) => `- [${!!v ? "x" : " "}] \`${p}\``);
 
 	return `\n#### Select the correct packages:
 ${changed_packages_list.join("\n")}
@@ -336,18 +340,23 @@ export function get_client(token: string, owner: string, repo: string) {
 	};
 }
 
-export function generate_changeset(
+export async function generate_changeset(
 	packages: [string, string | boolean][],
 	type: string,
 	title: string,
 ) {
-	return `---
+	if (packages.filter(([name, version]) => !!name && !!version).length === 0) {
+		return "";
+	}
+
+	return await format(`---
 ${packages
 	.filter(([name, version]) => !!name && !!version)
+	.sort((a, b) => a[0].localeCompare(b[0]))
 	.map(([name, version]) => `"${name}": ${version}`)
 	.join("\n")}
-	---
-	
+---
+
 ${type}:${title}
-`;
+`);
 }

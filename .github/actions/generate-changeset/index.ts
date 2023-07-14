@@ -108,6 +108,8 @@ async function run() {
 
 		manual_package_selection = selection.manual_package_selection;
 
+		console.log(JSON.stringify(selection, null, 2));
+
 		if (manual_package_selection && selection.versions) {
 			console.log(selection.versions);
 			packages_versions = selection.versions;

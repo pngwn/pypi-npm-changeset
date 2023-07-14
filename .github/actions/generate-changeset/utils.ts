@@ -49,9 +49,10 @@ function get_title(packages: [string, string | boolean][]) {
 }
 
 function create_version_table(packages: [string, string | boolean][]) {
-	if (!packages.length) return "__No changes detected. __";
-	const rendered_packages = packages
-		.filter(([p, v]) => p && v)
+	const packages_to_render = packages.filter(([p, v]) => p && v);
+	if (!packages_to_render.length) return "__No changes detected. __";
+
+	const rendered_packages = packages_to_render
 		.sort((a, b) => a[0].localeCompare(b[0]))
 		.map(([p, v]) => `|\`${p}\` | \`${v}\` |`)
 

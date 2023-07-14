@@ -42954,9 +42954,10 @@ function get_title(packages) {
   return packages.length ? `change detected` : `no changes detected`;
 }
 function create_version_table(packages) {
-  if (!packages.length)
+  const packages_to_render = packages.filter(([p, v]) => p && v);
+  if (!packages_to_render.length)
     return "__No changes detected. __";
-  const rendered_packages = packages.filter(([p, v]) => p && v).sort((a, b) => a[0].localeCompare(b[0])).map(([p, v]) => `|\`${p}\` | \`${v}\` |`).join("\n");
+  const rendered_packages = packages_to_render.sort((a, b) => a[0].localeCompare(b[0])).map(([p, v]) => `|\`${p}\` | \`${v}\` |`).join("\n");
   return `| Package | Version |
 |--------|--------|
 ${rendered_packages}`;
@@ -43210,9 +43211,7 @@ async function run() {
   if (comment?.body) {
     const selection = check_for_manual_selection(comment.body);
     manual_package_selection = selection.manual_package_selection;
-    console.log(JSON.stringify(selection, null, 2));
     if (manual_package_selection && selection.versions && selection.versions.length) {
-      console.log(selection.versions);
       packages_versions = selection.versions;
     }
   }
@@ -43225,7 +43224,6 @@ async function run() {
       main_pkg,
       version: version2
     });
-    console.log({ _version, version: version2 });
     if (_version !== "unknown" && version2 === "unknown") {
       version2 = _version;
     }
@@ -43244,7 +43242,6 @@ async function run() {
     title
   );
   if (changeset_content.trim() !== old_changeset_content.trim()) {
-    console.log({ packages_versions, changeset_content });
     const operation = (packages_versions.length === 0 || packages_versions.every(([p, v]) => !v)) && changeset_content === "" ? "delete" : "add";
     if (operation === "delete") {
       await import_fs.promises.unlink(changeset_path);
@@ -43379,7 +43376,6 @@ async function get_changed_packages({
   const changed_dependency_files = dependency_files.filter(
     ([f]) => changed_files.has(f)
   );
-  console.log({ changed_dependency_files, changed_pkgs, version: version2 });
   const updated_pkgs = /* @__PURE__ */ new Set();
   changed_pkgs.forEach((pkg) => {
     updated_pkgs.add(pkg.packageJson.name);

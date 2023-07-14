@@ -40,10 +40,6 @@ type PackageJson = Packages["packages"][0]["packageJson"] & {
 };
 
 async function run() {
-	// console.log(JSON.stringify(context, null, 2));
-
-	// we always need these details
-
 	if (context?.payload?.pull_request?.head.ref === "changeset-release/main") {
 		info("Release PR. Skipping changeset generation.");
 		return;
@@ -54,8 +50,6 @@ async function run() {
 	const client = get_client(token, context.repo.owner, context.repo.repo);
 	const pull_request_number =
 		context?.payload?.number || context?.issue?.number;
-
-	// console.log({ pull_request_number });
 
 	let {
 		base_branch_name,
@@ -108,14 +102,11 @@ async function run() {
 
 		manual_package_selection = selection.manual_package_selection;
 
-		console.log(JSON.stringify(selection, null, 2));
-
 		if (
 			manual_package_selection &&
 			selection.versions &&
 			selection.versions.length
 		) {
-			console.log(selection.versions);
 			packages_versions = selection.versions;
 		}
 	}
@@ -132,8 +123,6 @@ async function run() {
 			main_pkg,
 			version,
 		});
-
-		console.log({ _version, version });
 
 		if (_version !== "unknown" && version === "unknown") {
 			version = _version;
@@ -158,13 +147,13 @@ async function run() {
 	);
 
 	if (changeset_content.trim() !== old_changeset_content.trim()) {
-		console.log({ packages_versions, changeset_content });
 		const operation =
 			(packages_versions.length === 0 ||
 				packages_versions.every(([p, v]) => !v)) &&
 			changeset_content === ""
 				? "delete"
 				: "add";
+
 		if (operation === "delete") {
 			await fs.unlink(changeset_path);
 			warning("No packages selected. Skipping changeset generation.");
@@ -358,8 +347,6 @@ async function get_changed_packages({
 		name: string;
 		add_to_main_changeset: boolean;
 	}
-
-	console.log({ changed_dependency_files, changed_pkgs, version });
 
 	const updated_pkgs = new Set<string>();
 

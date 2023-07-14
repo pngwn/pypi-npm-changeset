@@ -341,6 +341,10 @@ export function generate_changeset(
 	type: string,
 	title: string,
 ) {
+	if (packages.filter(([name, version]) => !!name && !!version).length === 0) {
+		return "";
+	}
+
 	return `---
 ${packages
 	.filter(([name, version]) => !!name && !!version)

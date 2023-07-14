@@ -98,7 +98,7 @@ async function run() {
 		info("Changeset comment updated.");
 	}
 
-	const { packages: pkgs, rootDir } = getPackagesSync(process.cwd());
+	const { packages: pkgs } = getPackagesSync(process.cwd());
 
 	let packages_versions: undefined | [string, string | boolean][] = undefined;
 	let manual_package_selection = false;

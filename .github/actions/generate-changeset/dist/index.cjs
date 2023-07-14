@@ -43144,6 +43144,9 @@ function get_client(token, owner, repo) {
   };
 }
 function generate_changeset(packages, type2, title) {
+  if (packages.filter(([name, version2]) => !!name && !!version2).length === 0) {
+    return "";
+  }
   return `---
 ${packages.filter(([name, version2]) => !!name && !!version2).map(([name, version2]) => `"${name}": ${version2}`).join("\n")}
 	---
@@ -43203,7 +43206,7 @@ async function run() {
     });
     (0, import_core.info)("Changeset comment updated.");
   }
-  const { packages: pkgs, rootDir } = (0, import_get_packages.getPackagesSync)(process.cwd());
+  const { packages: pkgs } = (0, import_get_packages.getPackagesSync)(process.cwd());
   let packages_versions = void 0;
   let manual_package_selection = false;
   if (comment?.body) {

@@ -43021,9 +43021,7 @@ function get_frontmatter_versions(md) {
 function check_for_manual_selection(md_src) {
   if (!md_src)
     return { manual_package_selection: false };
-  console.log(md_src);
   const new_ast = md_parser.parse(md_src);
-  console.log(JSON.stringify(new_ast, null, 2));
   const manual_node = find(new_ast, (node2) => {
     return node2.type === "listItem" && node2?.checked != null && !!find(
       node2?.children[0],
@@ -43042,7 +43040,6 @@ function check_for_manual_selection(md_src) {
       }
     });
   }
-  console.log(manual_node);
   return {
     manual_package_selection: !!manual_node?.checked,
     versions: manual_node ? versions : void 0
@@ -43168,7 +43165,6 @@ var dev_only_ignore_globs = [
   "!**/requirements.txt"
 ];
 async function run() {
-  console.log(JSON.stringify(import_github2.context, null, 2));
   if (import_github2.context?.payload?.pull_request?.head.ref === "changeset-release/main") {
     (0, import_core.info)("Release PR. Skipping changeset generation.");
     return;
@@ -43177,7 +43173,6 @@ async function run() {
   const main_pkg = (0, import_core.getInput)("main_pkg");
   const client = get_client(token, import_github2.context.repo.owner, import_github2.context.repo.repo);
   const pull_request_number = import_github2.context?.payload?.number || import_github2.context?.issue?.number;
-  console.log({ pull_request_number });
   let {
     base_branch_name,
     current_branch_name,
@@ -43241,7 +43236,6 @@ async function run() {
   }
   let type2 = get_type_from_label(labels) || get_type_from_linked_issues(closes);
   const changeset_content = generate_changeset(packages_versions, type2, title);
-  console.log(changeset_content, old_changeset_content);
   if (changeset_content.trim() !== old_changeset_content.trim()) {
     import_fs.promises.writeFile(changeset_path, changeset_content);
     await (0, import_exec.exec)("git", [
@@ -43313,11 +43307,9 @@ async function get_changeset_status(changed_files) {
   const options = {
     listeners: {
       stdout: (data) => {
-        console.log(data.toString());
         output_data += data.toString();
       },
       stderr: (data) => {
-        console.log(data.toString());
         output_data += data.toString();
       }
     }
@@ -43373,6 +43365,7 @@ async function get_changed_packages({
   const changed_dependency_files = dependency_files.filter(
     ([f]) => changed_files.has(f)
   );
+  console.log(changed_dependency_files, changed_pkgs);
   const updated_pkgs = /* @__PURE__ */ new Set();
   changed_pkgs.forEach((pkg) => {
     updated_pkgs.add(pkg.packageJson.name);
@@ -43387,19 +43380,16 @@ async function get_changed_packages({
     }
   });
   let new_version = version2;
-  let title = "";
   if (new_version === "unknown") {
     if (changed_pkgs.length) {
       new_version = "minor";
     } else if (changed_dependency_files.length) {
       new_version = "patch";
-      title = "Update dependencies.";
     }
   }
   return {
     updated_pkgs,
-    version: new_version,
-    title
+    version: new_version
   };
 }
 /*! Bundled license information:

@@ -155,11 +155,8 @@ export function check_for_manual_selection(md_src: string): {
 } {
 	if (!md_src) return { manual_package_selection: false };
 
-	console.log(md_src);
-
 	const new_ast = md_parser.parse(md_src);
 
-	console.log(JSON.stringify(new_ast, null, 2));
 	const manual_node: ListItem | undefined = find(new_ast, (node) => {
 		return (
 			node.type === "listItem" &&
@@ -188,8 +185,6 @@ export function check_for_manual_selection(md_src: string): {
 			}
 		});
 	}
-
-	console.log(manual_node);
 
 	return {
 		manual_package_selection: !!manual_node?.checked,

@@ -254,10 +254,12 @@ async function get_changeset_status(changed_files: Set<string>): Promise<{
 
 	if (changeset_path === "") {
 		return {
-			changeset_path: human_id.humanId({
-				separator: "-",
-				capitalize: false,
-			}),
+			changeset_path:
+				".changeset/" +
+				human_id.humanId({
+					separator: "-",
+					capitalize: false,
+				}),
 			manual_mode: false,
 			old_changeset_content: "",
 		};

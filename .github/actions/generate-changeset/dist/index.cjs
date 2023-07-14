@@ -43210,7 +43210,7 @@ async function run() {
     const selection = check_for_manual_selection(comment.body);
     manual_package_selection = selection.manual_package_selection;
     console.log(JSON.stringify(selection, null, 2));
-    if (manual_package_selection && selection.versions) {
+    if (manual_package_selection && selection.versions && selection.versions.length) {
       console.log(selection.versions);
       packages_versions = selection.versions;
     }

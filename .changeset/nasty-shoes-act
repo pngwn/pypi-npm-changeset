@@ -1,4 +1,7 @@
 ---
+"@pngwn/gradio-test-pkg-one": major
+"@pngwn/gradio-test-pkg-private": major
+"@pngwn/gradio-test-pkg-three": major
 "gradio-test-client-pypi": major
 "gradio-test-pypi": major
 ---

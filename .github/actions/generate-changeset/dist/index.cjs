@@ -3990,8 +3990,8 @@ var require_graceful_fs = __commonJS({
     }
     function noop() {
     }
-    function publishQueue(context2, queue2) {
-      Object.defineProperty(context2, gracefulQueue, {
+    function publishQueue(context3, queue2) {
+      Object.defineProperty(context3, gracefulQueue, {
         get: function() {
           return queue2;
         }
@@ -10407,11 +10407,11 @@ var require_queue = __commonJS({
   "node_modules/.pnpm/fastq@1.15.0/node_modules/fastq/queue.js"(exports, module2) {
     "use strict";
     var reusify = require_reusify();
-    function fastqueue(context2, worker, concurrency) {
-      if (typeof context2 === "function") {
+    function fastqueue(context3, worker, concurrency) {
+      if (typeof context3 === "function") {
         concurrency = worker;
-        worker = context2;
-        context2 = null;
+        worker = context3;
+        context3 = null;
       }
       if (concurrency < 1) {
         throw new Error("fastqueue concurrency must be greater than 1");
@@ -10478,7 +10478,7 @@ var require_queue = __commonJS({
       }
       function push2(value2, done) {
         var current = cache.get();
-        current.context = context2;
+        current.context = context3;
         current.release = release;
         current.value = value2;
         current.callback = done || noop;
@@ -10494,12 +10494,12 @@ var require_queue = __commonJS({
           }
         } else {
           _running++;
-          worker.call(context2, current.value, current.worked);
+          worker.call(context3, current.value, current.worked);
         }
       }
       function unshift(value2, done) {
         var current = cache.get();
-        current.context = context2;
+        current.context = context3;
         current.release = release;
         current.value = value2;
         current.callback = done || noop;
@@ -10514,7 +10514,7 @@ var require_queue = __commonJS({
           }
         } else {
           _running++;
-          worker.call(context2, current.value, current.worked);
+          worker.call(context3, current.value, current.worked);
         }
       }
       function release(holder) {
@@ -10529,7 +10529,7 @@ var require_queue = __commonJS({
             }
             queueHead = next.next;
             next.next = null;
-            worker.call(context2, next.value, next.worked);
+            worker.call(context3, next.value, next.worked);
             if (queueTail === null) {
               self2.empty();
             }
@@ -10578,18 +10578,18 @@ var require_queue = __commonJS({
         self2.release(self2);
       };
     }
-    function queueAsPromised(context2, worker, concurrency) {
-      if (typeof context2 === "function") {
+    function queueAsPromised(context3, worker, concurrency) {
+      if (typeof context3 === "function") {
         concurrency = worker;
-        worker = context2;
-        context2 = null;
+        worker = context3;
+        context3 = null;
       }
       function asyncWrapper(arg, cb) {
         worker.call(this, arg).then(function(res) {
           cb(null, res);
         }, cb);
       }
-      var queue = fastqueue(context2, asyncWrapper, concurrency);
+      var queue = fastqueue(context3, asyncWrapper, concurrency);
       var pushCb = queue.push;
       var unshiftCb = queue.unshift;
       queue.push = push2;
@@ -18747,8 +18747,8 @@ var require_dist_node2 = __commonJS({
     function isKeyOperator(operator) {
       return operator === ";" || operator === "&" || operator === "?";
     }
-    function getValues(context2, operator, key, modifier) {
-      var value2 = context2[key], result = [];
+    function getValues(context3, operator, key, modifier) {
+      var value2 = context3[key], result = [];
       if (isDefined(value2) && value2 !== "") {
         if (typeof value2 === "string" || typeof value2 === "number" || typeof value2 === "boolean") {
           value2 = value2.toString();
@@ -18808,7 +18808,7 @@ var require_dist_node2 = __commonJS({
         expand: expand.bind(null, template)
       };
     }
-    function expand(template, context2) {
+    function expand(template, context3) {
       var operators = ["+", "#", ".", "/", ";", "?", "&"];
       return template.replace(/\{([^\{\}]+)\}|([^\{\}]+)/g, function(_, expression, literal) {
         if (expression) {
@@ -18820,7 +18820,7 @@ var require_dist_node2 = __commonJS({
           }
           expression.split(/,/g).forEach(function(variable) {
             var tmp = /([^:\*]*)(?::(\d+)|(\*))?/.exec(variable);
-            values.push(getValues(context2, operator, tmp[1], tmp[2] || tmp[3]));
+            values.push(getValues(context3, operator, tmp[1], tmp[2] || tmp[3]));
           });
           if (operator && operator !== "+") {
             var separator = ",";
@@ -20826,9 +20826,9 @@ var require_lib4 = __commonJS({
     FetchError.prototype = Object.create(Error.prototype);
     FetchError.prototype.constructor = FetchError;
     FetchError.prototype.name = "FetchError";
-    var convert2;
+    var convert3;
     try {
-      convert2 = require("encoding").convert;
+      convert3 = require("encoding").convert;
     } catch (e) {
     }
     var INTERNALS = Symbol("Body internals");
@@ -21035,7 +21035,7 @@ var require_lib4 = __commonJS({
       });
     }
     function convertBody(buffer2, headers) {
-      if (typeof convert2 !== "function") {
+      if (typeof convert3 !== "function") {
         throw new Error("The package `encoding` must be installed to use the textConverted() function");
       }
       const ct = headers.get("content-type");
@@ -21069,7 +21069,7 @@ var require_lib4 = __commonJS({
           charset = "gb18030";
         }
       }
-      return convert2(buffer2, "UTF-8", charset).toString();
+      return convert3(buffer2, "UTF-8", charset).toString();
     }
     function isURLSearchParams(obj) {
       if (typeof obj !== "object" || typeof obj.append !== "function" || typeof obj.delete !== "function" || typeof obj.get !== "function" || typeof obj.getAll !== "function" || typeof obj.has !== "function" || typeof obj.set !== "function") {
@@ -23871,11 +23871,11 @@ var require_github = __commonJS({
     var Context = __importStar(require_context());
     var utils_1 = require_utils9();
     exports.context = new Context.Context();
-    function getOctokit2(token, options, ...additionalPlugins) {
+    function getOctokit3(token, options, ...additionalPlugins) {
       const GitHubWithPlugins = utils_1.GitHub.plugin(...additionalPlugins);
       return new GitHubWithPlugins(utils_1.getOctokitOptions(token, options));
     }
-    exports.getOctokit = getOctokit2;
+    exports.getOctokit = getOctokit3;
   }
 });
 
@@ -23974,23 +23974,23 @@ var require_isexe = __commonJS({
           throw new TypeError("callback not provided");
         }
         return new Promise(function(resolve, reject) {
-          isexe(path2, options || {}, function(er, is2) {
+          isexe(path2, options || {}, function(er, is3) {
             if (er) {
               reject(er);
             } else {
-              resolve(is2);
+              resolve(is3);
             }
           });
         });
       }
-      core2(path2, options || {}, function(er, is2) {
+      core2(path2, options || {}, function(er, is3) {
         if (er) {
           if (er.code === "EACCES" || options && options.ignoreErrors) {
             er = null;
-            is2 = false;
+            is3 = false;
           }
         }
-        cb(er, is2);
+        cb(er, is3);
       });
     }
     function sync(path2, options) {
@@ -24071,8 +24071,8 @@ var require_which = __commonJS({
           if (ii === ll)
             return F(i + 1, l);
           var ext = pathExt[ii];
-          isexe(p + ext, { pathExt: pathExtExe }, function(er, is2) {
-            if (!er && is2) {
+          isexe(p + ext, { pathExt: pathExtExe }, function(er, is3) {
+            if (!er && is3) {
               if (opt.all)
                 found.push(p + ext);
               else
@@ -24100,10 +24100,10 @@ var require_which = __commonJS({
         }
         for (var j = 0, ll = pathExt.length; j < ll; j++) {
           var cur = p + pathExt[j];
-          var is2;
+          var is3;
           try {
-            is2 = isexe.sync(cur, { pathExt: pathExtExe });
-            if (is2) {
+            is3 = isexe.sync(cur, { pathExt: pathExtExe });
+            if (is3) {
               if (opt.all)
                 found.push(cur);
               else
@@ -25571,9 +25571,9 @@ var require_regeneratorRuntime = __commonJS({
         };
       }
       function wrap2(innerFn, outerFn, self2, tryLocsList) {
-        var protoGenerator = outerFn && outerFn.prototype instanceof Generator ? outerFn : Generator, generator = Object.create(protoGenerator.prototype), context2 = new Context(tryLocsList || []);
+        var protoGenerator = outerFn && outerFn.prototype instanceof Generator ? outerFn : Generator, generator = Object.create(protoGenerator.prototype), context3 = new Context(tryLocsList || []);
         return defineProperty(generator, "_invoke", {
-          value: makeInvokeMethod(innerFn, self2, context2)
+          value: makeInvokeMethod(innerFn, self2, context3)
         }), generator;
       }
       function tryCatch(fn, obj, arg) {
@@ -25640,7 +25640,7 @@ var require_regeneratorRuntime = __commonJS({
           }
         });
       }
-      function makeInvokeMethod(innerFn, self2, context2) {
+      function makeInvokeMethod(innerFn, self2, context3) {
         var state = "suspendedStart";
         return function(method, arg) {
           if ("executing" === state)
@@ -25650,47 +25650,47 @@ var require_regeneratorRuntime = __commonJS({
               throw arg;
             return doneResult();
           }
-          for (context2.method = method, context2.arg = arg; ; ) {
-            var delegate = context2.delegate;
+          for (context3.method = method, context3.arg = arg; ; ) {
+            var delegate = context3.delegate;
             if (delegate) {
-              var delegateResult = maybeInvokeDelegate(delegate, context2);
+              var delegateResult = maybeInvokeDelegate(delegate, context3);
               if (delegateResult) {
                 if (delegateResult === ContinueSentinel)
                   continue;
                 return delegateResult;
               }
             }
-            if ("next" === context2.method)
-              context2.sent = context2._sent = context2.arg;
-            else if ("throw" === context2.method) {
+            if ("next" === context3.method)
+              context3.sent = context3._sent = context3.arg;
+            else if ("throw" === context3.method) {
               if ("suspendedStart" === state)
-                throw state = "completed", context2.arg;
-              context2.dispatchException(context2.arg);
+                throw state = "completed", context3.arg;
+              context3.dispatchException(context3.arg);
             } else
-              "return" === context2.method && context2.abrupt("return", context2.arg);
+              "return" === context3.method && context3.abrupt("return", context3.arg);
             state = "executing";
-            var record = tryCatch(innerFn, self2, context2);
+            var record = tryCatch(innerFn, self2, context3);
             if ("normal" === record.type) {
-              if (state = context2.done ? "completed" : "suspendedYield", record.arg === ContinueSentinel)
+              if (state = context3.done ? "completed" : "suspendedYield", record.arg === ContinueSentinel)
                 continue;
               return {
                 value: record.arg,
-                done: context2.done
+                done: context3.done
               };
             }
-            "throw" === record.type && (state = "completed", context2.method = "throw", context2.arg = record.arg);
+            "throw" === record.type && (state = "completed", context3.method = "throw", context3.arg = record.arg);
           }
         };
       }
-      function maybeInvokeDelegate(delegate, context2) {
-        var methodName = context2.method, method = delegate.iterator[methodName];
+      function maybeInvokeDelegate(delegate, context3) {
+        var methodName = context3.method, method = delegate.iterator[methodName];
         if (void 0 === method)
-          return context2.delegate = null, "throw" === methodName && delegate.iterator["return"] && (context2.method = "return", context2.arg = void 0, maybeInvokeDelegate(delegate, context2), "throw" === context2.method) || "return" !== methodName && (context2.method = "throw", context2.arg = new TypeError("The iterator does not provide a '" + methodName + "' method")), ContinueSentinel;
-        var record = tryCatch(method, delegate.iterator, context2.arg);
+          return context3.delegate = null, "throw" === methodName && delegate.iterator["return"] && (context3.method = "return", context3.arg = void 0, maybeInvokeDelegate(delegate, context3), "throw" === context3.method) || "return" !== methodName && (context3.method = "throw", context3.arg = new TypeError("The iterator does not provide a '" + methodName + "' method")), ContinueSentinel;
+        var record = tryCatch(method, delegate.iterator, context3.arg);
         if ("throw" === record.type)
-          return context2.method = "throw", context2.arg = record.arg, context2.delegate = null, ContinueSentinel;
+          return context3.method = "throw", context3.arg = record.arg, context3.delegate = null, ContinueSentinel;
         var info2 = record.arg;
-        return info2 ? info2.done ? (context2[delegate.resultName] = info2.value, context2.next = delegate.nextLoc, "return" !== context2.method && (context2.method = "next", context2.arg = void 0), context2.delegate = null, ContinueSentinel) : info2 : (context2.method = "throw", context2.arg = new TypeError("iterator result is not an object"), context2.delegate = null, ContinueSentinel);
+        return info2 ? info2.done ? (context3[delegate.resultName] = info2.value, context3.next = delegate.nextLoc, "return" !== context3.method && (context3.method = "next", context3.arg = void 0), context3.delegate = null, ContinueSentinel) : info2 : (context3.method = "throw", context3.arg = new TypeError("iterator result is not an object"), context3.delegate = null, ContinueSentinel);
       }
       function pushTryEntry(locs) {
         var entry = {
@@ -25790,9 +25790,9 @@ var require_regeneratorRuntime = __commonJS({
         dispatchException: function dispatchException(exception2) {
           if (this.done)
             throw exception2;
-          var context2 = this;
+          var context3 = this;
           function handle(loc, caught) {
-            return record.type = "throw", record.arg = exception2, context2.next = loc, caught && (context2.method = "next", context2.arg = void 0), !!caught;
+            return record.type = "throw", record.arg = exception2, context3.next = loc, caught && (context3.method = "next", context3.arg = void 0), !!caught;
           }
           for (var i = this.tryEntries.length - 1; i >= 0; --i) {
             var entry = this.tryEntries[i], record = entry.completion;
@@ -28776,10 +28776,10 @@ var require_lodash = __commonJS({
         case stringTag:
           return object == other + "";
         case mapTag:
-          var convert2 = mapToArray;
+          var convert3 = mapToArray;
         case setTag:
           var isPartial = bitmask & PARTIAL_COMPARE_FLAG;
-          convert2 || (convert2 = setToArray);
+          convert3 || (convert3 = setToArray);
           if (object.size != other.size && !isPartial) {
             return false;
           }
@@ -28789,7 +28789,7 @@ var require_lodash = __commonJS({
           }
           bitmask |= UNORDERED_COMPARE_FLAG;
           stack.set(object, other);
-          var result = equalArrays(convert2(object), convert2(other), equalFunc, customizer, bitmask, stack);
+          var result = equalArrays(convert3(object), convert3(other), equalFunc, customizer, bitmask, stack);
           stack["delete"](object);
           return result;
         case symbolTag:
@@ -29178,7 +29178,7 @@ var require_dist = __commonJS({
 var import_core = __toESM(require_core(), 1);
 var import_exec = __toESM(require_exec(), 1);
 var import_get_packages = __toESM(require_manypkg_get_packages_cjs(), 1);
-var import_github = __toESM(require_github(), 1);
+var import_github2 = __toESM(require_github(), 1);
 var import_fs = require("fs");
 var import_path2 = require("path");
 var import_git = __toESM(require_git_cjs(), 1);
@@ -30138,7 +30138,7 @@ function regexCheck(regex) {
 }
 
 // node_modules/.pnpm/micromark-factory-space@1.1.0/node_modules/micromark-factory-space/index.js
-function factorySpace(effects, ok2, type2, max) {
+function factorySpace(effects, ok3, type2, max) {
   const limit = max ? max - 1 : Number.POSITIVE_INFINITY;
   let size = 0;
   return start;
@@ -30147,7 +30147,7 @@ function factorySpace(effects, ok2, type2, max) {
       effects.enter(type2);
       return prefix(code2);
     }
-    return ok2(code2);
+    return ok3(code2);
   }
   function prefix(code2) {
     if (markdownSpace(code2) && size++ < limit) {
@@ -30155,7 +30155,7 @@ function factorySpace(effects, ok2, type2, max) {
       return prefix;
     }
     effects.exit(type2);
-    return ok2(code2);
+    return ok3(code2);
   }
 }
 
@@ -30415,10 +30415,10 @@ function initializeDocument(effects) {
     self2.containerState._closeFlow = void 0;
   }
 }
-function tokenizeContainer(effects, ok2, nok) {
+function tokenizeContainer(effects, ok3, nok) {
   return factorySpace(
     effects,
-    effects.attempt(this.parser.constructs.document, ok2, nok),
+    effects.attempt(this.parser.constructs.document, ok3, nok),
     "linePrefix",
     this.parser.constructs.disable.null.includes("codeIndented") ? void 0 : 4
   );
@@ -30435,13 +30435,13 @@ function classifyCharacter(code2) {
 }
 
 // node_modules/.pnpm/micromark-util-resolve-all@1.1.0/node_modules/micromark-util-resolve-all/index.js
-function resolveAll(constructs2, events, context2) {
+function resolveAll(constructs2, events, context3) {
   const called = [];
   let index2 = -1;
   while (++index2 < constructs2.length) {
     const resolve = constructs2[index2].resolveAll;
     if (resolve && !called.includes(resolve)) {
-      events = resolve(events, context2);
+      events = resolve(events, context3);
       called.push(resolve);
     }
   }
@@ -30454,7 +30454,7 @@ var attention = {
   tokenize: tokenizeAttention,
   resolveAll: resolveAllAttention
 };
-function resolveAllAttention(events, context2) {
+function resolveAllAttention(events, context3) {
   let index2 = -1;
   let open;
   let group;
@@ -30469,7 +30469,7 @@ function resolveAllAttention(events, context2) {
       open = index2;
       while (open--) {
         if (events[open][0] === "exit" && events[open][1].type === "attentionSequence" && events[open][1]._open && // If the markers are the same:
-        context2.sliceSerialize(events[open][1]).charCodeAt(0) === context2.sliceSerialize(events[index2][1]).charCodeAt(0)) {
+        context3.sliceSerialize(events[open][1]).charCodeAt(0) === context3.sliceSerialize(events[index2][1]).charCodeAt(0)) {
           if ((events[open][1]._close || events[index2][1]._open) && (events[index2][1].end.offset - events[index2][1].start.offset) % 3 && !((events[open][1].end.offset - events[open][1].start.offset + events[index2][1].end.offset - events[index2][1].start.offset) % 3)) {
             continue;
           }
@@ -30503,35 +30503,35 @@ function resolveAllAttention(events, context2) {
           nextEvents = [];
           if (events[open][1].end.offset - events[open][1].start.offset) {
             nextEvents = push(nextEvents, [
-              ["enter", events[open][1], context2],
-              ["exit", events[open][1], context2]
+              ["enter", events[open][1], context3],
+              ["exit", events[open][1], context3]
             ]);
           }
           nextEvents = push(nextEvents, [
-            ["enter", group, context2],
-            ["enter", openingSequence, context2],
-            ["exit", openingSequence, context2],
-            ["enter", text4, context2]
+            ["enter", group, context3],
+            ["enter", openingSequence, context3],
+            ["exit", openingSequence, context3],
+            ["enter", text4, context3]
           ]);
           nextEvents = push(
             nextEvents,
             resolveAll(
-              context2.parser.constructs.insideSpan.null,
+              context3.parser.constructs.insideSpan.null,
               events.slice(open + 1, index2),
-              context2
+              context3
             )
           );
           nextEvents = push(nextEvents, [
-            ["exit", text4, context2],
-            ["enter", closingSequence, context2],
-            ["exit", closingSequence, context2],
-            ["exit", group, context2]
+            ["exit", text4, context3],
+            ["enter", closingSequence, context3],
+            ["exit", closingSequence, context3],
+            ["exit", group, context3]
           ]);
           if (events[index2][1].end.offset - events[index2][1].start.offset) {
             offset = 2;
             nextEvents = push(nextEvents, [
-              ["enter", events[index2][1], context2],
-              ["exit", events[index2][1], context2]
+              ["enter", events[index2][1], context3],
+              ["exit", events[index2][1], context3]
             ]);
           } else {
             offset = 0;
@@ -30551,7 +30551,7 @@ function resolveAllAttention(events, context2) {
   }
   return events;
 }
-function tokenizeAttention(effects, ok2) {
+function tokenizeAttention(effects, ok3) {
   const attentionMarkers2 = this.parser.constructs.attentionMarkers.null;
   const previous3 = this.previous;
   const before = classifyCharacter(previous3);
@@ -30573,7 +30573,7 @@ function tokenizeAttention(effects, ok2) {
     const close2 = !before || before === 2 && after || attentionMarkers2.includes(previous3);
     token._open = Boolean(marker === 42 ? open : open && (before || !close2));
     token._close = Boolean(marker === 42 ? close2 : close2 && (after || !open));
-    return ok2(code2);
+    return ok3(code2);
   }
 }
 function movePoint(point3, offset) {
@@ -30587,7 +30587,7 @@ var autolink = {
   name: "autolink",
   tokenize: tokenizeAutolink
 };
-function tokenizeAutolink(effects, ok2, nok) {
+function tokenizeAutolink(effects, ok3, nok) {
   let size = 0;
   return start;
   function start(code2) {
@@ -30632,7 +30632,7 @@ function tokenizeAutolink(effects, ok2, nok) {
       effects.consume(code2);
       effects.exit("autolinkMarker");
       effects.exit("autolink");
-      return ok2;
+      return ok3;
     }
     if (code2 === null || code2 === 32 || code2 === 60 || asciiControl(code2)) {
       return nok(code2);
@@ -30666,7 +30666,7 @@ function tokenizeAutolink(effects, ok2, nok) {
       effects.consume(code2);
       effects.exit("autolinkMarker");
       effects.exit("autolink");
-      return ok2;
+      return ok3;
     }
     return emailValue(code2);
   }
@@ -30685,13 +30685,13 @@ var blankLine = {
   tokenize: tokenizeBlankLine,
   partial: true
 };
-function tokenizeBlankLine(effects, ok2, nok) {
+function tokenizeBlankLine(effects, ok3, nok) {
   return start;
   function start(code2) {
     return markdownSpace(code2) ? factorySpace(effects, after, "linePrefix")(code2) : after(code2);
   }
   function after(code2) {
-    return code2 === null || markdownLineEnding(code2) ? ok2(code2) : nok(code2);
+    return code2 === null || markdownLineEnding(code2) ? ok3(code2) : nok(code2);
   }
 }
 
@@ -30704,7 +30704,7 @@ var blockQuote = {
   },
   exit
 };
-function tokenizeBlockQuoteStart(effects, ok2, nok) {
+function tokenizeBlockQuoteStart(effects, ok3, nok) {
   const self2 = this;
   return start;
   function start(code2) {
@@ -30730,13 +30730,13 @@ function tokenizeBlockQuoteStart(effects, ok2, nok) {
       effects.consume(code2);
       effects.exit("blockQuotePrefixWhitespace");
       effects.exit("blockQuotePrefix");
-      return ok2;
+      return ok3;
     }
     effects.exit("blockQuotePrefix");
-    return ok2(code2);
+    return ok3(code2);
   }
 }
-function tokenizeBlockQuoteContinuation(effects, ok2, nok) {
+function tokenizeBlockQuoteContinuation(effects, ok3, nok) {
   const self2 = this;
   return contStart;
   function contStart(code2) {
@@ -30751,7 +30751,7 @@ function tokenizeBlockQuoteContinuation(effects, ok2, nok) {
     return contBefore(code2);
   }
   function contBefore(code2) {
-    return effects.attempt(blockQuote, ok2, nok)(code2);
+    return effects.attempt(blockQuote, ok3, nok)(code2);
   }
 }
 function exit(effects) {
@@ -30763,7 +30763,7 @@ var characterEscape = {
   name: "characterEscape",
   tokenize: tokenizeCharacterEscape
 };
-function tokenizeCharacterEscape(effects, ok2, nok) {
+function tokenizeCharacterEscape(effects, ok3, nok) {
   return start;
   function start(code2) {
     effects.enter("characterEscape");
@@ -30778,7 +30778,7 @@ function tokenizeCharacterEscape(effects, ok2, nok) {
       effects.consume(code2);
       effects.exit("characterEscapeValue");
       effects.exit("characterEscape");
-      return ok2;
+      return ok3;
     }
     return nok(code2);
   }
@@ -32924,7 +32924,7 @@ var characterReference = {
   name: "characterReference",
   tokenize: tokenizeCharacterReference
 };
-function tokenizeCharacterReference(effects, ok2, nok) {
+function tokenizeCharacterReference(effects, ok3, nok) {
   const self2 = this;
   let size = 0;
   let max;
@@ -32974,7 +32974,7 @@ function tokenizeCharacterReference(effects, ok2, nok) {
       effects.consume(code2);
       effects.exit("characterReferenceMarker");
       effects.exit("characterReference");
-      return ok2;
+      return ok3;
     }
     if (test(code2) && size++ < max) {
       effects.consume(code2);
@@ -32994,7 +32994,7 @@ var codeFenced = {
   tokenize: tokenizeCodeFenced,
   concrete: true
 };
-function tokenizeCodeFenced(effects, ok2, nok) {
+function tokenizeCodeFenced(effects, ok3, nok) {
   const self2 = this;
   const closeStart = {
     tokenize: tokenizeCloseStart,
@@ -33031,7 +33031,7 @@ function tokenizeCodeFenced(effects, ok2, nok) {
   function infoBefore(code2) {
     if (code2 === null || markdownLineEnding(code2)) {
       effects.exit("codeFencedFence");
-      return self2.interrupt ? ok2(code2) : effects.check(nonLazyContinuation, atNonLazyBreak, after)(code2);
+      return self2.interrupt ? ok3(code2) : effects.check(nonLazyContinuation, atNonLazyBreak, after)(code2);
     }
     effects.enter("codeFencedFenceInfo");
     effects.enter("chunkString", {
@@ -33112,9 +33112,9 @@ function tokenizeCodeFenced(effects, ok2, nok) {
   }
   function after(code2) {
     effects.exit("codeFenced");
-    return ok2(code2);
+    return ok3(code2);
   }
-  function tokenizeCloseStart(effects2, ok3, nok2) {
+  function tokenizeCloseStart(effects2, ok4, nok2) {
     let size = 0;
     return startBefore;
     function startBefore(code2) {
@@ -33154,13 +33154,13 @@ function tokenizeCodeFenced(effects, ok2, nok) {
     function sequenceCloseAfter(code2) {
       if (code2 === null || markdownLineEnding(code2)) {
         effects2.exit("codeFencedFence");
-        return ok3(code2);
+        return ok4(code2);
       }
       return nok2(code2);
     }
   }
 }
-function tokenizeNonLazyContinuation(effects, ok2, nok) {
+function tokenizeNonLazyContinuation(effects, ok3, nok) {
   const self2 = this;
   return start;
   function start(code2) {
@@ -33173,7 +33173,7 @@ function tokenizeNonLazyContinuation(effects, ok2, nok) {
     return lineStart;
   }
   function lineStart(code2) {
-    return self2.parser.lazy[self2.now().line] ? nok(code2) : ok2(code2);
+    return self2.parser.lazy[self2.now().line] ? nok(code2) : ok3(code2);
   }
 }
 
@@ -33186,7 +33186,7 @@ var furtherStart = {
   tokenize: tokenizeFurtherStart,
   partial: true
 };
-function tokenizeCodeIndented(effects, ok2, nok) {
+function tokenizeCodeIndented(effects, ok3, nok) {
   const self2 = this;
   return start;
   function start(code2) {
@@ -33217,10 +33217,10 @@ function tokenizeCodeIndented(effects, ok2, nok) {
   }
   function after(code2) {
     effects.exit("codeIndented");
-    return ok2(code2);
+    return ok3(code2);
   }
 }
-function tokenizeFurtherStart(effects, ok2, nok) {
+function tokenizeFurtherStart(effects, ok3, nok) {
   const self2 = this;
   return furtherStart2;
   function furtherStart2(code2) {
@@ -33237,7 +33237,7 @@ function tokenizeFurtherStart(effects, ok2, nok) {
   }
   function afterPrefix(code2) {
     const tail = self2.events[self2.events.length - 1];
-    return tail && tail[1].type === "linePrefix" && tail[2].sliceSerialize(tail[1], true).length >= 4 ? ok2(code2) : markdownLineEnding(code2) ? furtherStart2(code2) : nok(code2);
+    return tail && tail[1].type === "linePrefix" && tail[2].sliceSerialize(tail[1], true).length >= 4 ? ok3(code2) : markdownLineEnding(code2) ? furtherStart2(code2) : nok(code2);
   }
 }
 
@@ -33288,7 +33288,7 @@ function resolveCodeText(events) {
 function previous(code2) {
   return code2 !== 96 || this.events[this.events.length - 1][1].type === "characterEscape";
 }
-function tokenizeCodeText(effects, ok2, nok) {
+function tokenizeCodeText(effects, ok3, nok) {
   const self2 = this;
   let sizeOpen = 0;
   let size;
@@ -33349,7 +33349,7 @@ function tokenizeCodeText(effects, ok2, nok) {
     if (size === sizeOpen) {
       effects.exit("codeTextSequence");
       effects.exit("codeText");
-      return ok2(code2);
+      return ok3(code2);
     }
     token.type = "codeTextData";
     return data(code2);
@@ -33425,10 +33425,10 @@ function subtokenize(events) {
 }
 function subcontent(events, eventIndex) {
   const token = events[eventIndex][1];
-  const context2 = events[eventIndex][2];
+  const context3 = events[eventIndex][2];
   let startPosition = eventIndex - 1;
   const startPositions = [];
-  const tokenizer = token._tokenizer || context2.parser[token.contentType](token.start);
+  const tokenizer = token._tokenizer || context3.parser[token.contentType](token.start);
   const childEvents = tokenizer.events;
   const jumps = [];
   const gaps = {};
@@ -33444,7 +33444,7 @@ function subcontent(events, eventIndex) {
     }
     startPositions.push(startPosition);
     if (!current._tokenizer) {
-      stream = context2.sliceStream(current);
+      stream = context3.sliceStream(current);
       if (!current.next) {
         stream.push(null);
       }
@@ -33510,7 +33510,7 @@ function resolveContent(events) {
   subtokenize(events);
   return events;
 }
-function tokenizeContent(effects, ok2) {
+function tokenizeContent(effects, ok3) {
   let previous3;
   return chunkStart;
   function chunkStart(code2) {
@@ -33537,7 +33537,7 @@ function tokenizeContent(effects, ok2) {
   function contentEnd(code2) {
     effects.exit("chunkContent");
     effects.exit("content");
-    return ok2(code2);
+    return ok3(code2);
   }
   function contentContinue(code2) {
     effects.consume(code2);
@@ -33550,7 +33550,7 @@ function tokenizeContent(effects, ok2) {
     return chunkInside;
   }
 }
-function tokenizeContinuation(effects, ok2, nok) {
+function tokenizeContinuation(effects, ok3, nok) {
   const self2 = this;
   return startLookahead;
   function startLookahead(code2) {
@@ -33566,14 +33566,14 @@ function tokenizeContinuation(effects, ok2, nok) {
     }
     const tail = self2.events[self2.events.length - 1];
     if (!self2.parser.constructs.disable.null.includes("codeIndented") && tail && tail[1].type === "linePrefix" && tail[2].sliceSerialize(tail[1], true).length >= 4) {
-      return ok2(code2);
+      return ok3(code2);
     }
-    return effects.interrupt(self2.parser.constructs.flow, nok, ok2)(code2);
+    return effects.interrupt(self2.parser.constructs.flow, nok, ok3)(code2);
   }
 }
 
 // node_modules/.pnpm/micromark-factory-destination@1.1.0/node_modules/micromark-factory-destination/index.js
-function factoryDestination(effects, ok2, nok, type2, literalType, literalMarkerType, rawType, stringType, max) {
+function factoryDestination(effects, ok3, nok, type2, literalType, literalMarkerType, rawType, stringType, max) {
   const limit = max || Number.POSITIVE_INFINITY;
   let balance = 0;
   return start;
@@ -33604,7 +33604,7 @@ function factoryDestination(effects, ok2, nok, type2, literalType, literalMarker
       effects.exit(literalMarkerType);
       effects.exit(literalType);
       effects.exit(type2);
-      return ok2;
+      return ok3;
     }
     effects.enter(stringType);
     effects.enter("chunkString", {
@@ -33637,7 +33637,7 @@ function factoryDestination(effects, ok2, nok, type2, literalType, literalMarker
       effects.exit(stringType);
       effects.exit(rawType);
       effects.exit(type2);
-      return ok2(code2);
+      return ok3(code2);
     }
     if (balance < limit && code2 === 40) {
       effects.consume(code2);
@@ -33665,7 +33665,7 @@ function factoryDestination(effects, ok2, nok, type2, literalType, literalMarker
 }
 
 // node_modules/.pnpm/micromark-factory-label@1.1.0/node_modules/micromark-factory-label/index.js
-function factoryLabel(effects, ok2, nok, type2, markerType, stringType) {
+function factoryLabel(effects, ok3, nok, type2, markerType, stringType) {
   const self2 = this;
   let size = 0;
   let seen;
@@ -33693,7 +33693,7 @@ function factoryLabel(effects, ok2, nok, type2, markerType, stringType) {
       effects.consume(code2);
       effects.exit(markerType);
       effects.exit(type2);
-      return ok2;
+      return ok3;
     }
     if (markdownLineEnding(code2)) {
       effects.enter("lineEnding");
@@ -33727,7 +33727,7 @@ function factoryLabel(effects, ok2, nok, type2, markerType, stringType) {
 }
 
 // node_modules/.pnpm/micromark-factory-title@1.1.0/node_modules/micromark-factory-title/index.js
-function factoryTitle(effects, ok2, nok, type2, markerType, stringType) {
+function factoryTitle(effects, ok3, nok, type2, markerType, stringType) {
   let marker;
   return start;
   function start(code2) {
@@ -33747,7 +33747,7 @@ function factoryTitle(effects, ok2, nok, type2, markerType, stringType) {
       effects.consume(code2);
       effects.exit(markerType);
       effects.exit(type2);
-      return ok2;
+      return ok3;
     }
     effects.enter(stringType);
     return atBreak(code2);
@@ -33789,7 +33789,7 @@ function factoryTitle(effects, ok2, nok, type2, markerType, stringType) {
 }
 
 // node_modules/.pnpm/micromark-factory-whitespace@1.1.0/node_modules/micromark-factory-whitespace/index.js
-function factoryWhitespace(effects, ok2) {
+function factoryWhitespace(effects, ok3) {
   let seen;
   return start;
   function start(code2) {
@@ -33807,7 +33807,7 @@ function factoryWhitespace(effects, ok2) {
         seen ? "linePrefix" : "lineSuffix"
       )(code2);
     }
-    return ok2(code2);
+    return ok3(code2);
   }
 }
 
@@ -33825,7 +33825,7 @@ var titleBefore = {
   tokenize: tokenizeTitleBefore,
   partial: true
 };
-function tokenizeDefinition(effects, ok2, nok) {
+function tokenizeDefinition(effects, ok3, nok) {
   const self2 = this;
   let identifier;
   return start;
@@ -33883,12 +33883,12 @@ function tokenizeDefinition(effects, ok2, nok) {
     if (code2 === null || markdownLineEnding(code2)) {
       effects.exit("definition");
       self2.parser.defined.push(identifier);
-      return ok2(code2);
+      return ok3(code2);
     }
     return nok(code2);
   }
 }
-function tokenizeTitleBefore(effects, ok2, nok) {
+function tokenizeTitleBefore(effects, ok3, nok) {
   return titleBefore2;
   function titleBefore2(code2) {
     return markdownLineEndingOrSpace(code2) ? factoryWhitespace(effects, beforeMarker)(code2) : nok(code2);
@@ -33907,7 +33907,7 @@ function tokenizeTitleBefore(effects, ok2, nok) {
     return markdownSpace(code2) ? factorySpace(effects, titleAfterOptionalWhitespace, "whitespace")(code2) : titleAfterOptionalWhitespace(code2);
   }
   function titleAfterOptionalWhitespace(code2) {
-    return code2 === null || markdownLineEnding(code2) ? ok2(code2) : nok(code2);
+    return code2 === null || markdownLineEnding(code2) ? ok3(code2) : nok(code2);
   }
 }
 
@@ -33916,7 +33916,7 @@ var hardBreakEscape = {
   name: "hardBreakEscape",
   tokenize: tokenizeHardBreakEscape
 };
-function tokenizeHardBreakEscape(effects, ok2, nok) {
+function tokenizeHardBreakEscape(effects, ok3, nok) {
   return start;
   function start(code2) {
     effects.enter("hardBreakEscape");
@@ -33926,7 +33926,7 @@ function tokenizeHardBreakEscape(effects, ok2, nok) {
   function after(code2) {
     if (markdownLineEnding(code2)) {
       effects.exit("hardBreakEscape");
-      return ok2(code2);
+      return ok3(code2);
     }
     return nok(code2);
   }
@@ -33938,7 +33938,7 @@ var headingAtx = {
   tokenize: tokenizeHeadingAtx,
   resolve: resolveHeadingAtx
 };
-function resolveHeadingAtx(events, context2) {
+function resolveHeadingAtx(events, context3) {
   let contentEnd = events.length - 2;
   let contentStart = 3;
   let content3;
@@ -33965,15 +33965,15 @@ function resolveHeadingAtx(events, context2) {
       contentType: "text"
     };
     splice(events, contentStart, contentEnd - contentStart + 1, [
-      ["enter", content3, context2],
-      ["enter", text4, context2],
-      ["exit", text4, context2],
-      ["exit", content3, context2]
+      ["enter", content3, context3],
+      ["enter", text4, context3],
+      ["exit", text4, context3],
+      ["exit", content3, context3]
     ]);
   }
   return events;
 }
-function tokenizeHeadingAtx(effects, ok2, nok) {
+function tokenizeHeadingAtx(effects, ok3, nok) {
   let size = 0;
   return start;
   function start(code2) {
@@ -34002,7 +34002,7 @@ function tokenizeHeadingAtx(effects, ok2, nok) {
     }
     if (code2 === null || markdownLineEnding(code2)) {
       effects.exit("atxHeading");
-      return ok2(code2);
+      return ok3(code2);
     }
     if (markdownSpace(code2)) {
       return factorySpace(effects, atBreak, "whitespace")(code2);
@@ -34124,7 +34124,7 @@ function resolveToHtmlFlow(events) {
   }
   return events;
 }
-function tokenizeHtmlFlow(effects, ok2, nok) {
+function tokenizeHtmlFlow(effects, ok3, nok) {
   const self2 = this;
   let marker;
   let closingTag;
@@ -34154,7 +34154,7 @@ function tokenizeHtmlFlow(effects, ok2, nok) {
     if (code2 === 63) {
       effects.consume(code2);
       marker = 3;
-      return self2.interrupt ? ok2 : continuationDeclarationInside;
+      return self2.interrupt ? ok3 : continuationDeclarationInside;
     }
     if (asciiAlpha(code2)) {
       effects.consume(code2);
@@ -34178,14 +34178,14 @@ function tokenizeHtmlFlow(effects, ok2, nok) {
     if (asciiAlpha(code2)) {
       effects.consume(code2);
       marker = 4;
-      return self2.interrupt ? ok2 : continuationDeclarationInside;
+      return self2.interrupt ? ok3 : continuationDeclarationInside;
     }
     return nok(code2);
   }
   function commentOpenInside(code2) {
     if (code2 === 45) {
       effects.consume(code2);
-      return self2.interrupt ? ok2 : continuationDeclarationInside;
+      return self2.interrupt ? ok3 : continuationDeclarationInside;
     }
     return nok(code2);
   }
@@ -34194,7 +34194,7 @@ function tokenizeHtmlFlow(effects, ok2, nok) {
     if (code2 === value2.charCodeAt(index2++)) {
       effects.consume(code2);
       if (index2 === value2.length) {
-        return self2.interrupt ? ok2 : continuation;
+        return self2.interrupt ? ok3 : continuation;
       }
       return cdataOpenInside;
     }
@@ -34214,7 +34214,7 @@ function tokenizeHtmlFlow(effects, ok2, nok) {
       const name = buffer2.toLowerCase();
       if (!slash && !closingTag && htmlRawNames.includes(name)) {
         marker = 1;
-        return self2.interrupt ? ok2(code2) : continuation(code2);
+        return self2.interrupt ? ok3(code2) : continuation(code2);
       }
       if (htmlBlockNames.includes(buffer2.toLowerCase())) {
         marker = 6;
@@ -34222,7 +34222,7 @@ function tokenizeHtmlFlow(effects, ok2, nok) {
           effects.consume(code2);
           return basicSelfClosing;
         }
-        return self2.interrupt ? ok2(code2) : continuation(code2);
+        return self2.interrupt ? ok3(code2) : continuation(code2);
       }
       marker = 7;
       return self2.interrupt && !self2.parser.lazy[self2.now().line] ? nok(code2) : closingTag ? completeClosingTagAfter(code2) : completeAttributeNameBefore(code2);
@@ -34237,7 +34237,7 @@ function tokenizeHtmlFlow(effects, ok2, nok) {
   function basicSelfClosing(code2) {
     if (code2 === 62) {
       effects.consume(code2);
-      return self2.interrupt ? ok2 : continuation;
+      return self2.interrupt ? ok3 : continuation;
     }
     return nok(code2);
   }
@@ -34453,10 +34453,10 @@ function tokenizeHtmlFlow(effects, ok2, nok) {
   }
   function continuationAfter(code2) {
     effects.exit("htmlFlow");
-    return ok2(code2);
+    return ok3(code2);
   }
 }
-function tokenizeNonLazyContinuationStart(effects, ok2, nok) {
+function tokenizeNonLazyContinuationStart(effects, ok3, nok) {
   const self2 = this;
   return start;
   function start(code2) {
@@ -34469,16 +34469,16 @@ function tokenizeNonLazyContinuationStart(effects, ok2, nok) {
     return nok(code2);
   }
   function after(code2) {
-    return self2.parser.lazy[self2.now().line] ? nok(code2) : ok2(code2);
+    return self2.parser.lazy[self2.now().line] ? nok(code2) : ok3(code2);
   }
 }
-function tokenizeBlankLineBefore(effects, ok2, nok) {
+function tokenizeBlankLineBefore(effects, ok3, nok) {
   return start;
   function start(code2) {
     effects.enter("lineEnding");
     effects.consume(code2);
     effects.exit("lineEnding");
-    return effects.attempt(blankLine, ok2, nok);
+    return effects.attempt(blankLine, ok3, nok);
   }
 }
 
@@ -34487,7 +34487,7 @@ var htmlText = {
   name: "htmlText",
   tokenize: tokenizeHtmlText
 };
-function tokenizeHtmlText(effects, ok2, nok) {
+function tokenizeHtmlText(effects, ok3, nok) {
   const self2 = this;
   let marker;
   let index2;
@@ -34768,7 +34768,7 @@ function tokenizeHtmlText(effects, ok2, nok) {
       effects.consume(code2);
       effects.exit("htmlTextData");
       effects.exit("htmlText");
-      return ok2;
+      return ok3;
     }
     return nok(code2);
   }
@@ -34821,7 +34821,7 @@ function resolveAllLabelEnd(events) {
   }
   return events;
 }
-function resolveToLabelEnd(events, context2) {
+function resolveToLabelEnd(events, context3) {
   let index2 = events.length;
   let offset = 0;
   let token;
@@ -34865,31 +34865,31 @@ function resolveToLabelEnd(events, context2) {
     end: Object.assign({}, events[close2 - 2][1].start)
   };
   media = [
-    ["enter", group, context2],
-    ["enter", label, context2]
+    ["enter", group, context3],
+    ["enter", label, context3]
   ];
   media = push(media, events.slice(open + 1, open + offset + 3));
-  media = push(media, [["enter", text4, context2]]);
+  media = push(media, [["enter", text4, context3]]);
   media = push(
     media,
     resolveAll(
-      context2.parser.constructs.insideSpan.null,
+      context3.parser.constructs.insideSpan.null,
       events.slice(open + offset + 4, close2 - 3),
-      context2
+      context3
     )
   );
   media = push(media, [
-    ["exit", text4, context2],
+    ["exit", text4, context3],
     events[close2 - 2],
     events[close2 - 1],
-    ["exit", label, context2]
+    ["exit", label, context3]
   ]);
   media = push(media, events.slice(close2 + 1));
-  media = push(media, [["exit", group, context2]]);
+  media = push(media, [["exit", group, context3]]);
   splice(events, open, events.length, media);
   return events;
 }
-function tokenizeLabelEnd(effects, ok2, nok) {
+function tokenizeLabelEnd(effects, ok3, nok) {
   const self2 = this;
   let index2 = self2.events.length;
   let labelStart;
@@ -34948,14 +34948,14 @@ function tokenizeLabelEnd(effects, ok2, nok) {
     )(code2);
   }
   function labelEndOk(code2) {
-    return ok2(code2);
+    return ok3(code2);
   }
   function labelEndNok(code2) {
     labelStart._balanced = true;
     return nok(code2);
   }
 }
-function tokenizeResource(effects, ok2, nok) {
+function tokenizeResource(effects, ok3, nok) {
   return resourceStart;
   function resourceStart(code2) {
     effects.enter("resource");
@@ -35011,12 +35011,12 @@ function tokenizeResource(effects, ok2, nok) {
       effects.consume(code2);
       effects.exit("resourceMarker");
       effects.exit("resource");
-      return ok2;
+      return ok3;
     }
     return nok(code2);
   }
 }
-function tokenizeReferenceFull(effects, ok2, nok) {
+function tokenizeReferenceFull(effects, ok3, nok) {
   const self2 = this;
   return referenceFull;
   function referenceFull(code2) {
@@ -35035,13 +35035,13 @@ function tokenizeReferenceFull(effects, ok2, nok) {
       normalizeIdentifier(
         self2.sliceSerialize(self2.events[self2.events.length - 1][1]).slice(1, -1)
       )
-    ) ? ok2(code2) : nok(code2);
+    ) ? ok3(code2) : nok(code2);
   }
   function referenceFullMissing(code2) {
     return nok(code2);
   }
 }
-function tokenizeReferenceCollapsed(effects, ok2, nok) {
+function tokenizeReferenceCollapsed(effects, ok3, nok) {
   return referenceCollapsedStart;
   function referenceCollapsedStart(code2) {
     effects.enter("reference");
@@ -35056,7 +35056,7 @@ function tokenizeReferenceCollapsed(effects, ok2, nok) {
       effects.consume(code2);
       effects.exit("referenceMarker");
       effects.exit("reference");
-      return ok2;
+      return ok3;
     }
     return nok(code2);
   }
@@ -35068,7 +35068,7 @@ var labelStartImage = {
   tokenize: tokenizeLabelStartImage,
   resolveAll: labelEnd.resolveAll
 };
-function tokenizeLabelStartImage(effects, ok2, nok) {
+function tokenizeLabelStartImage(effects, ok3, nok) {
   const self2 = this;
   return start;
   function start(code2) {
@@ -35089,7 +35089,7 @@ function tokenizeLabelStartImage(effects, ok2, nok) {
     return nok(code2);
   }
   function after(code2) {
-    return code2 === 94 && "_hiddenFootnoteSupport" in self2.parser.constructs ? nok(code2) : ok2(code2);
+    return code2 === 94 && "_hiddenFootnoteSupport" in self2.parser.constructs ? nok(code2) : ok3(code2);
   }
 }
 
@@ -35099,7 +35099,7 @@ var labelStartLink = {
   tokenize: tokenizeLabelStartLink,
   resolveAll: labelEnd.resolveAll
 };
-function tokenizeLabelStartLink(effects, ok2, nok) {
+function tokenizeLabelStartLink(effects, ok3, nok) {
   const self2 = this;
   return start;
   function start(code2) {
@@ -35111,7 +35111,7 @@ function tokenizeLabelStartLink(effects, ok2, nok) {
     return after;
   }
   function after(code2) {
-    return code2 === 94 && "_hiddenFootnoteSupport" in self2.parser.constructs ? nok(code2) : ok2(code2);
+    return code2 === 94 && "_hiddenFootnoteSupport" in self2.parser.constructs ? nok(code2) : ok3(code2);
   }
 }
 
@@ -35120,13 +35120,13 @@ var lineEnding = {
   name: "lineEnding",
   tokenize: tokenizeLineEnding
 };
-function tokenizeLineEnding(effects, ok2) {
+function tokenizeLineEnding(effects, ok3) {
   return start;
   function start(code2) {
     effects.enter("lineEnding");
     effects.consume(code2);
     effects.exit("lineEnding");
-    return factorySpace(effects, ok2, "linePrefix");
+    return factorySpace(effects, ok3, "linePrefix");
   }
 }
 
@@ -35135,7 +35135,7 @@ var thematicBreak = {
   name: "thematicBreak",
   tokenize: tokenizeThematicBreak
 };
-function tokenizeThematicBreak(effects, ok2, nok) {
+function tokenizeThematicBreak(effects, ok3, nok) {
   let size = 0;
   let marker;
   return start;
@@ -35154,7 +35154,7 @@ function tokenizeThematicBreak(effects, ok2, nok) {
     }
     if (size >= 3 && (code2 === null || markdownLineEnding(code2))) {
       effects.exit("thematicBreak");
-      return ok2(code2);
+      return ok3(code2);
     }
     return nok(code2);
   }
@@ -35186,7 +35186,7 @@ var indentConstruct = {
   tokenize: tokenizeIndent,
   partial: true
 };
-function tokenizeListStart(effects, ok2, nok) {
+function tokenizeListStart(effects, ok3, nok) {
   const self2 = this;
   const tail = self2.events[self2.events.length - 1];
   let initialSize = tail && tail[1].type === "linePrefix" ? tail[2].sliceSerialize(tail[1], true).length : 0;
@@ -35256,10 +35256,10 @@ function tokenizeListStart(effects, ok2, nok) {
   }
   function endOfPrefix(code2) {
     self2.containerState.size = initialSize + self2.sliceSerialize(effects.exit("listItemPrefix"), true).length;
-    return ok2(code2);
+    return ok3(code2);
   }
 }
-function tokenizeListContinuation(effects, ok2, nok) {
+function tokenizeListContinuation(effects, ok3, nok) {
   const self2 = this;
   self2.containerState._closeFlow = void 0;
   return effects.check(blankLine, onBlank, notBlank);
@@ -35267,7 +35267,7 @@ function tokenizeListContinuation(effects, ok2, nok) {
     self2.containerState.furtherBlankLines = self2.containerState.furtherBlankLines || self2.containerState.initialBlankLine;
     return factorySpace(
       effects,
-      ok2,
+      ok3,
       "listItemIndent",
       self2.containerState.size + 1
     )(code2);
@@ -35280,20 +35280,20 @@ function tokenizeListContinuation(effects, ok2, nok) {
     }
     self2.containerState.furtherBlankLines = void 0;
     self2.containerState.initialBlankLine = void 0;
-    return effects.attempt(indentConstruct, ok2, notInCurrentItem)(code2);
+    return effects.attempt(indentConstruct, ok3, notInCurrentItem)(code2);
   }
   function notInCurrentItem(code2) {
     self2.containerState._closeFlow = true;
     self2.interrupt = void 0;
     return factorySpace(
       effects,
-      effects.attempt(list, ok2, nok),
+      effects.attempt(list, ok3, nok),
       "linePrefix",
       self2.parser.constructs.disable.null.includes("codeIndented") ? void 0 : 4
     )(code2);
   }
 }
-function tokenizeIndent(effects, ok2, nok) {
+function tokenizeIndent(effects, ok3, nok) {
   const self2 = this;
   return factorySpace(
     effects,
@@ -35303,13 +35303,13 @@ function tokenizeIndent(effects, ok2, nok) {
   );
   function afterPrefix(code2) {
     const tail = self2.events[self2.events.length - 1];
-    return tail && tail[1].type === "listItemIndent" && tail[2].sliceSerialize(tail[1], true).length === self2.containerState.size ? ok2(code2) : nok(code2);
+    return tail && tail[1].type === "listItemIndent" && tail[2].sliceSerialize(tail[1], true).length === self2.containerState.size ? ok3(code2) : nok(code2);
   }
 }
 function tokenizeListEnd(effects) {
   effects.exit(this.containerState.type);
 }
-function tokenizeListItemPrefixWhitespace(effects, ok2, nok) {
+function tokenizeListItemPrefixWhitespace(effects, ok3, nok) {
   const self2 = this;
   return factorySpace(
     effects,
@@ -35319,7 +35319,7 @@ function tokenizeListItemPrefixWhitespace(effects, ok2, nok) {
   );
   function afterPrefix(code2) {
     const tail = self2.events[self2.events.length - 1];
-    return !markdownSpace(code2) && tail && tail[1].type === "listItemPrefixWhitespace" ? ok2(code2) : nok(code2);
+    return !markdownSpace(code2) && tail && tail[1].type === "listItemPrefixWhitespace" ? ok3(code2) : nok(code2);
   }
 }
 
@@ -35329,7 +35329,7 @@ var setextUnderline = {
   tokenize: tokenizeSetextUnderline,
   resolveTo: resolveToSetextUnderline
 };
-function resolveToSetextUnderline(events, context2) {
+function resolveToSetextUnderline(events, context3) {
   let index2 = events.length;
   let content3;
   let text4;
@@ -35359,16 +35359,16 @@ function resolveToSetextUnderline(events, context2) {
   };
   events[text4][1].type = "setextHeadingText";
   if (definition2) {
-    events.splice(text4, 0, ["enter", heading, context2]);
-    events.splice(definition2 + 1, 0, ["exit", events[content3][1], context2]);
+    events.splice(text4, 0, ["enter", heading, context3]);
+    events.splice(definition2 + 1, 0, ["exit", events[content3][1], context3]);
     events[content3][1].end = Object.assign({}, events[definition2][1].end);
   } else {
     events[content3][1] = heading;
   }
-  events.push(["exit", heading, context2]);
+  events.push(["exit", heading, context3]);
   return events;
 }
-function tokenizeSetextUnderline(effects, ok2, nok) {
+function tokenizeSetextUnderline(effects, ok3, nok) {
   const self2 = this;
   let marker;
   return start;
@@ -35403,7 +35403,7 @@ function tokenizeSetextUnderline(effects, ok2, nok) {
   function after(code2) {
     if (code2 === null || markdownLineEnding(code2)) {
       effects.exit("setextHeadingLine");
-      return ok2(code2);
+      return ok3(code2);
     }
     return nok(code2);
   }
@@ -35517,7 +35517,7 @@ function initializeFactory(field) {
 }
 function createResolver(extraResolver) {
   return resolveAllText;
-  function resolveAllText(events, context2) {
+  function resolveAllText(events, context3) {
     let index2 = -1;
     let enter;
     while (++index2 <= events.length) {
@@ -35535,15 +35535,15 @@ function createResolver(extraResolver) {
         enter = void 0;
       }
     }
-    return extraResolver ? extraResolver(events, context2) : events;
+    return extraResolver ? extraResolver(events, context3) : events;
   }
 }
-function resolveAllLineSuffixes(events, context2) {
+function resolveAllLineSuffixes(events, context3) {
   let eventIndex = 0;
   while (++eventIndex <= events.length) {
     if ((eventIndex === events.length || events[eventIndex][1].type === "lineEnding") && events[eventIndex - 1][1].type === "data") {
       const data = events[eventIndex - 1][1];
-      const chunks = context2.sliceStream(data);
+      const chunks = context3.sliceStream(data);
       let index2 = chunks.length;
       let bufferIndex = -1;
       let size = 0;
@@ -35587,8 +35587,8 @@ function resolveAllLineSuffixes(events, context2) {
           events.splice(
             eventIndex,
             0,
-            ["enter", token, context2],
-            ["exit", token, context2]
+            ["enter", token, context3],
+            ["exit", token, context3]
           );
           eventIndex += 2;
         }
@@ -35627,7 +35627,7 @@ function createTokenizer(parser, initialize, from) {
       interrupt: true
     })
   };
-  const context2 = {
+  const context3 = {
     previous: null,
     code: null,
     containerState: {},
@@ -35639,12 +35639,12 @@ function createTokenizer(parser, initialize, from) {
     defineSkip,
     write
   };
-  let state = initialize.tokenize.call(context2, effects);
+  let state = initialize.tokenize.call(context3, effects);
   let expectedCode;
   if (initialize.resolveAll) {
     resolveAllConstructs.push(initialize);
   }
-  return context2;
+  return context3;
   function write(slice) {
     chunks = push(chunks, slice);
     main();
@@ -35652,8 +35652,8 @@ function createTokenizer(parser, initialize, from) {
       return [];
     }
     addResult(initialize, 0);
-    context2.events = resolveAll(resolveAllConstructs, context2.events, context2);
-    return context2.events;
+    context3.events = resolveAll(resolveAllConstructs, context3.events, context3);
+    return context3.events;
   }
   function sliceSerialize(token, expandTabs) {
     return serializeChunks(sliceStream(token), expandTabs);
@@ -35716,21 +35716,21 @@ function createTokenizer(parser, initialize, from) {
         point3._index++;
       }
     }
-    context2.previous = code2;
+    context3.previous = code2;
     consumed = true;
   }
   function enter(type2, fields) {
     const token = fields || {};
     token.type = type2;
     token.start = now();
-    context2.events.push(["enter", token, context2]);
+    context3.events.push(["enter", token, context3]);
     stack.push(token);
     return token;
   }
   function exit3(type2) {
     const token = stack.pop();
     token.end = now();
-    context2.events.push(["exit", token, context2]);
+    context3.events.push(["exit", token, context3]);
     return token;
   }
   function onsuccessfulconstruct(construct, info2) {
@@ -35778,23 +35778,23 @@ function createTokenizer(parser, initialize, from) {
           info2 = store();
           currentConstruct = construct;
           if (!construct.partial) {
-            context2.currentConstruct = construct;
+            context3.currentConstruct = construct;
           }
-          if (construct.name && context2.parser.constructs.disable.null.includes(construct.name)) {
+          if (construct.name && context3.parser.constructs.disable.null.includes(construct.name)) {
             return nok(code2);
           }
           return construct.tokenize.call(
             // If we do have fields, create an object w/ `context` as its
             // prototype.
             // This allows a “live binding”, which is needed for `interrupt`.
-            fields ? Object.assign(Object.create(context2), fields) : context2,
+            fields ? Object.assign(Object.create(context3), fields) : context3,
             effects,
-            ok2,
+            ok3,
             nok
           )(code2);
         }
       }
-      function ok2(code2) {
+      function ok3(code2) {
         consumed = true;
         onreturn(currentConstruct, info2);
         return returnState;
@@ -35815,21 +35815,21 @@ function createTokenizer(parser, initialize, from) {
     }
     if (construct.resolve) {
       splice(
-        context2.events,
+        context3.events,
         from2,
-        context2.events.length - from2,
-        construct.resolve(context2.events.slice(from2), context2)
+        context3.events.length - from2,
+        construct.resolve(context3.events.slice(from2), context3)
       );
     }
     if (construct.resolveTo) {
-      context2.events = construct.resolveTo(context2.events, context2);
+      context3.events = construct.resolveTo(context3.events, context3);
     }
   }
   function store() {
     const startPoint = now();
-    const startPrevious = context2.previous;
-    const startCurrentConstruct = context2.currentConstruct;
-    const startEventsIndex = context2.events.length;
+    const startPrevious = context3.previous;
+    const startCurrentConstruct = context3.currentConstruct;
+    const startEventsIndex = context3.events.length;
     const startStack = Array.from(stack);
     return {
       restore,
@@ -35837,9 +35837,9 @@ function createTokenizer(parser, initialize, from) {
     };
     function restore() {
       point3 = startPoint;
-      context2.previous = startPrevious;
-      context2.currentConstruct = startCurrentConstruct;
-      context2.events.length = startEventsIndex;
+      context3.previous = startPrevious;
+      context3.currentConstruct = startCurrentConstruct;
+      context3.events.length = startEventsIndex;
       stack = startStack;
       accountForPotentialSkip();
     }
@@ -36275,7 +36275,7 @@ function compiler(options) {
       type: "root",
       children: []
     };
-    const context2 = {
+    const context3 = {
       stack: [tree],
       tokenStack: [],
       config,
@@ -36307,16 +36307,16 @@ function compiler(options) {
             {
               sliceSerialize: events[index2][2].sliceSerialize
             },
-            context2
+            context3
           ),
           events[index2][1]
         );
       }
     }
-    if (context2.tokenStack.length > 0) {
-      const tail = context2.tokenStack[context2.tokenStack.length - 1];
+    if (context3.tokenStack.length > 0) {
+      const tail = context3.tokenStack[context3.tokenStack.length - 1];
       const handler2 = tail[1] || defaultOnError;
-      handler2.call(context2, void 0, tail[0]);
+      handler2.call(context3, void 0, tail[0]);
     }
     tree.position = {
       start: point2(
@@ -36570,14 +36570,14 @@ function compiler(options) {
     tail.position.end = point2(token.end);
   }
   function onexitlineending(token) {
-    const context2 = this.stack[this.stack.length - 1];
+    const context3 = this.stack[this.stack.length - 1];
     if (getData("atHardBreak")) {
-      const tail = context2.children[context2.children.length - 1];
+      const tail = context3.children[context3.children.length - 1];
       tail.position.end = point2(token.end);
       setData("atHardBreak");
       return;
     }
-    if (!getData("setextHeadingSlurpLineEnding") && config.canContainEols.includes(context2.type)) {
+    if (!getData("setextHeadingSlurpLineEnding") && config.canContainEols.includes(context3.type)) {
       onenterdata.call(this, token);
       onexitdata.call(this, token);
     }
@@ -36949,7 +36949,7 @@ text3[72] = [emailAutolink, protocolAutolink];
 text3[104] = [emailAutolink, protocolAutolink];
 text3[87] = [emailAutolink, wwwAutolink];
 text3[119] = [emailAutolink, wwwAutolink];
-function tokenizeEmailAutolink(effects, ok2, nok) {
+function tokenizeEmailAutolink(effects, ok3, nok) {
   const self2 = this;
   let dot;
   let data;
@@ -36997,12 +36997,12 @@ function tokenizeEmailAutolink(effects, ok2, nok) {
     if (data && dot && asciiAlpha(self2.previous)) {
       effects.exit("literalAutolinkEmail");
       effects.exit("literalAutolink");
-      return ok2(code2);
+      return ok3(code2);
     }
     return nok(code2);
   }
 }
-function tokenizeWwwAutolink(effects, ok2, nok) {
+function tokenizeWwwAutolink(effects, ok3, nok) {
   const self2 = this;
   return wwwStart;
   function wwwStart(code2) {
@@ -37020,10 +37020,10 @@ function tokenizeWwwAutolink(effects, ok2, nok) {
   function wwwAfter(code2) {
     effects.exit("literalAutolinkWww");
     effects.exit("literalAutolink");
-    return ok2(code2);
+    return ok3(code2);
   }
 }
-function tokenizeProtocolAutolink(effects, ok2, nok) {
+function tokenizeProtocolAutolink(effects, ok3, nok) {
   const self2 = this;
   let buffer2 = "";
   let seen = false;
@@ -37070,10 +37070,10 @@ function tokenizeProtocolAutolink(effects, ok2, nok) {
   function protocolAfter(code2) {
     effects.exit("literalAutolinkHttp");
     effects.exit("literalAutolink");
-    return ok2(code2);
+    return ok3(code2);
   }
 }
-function tokenizeWwwPrefix(effects, ok2, nok) {
+function tokenizeWwwPrefix(effects, ok3, nok) {
   let size = 0;
   return wwwPrefixInside;
   function wwwPrefixInside(code2) {
@@ -37089,10 +37089,10 @@ function tokenizeWwwPrefix(effects, ok2, nok) {
     return nok(code2);
   }
   function wwwPrefixAfter(code2) {
-    return code2 === null ? nok(code2) : ok2(code2);
+    return code2 === null ? nok(code2) : ok3(code2);
   }
 }
-function tokenizeDomain(effects, ok2, nok) {
+function tokenizeDomain(effects, ok3, nok) {
   let underscoreInLastSegment;
   let underscoreInLastLastSegment;
   let seen;
@@ -37122,10 +37122,10 @@ function tokenizeDomain(effects, ok2, nok) {
     if (underscoreInLastLastSegment || underscoreInLastSegment || !seen) {
       return nok(code2);
     }
-    return ok2(code2);
+    return ok3(code2);
   }
 }
-function tokenizePath(effects, ok2) {
+function tokenizePath(effects, ok3) {
   let sizeOpen = 0;
   let sizeClose = 0;
   return pathInside;
@@ -37139,10 +37139,10 @@ function tokenizePath(effects, ok2) {
       return pathAtPunctuation(code2);
     }
     if (code2 === 33 || code2 === 34 || code2 === 38 || code2 === 39 || code2 === 41 || code2 === 42 || code2 === 44 || code2 === 46 || code2 === 58 || code2 === 59 || code2 === 60 || code2 === 63 || code2 === 93 || code2 === 95 || code2 === 126) {
-      return effects.check(trail, ok2, pathAtPunctuation)(code2);
+      return effects.check(trail, ok3, pathAtPunctuation)(code2);
     }
     if (code2 === null || markdownLineEndingOrSpace(code2) || unicodeWhitespace(code2)) {
-      return ok2(code2);
+      return ok3(code2);
     }
     effects.consume(code2);
     return pathInside;
@@ -37155,7 +37155,7 @@ function tokenizePath(effects, ok2) {
     return pathInside;
   }
 }
-function tokenizeTrail(effects, ok2, nok) {
+function tokenizeTrail(effects, ok3, nok) {
   return trail2;
   function trail2(code2) {
     if (code2 === 33 || code2 === 34 || code2 === 39 || code2 === 41 || code2 === 42 || code2 === 44 || code2 === 46 || code2 === 58 || code2 === 59 || code2 === 63 || code2 === 95 || code2 === 126) {
@@ -37175,13 +37175,13 @@ function tokenizeTrail(effects, ok2, nok) {
       code2 === 60 || // So is whitespace.
       code2 === null || markdownLineEndingOrSpace(code2) || unicodeWhitespace(code2)
     ) {
-      return ok2(code2);
+      return ok3(code2);
     }
     return nok(code2);
   }
   function trailBracketAfter(code2) {
     if (code2 === null || code2 === 40 || code2 === 91 || markdownLineEndingOrSpace(code2) || unicodeWhitespace(code2)) {
-      return ok2(code2);
+      return ok3(code2);
     }
     return trail2(code2);
   }
@@ -37200,14 +37200,14 @@ function tokenizeTrail(effects, ok2, nok) {
     return nok(code2);
   }
 }
-function tokenizeEmailDomainDotTrail(effects, ok2, nok) {
+function tokenizeEmailDomainDotTrail(effects, ok3, nok) {
   return start;
   function start(code2) {
     effects.consume(code2);
     return after;
   }
   function after(code2) {
-    return asciiAlphanumeric(code2) ? nok(code2) : ok2(code2);
+    return asciiAlphanumeric(code2) ? nok(code2) : ok3(code2);
   }
 }
 function previousWww(code2) {
@@ -37270,7 +37270,7 @@ function gfmFootnote() {
     }
   };
 }
-function tokenizePotentialGfmFootnoteCall(effects, ok2, nok) {
+function tokenizePotentialGfmFootnoteCall(effects, ok3, nok) {
   const self2 = this;
   let index2 = self2.events.length;
   const defined = self2.parser.gfmFootnotes || (self2.parser.gfmFootnotes = []);
@@ -37302,10 +37302,10 @@ function tokenizePotentialGfmFootnoteCall(effects, ok2, nok) {
     effects.enter("gfmFootnoteCallLabelMarker");
     effects.consume(code2);
     effects.exit("gfmFootnoteCallLabelMarker");
-    return ok2(code2);
+    return ok3(code2);
   }
 }
-function resolveToPotentialGfmFootnoteCall(events, context2) {
+function resolveToPotentialGfmFootnoteCall(events, context3) {
   let index2 = events.length;
   let labelStart;
   while (index2--) {
@@ -37344,27 +37344,27 @@ function resolveToPotentialGfmFootnoteCall(events, context2) {
     // Take the `labelImageMarker` (now `data`, the `!`)
     events[index2 + 1],
     events[index2 + 2],
-    ["enter", call, context2],
+    ["enter", call, context3],
     // The `[`
     events[index2 + 3],
     events[index2 + 4],
     // The `^`.
-    ["enter", marker, context2],
-    ["exit", marker, context2],
+    ["enter", marker, context3],
+    ["exit", marker, context3],
     // Everything in between.
-    ["enter", string3, context2],
-    ["enter", chunk, context2],
-    ["exit", chunk, context2],
-    ["exit", string3, context2],
+    ["enter", string3, context3],
+    ["enter", chunk, context3],
+    ["exit", chunk, context3],
+    ["exit", string3, context3],
     // The ending (`]`, properly parsed and labelled).
     events[events.length - 2],
     events[events.length - 1],
-    ["exit", call, context2]
+    ["exit", call, context3]
   ];
   events.splice(index2, events.length - index2 + 1, ...replacement);
   return events;
 }
-function tokenizeGfmFootnoteCall(effects, ok2, nok) {
+function tokenizeGfmFootnoteCall(effects, ok3, nok) {
   const self2 = this;
   const defined = self2.parser.gfmFootnotes || (self2.parser.gfmFootnotes = []);
   let size = 0;
@@ -37407,7 +37407,7 @@ function tokenizeGfmFootnoteCall(effects, ok2, nok) {
       effects.consume(code2);
       effects.exit("gfmFootnoteCallLabelMarker");
       effects.exit("gfmFootnoteCall");
-      return ok2;
+      return ok3;
     }
     if (!markdownLineEndingOrSpace(code2)) {
       data = true;
@@ -37425,7 +37425,7 @@ function tokenizeGfmFootnoteCall(effects, ok2, nok) {
     return callData(code2);
   }
 }
-function tokenizeDefinitionStart(effects, ok2, nok) {
+function tokenizeDefinitionStart(effects, ok3, nok) {
   const self2 = this;
   const defined = self2.parser.gfmFootnotes || (self2.parser.gfmFootnotes = []);
   let identifier;
@@ -37503,16 +37503,16 @@ function tokenizeDefinitionStart(effects, ok2, nok) {
     return nok(code2);
   }
   function whitespaceAfter(code2) {
-    return ok2(code2);
+    return ok3(code2);
   }
 }
-function tokenizeDefinitionContinuation(effects, ok2, nok) {
-  return effects.check(blankLine, ok2, effects.attempt(indent, ok2, nok));
+function tokenizeDefinitionContinuation(effects, ok3, nok) {
+  return effects.check(blankLine, ok3, effects.attempt(indent, ok3, nok));
 }
 function gfmFootnoteDefinitionEnd(effects) {
   effects.exit("gfmFootnoteDefinition");
 }
-function tokenizeIndent2(effects, ok2, nok) {
+function tokenizeIndent2(effects, ok3, nok) {
   const self2 = this;
   return factorySpace(
     effects,
@@ -37522,7 +37522,7 @@ function tokenizeIndent2(effects, ok2, nok) {
   );
   function afterPrefix(code2) {
     const tail = self2.events[self2.events.length - 1];
-    return tail && tail[1].type === "gfmFootnoteDefinitionIndent" && tail[2].sliceSerialize(tail[1], true).length === 4 ? ok2(code2) : nok(code2);
+    return tail && tail[1].type === "gfmFootnoteDefinitionIndent" && tail[2].sliceSerialize(tail[1], true).length === 4 ? ok3(code2) : nok(code2);
   }
 }
 
@@ -37548,7 +37548,7 @@ function gfmStrikethrough(options) {
       null: [126]
     }
   };
-  function resolveAllStrikethrough(events, context2) {
+  function resolveAllStrikethrough(events, context3) {
     let index2 = -1;
     while (++index2 < events.length) {
       if (events[index2][0] === "enter" && events[index2][1].type === "strikethroughSequenceTemporary" && events[index2][1]._close) {
@@ -37569,25 +37569,25 @@ function gfmStrikethrough(options) {
               end: Object.assign({}, events[index2][1].start)
             };
             const nextEvents = [
-              ["enter", strikethrough, context2],
-              ["enter", events[open][1], context2],
-              ["exit", events[open][1], context2],
-              ["enter", text4, context2]
+              ["enter", strikethrough, context3],
+              ["enter", events[open][1], context3],
+              ["exit", events[open][1], context3],
+              ["enter", text4, context3]
             ];
-            const insideSpan2 = context2.parser.constructs.insideSpan.null;
+            const insideSpan2 = context3.parser.constructs.insideSpan.null;
             if (insideSpan2) {
               splice(
                 nextEvents,
                 nextEvents.length,
                 0,
-                resolveAll(insideSpan2, events.slice(open + 1, index2), context2)
+                resolveAll(insideSpan2, events.slice(open + 1, index2), context3)
               );
             }
             splice(nextEvents, nextEvents.length, 0, [
-              ["exit", text4, context2],
-              ["enter", events[index2][1], context2],
-              ["exit", events[index2][1], context2],
-              ["exit", strikethrough, context2]
+              ["exit", text4, context3],
+              ["enter", events[index2][1], context3],
+              ["exit", events[index2][1], context3],
+              ["exit", strikethrough, context3]
             ]);
             splice(events, open - 1, index2 - open + 3, nextEvents);
             index2 = open + nextEvents.length - 2;
@@ -37604,7 +37604,7 @@ function gfmStrikethrough(options) {
     }
     return events;
   }
-  function tokenizeStrikethrough(effects, ok2, nok) {
+  function tokenizeStrikethrough(effects, ok3, nok) {
     const previous3 = this.previous;
     const events = this.events;
     let size = 0;
@@ -37631,7 +37631,7 @@ function gfmStrikethrough(options) {
       const after = classifyCharacter(code2);
       token._open = !after || after === 2 && Boolean(before);
       token._close = !before || before === 2 && Boolean(after);
-      return ok2(code2);
+      return ok3(code2);
     }
   }
 }
@@ -37750,7 +37750,7 @@ var gfmTable = {
     }
   }
 };
-function tokenizeTable(effects, ok2, nok) {
+function tokenizeTable(effects, ok3, nok) {
   const self2 = this;
   let size = 0;
   let sizeB = 0;
@@ -37928,7 +37928,7 @@ function tokenizeTable(effects, ok2, nok) {
       }
       effects.exit("tableDelimiterRow");
       effects.exit("tableHead");
-      return ok2(code2);
+      return ok3(code2);
     }
     return headDelimiterNok(code2);
   }
@@ -37948,7 +37948,7 @@ function tokenizeTable(effects, ok2, nok) {
     }
     if (code2 === null || markdownLineEnding(code2)) {
       effects.exit("tableRow");
-      return ok2(code2);
+      return ok3(code2);
     }
     if (markdownSpace(code2)) {
       return factorySpace(effects, bodyRowBreak, "whitespace")(code2);
@@ -37972,7 +37972,7 @@ function tokenizeTable(effects, ok2, nok) {
     return bodyRowData(code2);
   }
 }
-function resolveTable(events, context2) {
+function resolveTable(events, context3) {
   let index2 = -1;
   let inFirstCellAwaitingPipe = true;
   let rowKind = 0;
@@ -37991,7 +37991,7 @@ function resolveTable(events, context2) {
       if (token.type === "tableHead") {
         afterHeadAwaitingFirstBodyRow = false;
         if (lastTableEnd !== 0) {
-          flushTableEnd(map3, context2, lastTableEnd, currentTable, currentBody);
+          flushTableEnd(map3, context3, lastTableEnd, currentTable, currentBody);
           currentBody = void 0;
           lastTableEnd = 0;
         }
@@ -38001,7 +38001,7 @@ function resolveTable(events, context2) {
           // Note: correct end is set later.
           end: Object.assign({}, token.end)
         };
-        map3.add(index2, 0, [["enter", currentTable, context2]]);
+        map3.add(index2, 0, [["enter", currentTable, context3]]);
       } else if (token.type === "tableRow" || token.type === "tableDelimiterRow") {
         inFirstCellAwaitingPipe = true;
         currentCell = void 0;
@@ -38015,7 +38015,7 @@ function resolveTable(events, context2) {
             // Note: correct end is set later.
             end: Object.assign({}, token.end)
           };
-          map3.add(index2, 0, [["enter", currentBody, context2]]);
+          map3.add(index2, 0, [["enter", currentBody, context3]]);
         }
         rowKind = token.type === "tableDelimiterRow" ? 2 : currentBody ? 3 : 1;
       } else if (rowKind && (token.type === "data" || token.type === "tableDelimiterMarker" || token.type === "tableDelimiterFiller")) {
@@ -38025,7 +38025,7 @@ function resolveTable(events, context2) {
             cell[0] = cell[1];
             currentCell = flushCell(
               map3,
-              context2,
+              context3,
               lastCell,
               rowKind,
               void 0,
@@ -38043,7 +38043,7 @@ function resolveTable(events, context2) {
             cell[0] = cell[1];
             currentCell = flushCell(
               map3,
-              context2,
+              context3,
               lastCell,
               rowKind,
               void 0,
@@ -38063,14 +38063,14 @@ function resolveTable(events, context2) {
         cell[0] = cell[1];
         currentCell = flushCell(
           map3,
-          context2,
+          context3,
           lastCell,
           rowKind,
           index2,
           currentCell
         );
       } else if (cell[1] !== 0) {
-        currentCell = flushCell(map3, context2, cell, rowKind, index2, currentCell);
+        currentCell = flushCell(map3, context3, cell, rowKind, index2, currentCell);
       }
       rowKind = 0;
     } else if (rowKind && (token.type === "data" || token.type === "tableDelimiterMarker" || token.type === "tableDelimiterFiller")) {
@@ -38078,45 +38078,45 @@ function resolveTable(events, context2) {
     }
   }
   if (lastTableEnd !== 0) {
-    flushTableEnd(map3, context2, lastTableEnd, currentTable, currentBody);
+    flushTableEnd(map3, context3, lastTableEnd, currentTable, currentBody);
   }
-  map3.consume(context2.events);
+  map3.consume(context3.events);
   index2 = -1;
-  while (++index2 < context2.events.length) {
-    const event = context2.events[index2];
+  while (++index2 < context3.events.length) {
+    const event = context3.events[index2];
     if (event[0] === "enter" && event[1].type === "table") {
-      event[1]._align = gfmTableAlign(context2.events, index2);
+      event[1]._align = gfmTableAlign(context3.events, index2);
     }
   }
   return events;
 }
-function flushCell(map3, context2, range, rowKind, rowEnd, previousCell) {
+function flushCell(map3, context3, range, rowKind, rowEnd, previousCell) {
   const groupName = rowKind === 1 ? "tableHeader" : rowKind === 2 ? "tableDelimiter" : "tableData";
   const valueName = "tableContent";
   if (range[0] !== 0) {
-    previousCell.end = Object.assign({}, getPoint(context2.events, range[0]));
-    map3.add(range[0], 0, [["exit", previousCell, context2]]);
+    previousCell.end = Object.assign({}, getPoint(context3.events, range[0]));
+    map3.add(range[0], 0, [["exit", previousCell, context3]]);
   }
-  const now = getPoint(context2.events, range[1]);
+  const now = getPoint(context3.events, range[1]);
   previousCell = {
     type: groupName,
     start: Object.assign({}, now),
     // Note: correct end is set later.
     end: Object.assign({}, now)
   };
-  map3.add(range[1], 0, [["enter", previousCell, context2]]);
+  map3.add(range[1], 0, [["enter", previousCell, context3]]);
   if (range[2] !== 0) {
-    const relatedStart = getPoint(context2.events, range[2]);
-    const relatedEnd = getPoint(context2.events, range[3]);
+    const relatedStart = getPoint(context3.events, range[2]);
+    const relatedEnd = getPoint(context3.events, range[3]);
     const valueToken = {
       type: valueName,
       start: Object.assign({}, relatedStart),
       end: Object.assign({}, relatedEnd)
     };
-    map3.add(range[2], 0, [["enter", valueToken, context2]]);
+    map3.add(range[2], 0, [["enter", valueToken, context3]]);
     if (rowKind !== 2) {
-      const start = context2.events[range[2]];
-      const end = context2.events[range[3]];
+      const start = context3.events[range[2]];
+      const end = context3.events[range[3]];
       start[1].end = Object.assign({}, end[1].end);
       start[1].type = "chunkText";
       start[1].contentType = "text";
@@ -38126,24 +38126,24 @@ function flushCell(map3, context2, range, rowKind, rowEnd, previousCell) {
         map3.add(a, b, []);
       }
     }
-    map3.add(range[3] + 1, 0, [["exit", valueToken, context2]]);
+    map3.add(range[3] + 1, 0, [["exit", valueToken, context3]]);
   }
   if (rowEnd !== void 0) {
-    previousCell.end = Object.assign({}, getPoint(context2.events, rowEnd));
-    map3.add(rowEnd, 0, [["exit", previousCell, context2]]);
+    previousCell.end = Object.assign({}, getPoint(context3.events, rowEnd));
+    map3.add(rowEnd, 0, [["exit", previousCell, context3]]);
     previousCell = void 0;
   }
   return previousCell;
 }
-function flushTableEnd(map3, context2, index2, table, tableBody) {
+function flushTableEnd(map3, context3, index2, table, tableBody) {
   const exits = [];
-  const related = getPoint(context2.events, index2);
+  const related = getPoint(context3.events, index2);
   if (tableBody) {
     tableBody.end = Object.assign({}, related);
-    exits.push(["exit", tableBody, context2]);
+    exits.push(["exit", tableBody, context3]);
   }
   table.end = Object.assign({}, related);
-  exits.push(["exit", table, context2]);
+  exits.push(["exit", table, context3]);
   map3.add(index2 + 1, 0, exits);
 }
 function getPoint(events, index2) {
@@ -38161,7 +38161,7 @@ var gfmTaskListItem = {
     [91]: tasklistCheck
   }
 };
-function tokenizeTasklistCheck(effects, ok2, nok) {
+function tokenizeTasklistCheck(effects, ok3, nok) {
   const self2 = this;
   return open;
   function open(code2) {
@@ -38206,24 +38206,24 @@ function tokenizeTasklistCheck(effects, ok2, nok) {
   }
   function after(code2) {
     if (markdownLineEnding(code2)) {
-      return ok2(code2);
+      return ok3(code2);
     }
     if (markdownSpace(code2)) {
       return effects.check(
         {
           tokenize: spaceThenNonSpace
         },
-        ok2,
+        ok3,
         nok
       )(code2);
     }
     return nok(code2);
   }
 }
-function spaceThenNonSpace(effects, ok2, nok) {
+function spaceThenNonSpace(effects, ok3, nok) {
   return factorySpace(effects, after, "whitespace");
   function after(code2) {
-    return code2 === null ? nok(code2) : ok2(code2);
+    return code2 === null ? nok(code2) : ok3(code2);
   }
 }
 
@@ -38364,7 +38364,7 @@ var visitParents = (
       visitor = test;
       test = null;
     }
-    const is2 = convert(test);
+    const is3 = convert(test);
     const step = reverse ? -1 : 1;
     factory(tree, void 0, [])();
     function factory(node2, index2, parents) {
@@ -38377,17 +38377,17 @@ var visitParents = (
             typeof value2.name === "string" ? value2.name : void 0
           )
         );
-        Object.defineProperty(visit2, "name", {
+        Object.defineProperty(visit3, "name", {
           value: "node (" + color(node2.type + (name ? "<" + name + ">" : "")) + ")"
         });
       }
-      return visit2;
-      function visit2() {
+      return visit3;
+      function visit3() {
         let result = [];
         let subresult;
         let offset;
         let grandparents;
-        if (!test || is2(node2, index2, parents[parents.length - 1] || null)) {
+        if (!test || is3(node2, index2, parents[parents.length - 1] || null)) {
           result = toResult(visitor(node2, parents));
           if (result[0] === EXIT) {
             return result;
@@ -38986,13 +38986,13 @@ function exitFootnoteCallString(token) {
 function exitFootnoteCall(token) {
   this.exit(token);
 }
-function footnoteReference(node2, _, context2, safeOptions) {
+function footnoteReference(node2, _, context3, safeOptions) {
   const tracker = track(safeOptions);
   let value2 = tracker.move("[^");
-  const exit3 = context2.enter("footnoteReference");
-  const subexit = context2.enter("reference");
+  const exit3 = context3.enter("footnoteReference");
+  const subexit = context3.enter("reference");
   value2 += tracker.move(
-    safe(context2, association(node2), {
+    safe(context3, association(node2), {
       ...tracker.current(),
       before: value2,
       after: "]"
@@ -39006,13 +39006,13 @@ function footnoteReference(node2, _, context2, safeOptions) {
 function footnoteReferencePeek() {
   return "[";
 }
-function footnoteDefinition(node2, _, context2, safeOptions) {
+function footnoteDefinition(node2, _, context3, safeOptions) {
   const tracker = track(safeOptions);
   let value2 = tracker.move("[^");
-  const exit3 = context2.enter("footnoteDefinition");
-  const subexit = context2.enter("label");
+  const exit3 = context3.enter("footnoteDefinition");
+  const subexit = context3.enter("label");
   value2 += tracker.move(
-    safe(context2, association(node2), {
+    safe(context3, association(node2), {
       ...tracker.current(),
       before: value2,
       after: "]"
@@ -39024,7 +39024,7 @@ function footnoteDefinition(node2, _, context2, safeOptions) {
   );
   tracker.shift(4);
   value2 += tracker.move(
-    indentLines(containerFlow(node2, context2, tracker.current()), map)
+    indentLines(containerFlow(node2, context3, tracker.current()), map)
   );
   exit3();
   return value2;
@@ -39116,11 +39116,11 @@ function enterStrikethrough(token) {
 function exitStrikethrough(token) {
   this.exit(token);
 }
-function handleDelete(node2, _, context2, safeOptions) {
+function handleDelete(node2, _, context3, safeOptions) {
   const tracker = track(safeOptions);
-  const exit3 = context2.enter("strikethrough");
+  const exit3 = context3.enter("strikethrough");
   let value2 = tracker.move("~~");
-  value2 += containerPhrasing(node2, context2, {
+  value2 += containerPhrasing(node2, context3, {
     ...tracker.current(),
     before: value2,
     after: "~"
@@ -39393,21 +39393,21 @@ function gfmTableToMarkdown(options) {
       inlineCode: inlineCodeWithTable
     }
   };
-  function handleTable(node2, _, context2, safeOptions) {
+  function handleTable(node2, _, context3, safeOptions) {
     return serializeData(
-      handleTableAsData(node2, context2, safeOptions),
+      handleTableAsData(node2, context3, safeOptions),
       node2.align
     );
   }
-  function handleTableRow(node2, _, context2, safeOptions) {
-    const row = handleTableRowAsData(node2, context2, safeOptions);
+  function handleTableRow(node2, _, context3, safeOptions) {
+    const row = handleTableRowAsData(node2, context3, safeOptions);
     const value2 = serializeData([row]);
     return value2.slice(0, value2.indexOf("\n"));
   }
-  function handleTableCell(node2, _, context2, safeOptions) {
-    const exit3 = context2.enter("tableCell");
-    const subexit = context2.enter("phrasing");
-    const value2 = containerPhrasing(node2, context2, {
+  function handleTableCell(node2, _, context3, safeOptions) {
+    const exit3 = context3.enter("tableCell");
+    const subexit = context3.enter("phrasing");
+    const value2 = containerPhrasing(node2, context3, {
       ...safeOptions,
       before: around,
       after: around
@@ -39427,40 +39427,40 @@ function gfmTableToMarkdown(options) {
       stringLength
     });
   }
-  function handleTableAsData(node2, context2, safeOptions) {
+  function handleTableAsData(node2, context3, safeOptions) {
     const children = node2.children;
     let index2 = -1;
     const result = [];
-    const subexit = context2.enter("table");
+    const subexit = context3.enter("table");
     while (++index2 < children.length) {
       result[index2] = handleTableRowAsData(
         children[index2],
-        context2,
+        context3,
         safeOptions
       );
     }
     subexit();
     return result;
   }
-  function handleTableRowAsData(node2, context2, safeOptions) {
+  function handleTableRowAsData(node2, context3, safeOptions) {
     const children = node2.children;
     let index2 = -1;
     const result = [];
-    const subexit = context2.enter("tableRow");
+    const subexit = context3.enter("tableRow");
     while (++index2 < children.length) {
       result[index2] = handleTableCell(
         children[index2],
         node2,
-        context2,
+        context3,
         safeOptions
       );
     }
     subexit();
     return result;
   }
-  function inlineCodeWithTable(node2, parent, context2) {
-    let value2 = inlineCode(node2, parent, context2);
-    if (context2.stack.includes("tableCell")) {
+  function inlineCodeWithTable(node2, parent, context3) {
+    let value2 = inlineCode(node2, parent, context3);
+    if (context3.stack.includes("tableCell")) {
       value2 = value2.replace(/\|/g, "\\$&");
     }
     return value2;
@@ -39576,7 +39576,7 @@ function exitParagraphWithTaskListItem(token) {
   }
   this.exit(token);
 }
-function listItemWithTaskListItem(node2, parent, context2, safeOptions) {
+function listItemWithTaskListItem(node2, parent, context3, safeOptions) {
   const head = node2.children[0];
   const checkable = typeof node2.checked === "boolean" && head && head.type === "paragraph";
   const checkbox = "[" + (node2.checked ? "x" : " ") + "] ";
@@ -39584,7 +39584,7 @@ function listItemWithTaskListItem(node2, parent, context2, safeOptions) {
   if (checkable) {
     tracker.move(checkbox);
   }
-  let value2 = listItem(node2, parent, context2, {
+  let value2 = listItem(node2, parent, context3, {
     ...safeOptions,
     ...tracker.current()
   });
@@ -39740,7 +39740,7 @@ function createConstruct(matter2) {
     tokenize: tokenizeFrontmatter,
     concrete: true
   };
-  function tokenizeFrontmatter(effects, ok2, nok) {
+  function tokenizeFrontmatter(effects, ok3, nok) {
     const self2 = this;
     return start;
     function start(code2) {
@@ -39822,10 +39822,10 @@ function createConstruct(matter2) {
     }
     function after(code2) {
       effects.exit(frontmatterType);
-      return ok2(code2);
+      return ok3(code2);
     }
   }
-  function tokenizeClosingFence(effects, ok2, nok) {
+  function tokenizeClosingFence(effects, ok3, nok) {
     let bufferIndex2 = 0;
     return closeStart;
     function closeStart(code2) {
@@ -39862,7 +39862,7 @@ function createConstruct(matter2) {
     function closeAfter(code2) {
       if (code2 === null || markdownLineEnding(code2)) {
         effects.exit(fenceType);
-        return ok2(code2);
+        return ok3(code2);
       }
       return nok(code2);
     }
@@ -42654,8 +42654,206 @@ var jsYaml = {
 };
 var js_yaml_default = jsYaml;
 
+// node_modules/.pnpm/unist-util-is@6.0.0/node_modules/unist-util-is/lib/index.js
+var convert2 = (
+  // Note: overloads in JSDoc can’t yet use different `@template`s.
+  /**
+   * @type {(
+   *   (<Condition extends string>(test: Condition) => (node: unknown, index?: number | null | undefined, parent?: Parent | null | undefined, context?: unknown) => node is Node & {type: Condition}) &
+   *   (<Condition extends Props>(test: Condition) => (node: unknown, index?: number | null | undefined, parent?: Parent | null | undefined, context?: unknown) => node is Node & Condition) &
+   *   (<Condition extends TestFunction>(test: Condition) => (node: unknown, index?: number | null | undefined, parent?: Parent | null | undefined, context?: unknown) => node is Node & Predicate<Condition, Node>) &
+   *   ((test?: null | undefined) => (node?: unknown, index?: number | null | undefined, parent?: Parent | null | undefined, context?: unknown) => node is Node) &
+   *   ((test?: Test) => Check)
+   * )}
+   */
+  /**
+   * @param {Test} [test]
+   * @returns {Check}
+   */
+  function(test) {
+    if (test === null || test === void 0) {
+      return ok2;
+    }
+    if (typeof test === "function") {
+      return castFactory2(test);
+    }
+    if (typeof test === "object") {
+      return Array.isArray(test) ? anyFactory2(test) : propsFactory2(test);
+    }
+    if (typeof test === "string") {
+      return typeFactory2(test);
+    }
+    throw new Error("Expected function, string, or object as test");
+  }
+);
+function anyFactory2(tests) {
+  const checks = [];
+  let index2 = -1;
+  while (++index2 < tests.length) {
+    checks[index2] = convert2(tests[index2]);
+  }
+  return castFactory2(any);
+  function any(...parameters) {
+    let index3 = -1;
+    while (++index3 < checks.length) {
+      if (checks[index3].apply(this, parameters))
+        return true;
+    }
+    return false;
+  }
+}
+function propsFactory2(check) {
+  const checkAsRecord = (
+    /** @type {Record<string, unknown>} */
+    check
+  );
+  return castFactory2(all2);
+  function all2(node2) {
+    const nodeAsRecord = (
+      /** @type {Record<string, unknown>} */
+      /** @type {unknown} */
+      node2
+    );
+    let key;
+    for (key in check) {
+      if (nodeAsRecord[key] !== checkAsRecord[key])
+        return false;
+    }
+    return true;
+  }
+}
+function typeFactory2(check) {
+  return castFactory2(type2);
+  function type2(node2) {
+    return node2 && node2.type === check;
+  }
+}
+function castFactory2(testFunction) {
+  return check;
+  function check(value2, index2, parent) {
+    return Boolean(
+      looksLikeANode(value2) && testFunction.call(
+        this,
+        value2,
+        typeof index2 === "number" ? index2 : void 0,
+        parent || void 0
+      )
+    );
+  }
+}
+function ok2() {
+  return true;
+}
+function looksLikeANode(value2) {
+  return value2 !== null && typeof value2 === "object" && "type" in value2;
+}
+
+// node_modules/.pnpm/unist-util-visit-parents@6.0.1/node_modules/unist-util-visit-parents/lib/color.node.js
+function color2(d) {
+  return "\x1B[33m" + d + "\x1B[39m";
+}
+
+// node_modules/.pnpm/unist-util-visit-parents@6.0.1/node_modules/unist-util-visit-parents/lib/index.js
+var empty = [];
+var CONTINUE2 = true;
+var EXIT2 = false;
+var SKIP2 = "skip";
+function visitParents2(tree, test, visitor, reverse) {
+  let check;
+  if (typeof test === "function" && typeof visitor !== "function") {
+    reverse = visitor;
+    visitor = test;
+  } else {
+    check = test;
+  }
+  const is3 = convert2(check);
+  const step = reverse ? -1 : 1;
+  factory(tree, void 0, [])();
+  function factory(node2, index2, parents) {
+    const value2 = (
+      /** @type {Record<string, unknown>} */
+      node2 && typeof node2 === "object" ? node2 : {}
+    );
+    if (typeof value2.type === "string") {
+      const name = (
+        // `hast`
+        typeof value2.tagName === "string" ? value2.tagName : (
+          // `xast`
+          typeof value2.name === "string" ? value2.name : void 0
+        )
+      );
+      Object.defineProperty(visit3, "name", {
+        value: "node (" + color2(node2.type + (name ? "<" + name + ">" : "")) + ")"
+      });
+    }
+    return visit3;
+    function visit3() {
+      let result = empty;
+      let subresult;
+      let offset;
+      let grandparents;
+      if (!test || is3(node2, index2, parents[parents.length - 1] || void 0)) {
+        result = toResult2(visitor(node2, parents));
+        if (result[0] === EXIT2) {
+          return result;
+        }
+      }
+      if ("children" in node2 && node2.children) {
+        const nodeAsParent = (
+          /** @type {UnistParent} */
+          node2
+        );
+        if (nodeAsParent.children && result[0] !== SKIP2) {
+          offset = (reverse ? nodeAsParent.children.length : -1) + step;
+          grandparents = parents.concat(nodeAsParent);
+          while (offset > -1 && offset < nodeAsParent.children.length) {
+            const child = nodeAsParent.children[offset];
+            subresult = factory(child, offset, grandparents)();
+            if (subresult[0] === EXIT2) {
+              return subresult;
+            }
+            offset = typeof subresult[1] === "number" ? subresult[1] : offset + step;
+          }
+        }
+      }
+      return result;
+    }
+  }
+}
+function toResult2(value2) {
+  if (Array.isArray(value2)) {
+    return value2;
+  }
+  if (typeof value2 === "number") {
+    return [CONTINUE2, value2];
+  }
+  return value2 === null || value2 === void 0 ? empty : [value2];
+}
+
+// node_modules/.pnpm/unist-util-visit@5.0.0/node_modules/unist-util-visit/lib/index.js
+function visit(tree, testOrVisitor, visitorOrReverse, maybeReverse) {
+  let reverse;
+  let test;
+  let visitor;
+  if (typeof testOrVisitor === "function" && typeof visitorOrReverse !== "function") {
+    test = void 0;
+    visitor = testOrVisitor;
+    reverse = visitorOrReverse;
+  } else {
+    test = testOrVisitor;
+    visitor = visitorOrReverse;
+    reverse = maybeReverse;
+  }
+  visitParents2(tree, test, overload, reverse);
+  function overload(node2, parents) {
+    const parent = parents[parents.length - 1];
+    const index2 = parent ? parent.children.indexOf(node2) : void 0;
+    return visitor(node2, index2, parent);
+  }
+}
+
 // node_modules/.pnpm/unist-util-visit@4.1.2/node_modules/unist-util-visit/lib/index.js
-var visit = (
+var visit2 = (
   /**
    * @type {(
    *   (<Tree extends Node, Check extends Test>(tree: Tree, test: Check, visitor: BuildVisitor<Tree, Check>, reverse?: boolean | null | undefined) => void) &
@@ -42696,7 +42894,7 @@ function find(tree, condition) {
     throw new Error("unist-util-find requires a condition");
   const predicate = (0, import_lodash.default)(condition);
   let result;
-  visit(tree, function(node2) {
+  visit2(tree, function(node2) {
     if (predicate(node2)) {
       result = node2;
       return false;
@@ -42705,7 +42903,8 @@ function find(tree, condition) {
   return result;
 }
 
-// .github/actions/generate-changeset/gql.ts
+// .github/actions/generate-changeset/utils.ts
+var import_github = __toESM(require_github(), 1);
 function gql_get_pr(owner, repo, pr_number) {
   return `{
     repository(owner: "${owner}", name: "${repo}") {
@@ -42755,19 +42954,20 @@ function get_title(packages) {
   return packages.length ? `change detected` : `no changes detected`;
 }
 function create_version_table(packages) {
-  const rendered_packages = packages.map(([p, v]) => `|\`${p}\` | \`${v}\` |`).join("\n");
+  if (!packages.length)
+    return "__No changes detected. __";
+  const rendered_packages = packages.filter(([p, v]) => p && v).map(([p, v]) => `|\`${p}\` | \`${v}\` |`).join("\n");
   return `| Package | Version |
 |--------|--------|
 ${rendered_packages}`;
 }
-function create_package_checklist(changed_packages, other_packages) {
-  const changed_packages_list = changed_packages.map(
-    ([p, v]) => `- [x] \`${p}\``
+function create_package_checklist(packages) {
+  const changed_packages_list = packages.map(
+    ([p, v]) => `- [${!!v ? "x" : " "}] \`${p}\``
   );
-  const other_packages_list = other_packages.map((p) => `- [ ] \`${p}\``);
   return `
 #### Select the correct packages:
-${changed_packages_list.concat(other_packages_list).join("\n")}
+${changed_packages_list.join("\n")}
 
 \\-
 `;
@@ -42776,20 +42976,21 @@ function get_version_interaction_text(manual_version) {
   return manual_version ? "enable automatic package selection" : "manually select packages to update";
 }
 function create_changeset_comment({
-  changed_packages,
+  packages,
   changelog,
-  manual_version,
-  other_packages
+  manual_package_selection
 }) {
   return `<!-- tag=changesets_gradio -->
 
-###  \u{1F984} ${get_title(changed_packages)}
+###  \u{1F984} ${get_title(packages)}
 
 #### This Pull Request includes changes to the following packages. 
 
-${create_version_table(changed_packages)}
-${manual_version ? create_package_checklist(changed_packages, other_packages) : ""}
-- [${manual_version ? "x" : " "}] Maintainers can ${manual_version ? "de" : " "}select this checkbox to ${get_version_interaction_text(manual_version)}.
+${create_version_table(packages)}
+${manual_package_selection ? create_package_checklist(packages) : ""}
+- [${manual_package_selection ? "x" : " "}] Maintainers can ${manual_package_selection ? "de" : " "}select this checkbox to ${get_version_interaction_text(
+    manual_package_selection
+  )}.
 
 #### With the following changelog entry.
 
@@ -42817,9 +43018,9 @@ function get_frontmatter_versions(md) {
   }
   return false;
 }
-function check_for_interaction(md_src) {
+function check_for_manual_selection(md_src) {
   if (!md_src)
-    return { manual_version: false };
+    return { manual_package_selection: false };
   console.log(md_src);
   const new_ast = md_parser.parse(md_src);
   console.log(JSON.stringify(new_ast, null, 2));
@@ -42829,211 +43030,24 @@ function check_for_interaction(md_src) {
       (inner_node) => inner_node?.value?.trim()?.startsWith("Maintainers can ")
     );
   });
+  let versions = [];
+  if (manual_node) {
+    visit(new_ast, (node2) => {
+      if (node2.type === "listItem" && node2.checked != null && node2.checked != void 0) {
+        visit(node2.children[0], (inner_node) => {
+          if (inner_node.type === "inlineCode") {
+            versions.push([inner_node.value, !!node2.checked]);
+          }
+        });
+      }
+    });
+  }
   console.log(manual_node);
   return {
-    manual_version: !!manual_node?.checked
+    manual_package_selection: !!manual_node?.checked,
+    versions: manual_node ? versions : void 0
   };
 }
-
-// .github/actions/generate-changeset/index.ts
-var human_id = __toESM(require_dist(), 1);
-var dev_only_ignore_globs = [
-  "!**/test/**",
-  "!**/*.test.ts",
-  "!**/*.test.js",
-  "!**/*.spec.js",
-  "!**/*.spec.ts",
-  "!**/*.stories.svelte",
-  "!**/package.json",
-  "!**/requirements.txt"
-];
-async function run() {
-  console.log(JSON.stringify(import_github.context, null, 2));
-  if (import_github.context?.payload?.pull_request?.head.ref === "changeset-release/main") {
-    (0, import_core.info)("Release PR. Skipping changeset generation.");
-    return;
-  }
-  const token = (0, import_core.getInput)("github-token");
-  const main_pkg = (0, import_core.getInput)("main_pkg");
-  const octokit = (0, import_github.getOctokit)(token);
-  const response = await octokit.graphql(
-    gql_get_pr(import_github.context.repo.owner, import_github.context.repo.repo, import_github.context.issue.number)
-  );
-  let {
-    repository: {
-      pullRequest: {
-        baseRefName: base_branch_name,
-        headRefName: current_branch_name,
-        baseRefOid: base_sha,
-        headRefOid: head_sha,
-        closingIssuesReferences: { nodes: closes },
-        labels: { nodes: labels },
-        title,
-        comments: { nodes: comments }
-      }
-    }
-  } = response;
-  const comment = find_comment(comments);
-  let version2 = get_version_from_label(labels) || get_version_from_linked_issues(closes);
-  let type2 = get_type_from_label(labels) || get_type_from_linked_issues(closes);
-  const changed_pkgs = await (0, import_git.getChangedPackagesSinceRef)({
-    cwd: process.cwd(),
-    ref: base_sha,
-    changedFilePatterns: dev_only_ignore_globs
-  });
-  const { packages: pkgs, rootDir } = (0, import_get_packages.getPackagesSync)(process.cwd());
-  const main_package_json = pkgs.find(
-    (p) => p.packageJson.name === main_pkg
-  );
-  if (!main_package_json) {
-    (0, import_core.setFailed)(`Could not find main package ${main_pkg}`);
-  }
-  const dependency_files = pkgs.map(({ packageJson, relativeDir }) => {
-    if (packageJson.python) {
-      return [(0, import_path2.join)(relativeDir, "..", "requirements.txt"), packageJson.name];
-    } else {
-      return [(0, import_path2.join)(relativeDir, "package.json"), packageJson.name];
-    }
-  });
-  let output = "";
-  let error = "";
-  const options = {
-    listeners: {
-      stdout: (data) => {
-        output += data.toString();
-      },
-      stderr: (data) => {
-        error += data.toString();
-      }
-    }
-  };
-  await (0, import_exec.exec)("git", ["diff", "--name-only", base_sha], options);
-  const changed_files = output.split("\n").map((s) => s.trim()).filter(Boolean).reduce((acc, next) => {
-    acc.add(next);
-    return acc;
-  }, /* @__PURE__ */ new Set());
-  const changed_dependency_files = dependency_files.filter(
-    ([f]) => changed_files.has(f)
-  );
-  if (version2 === "unknown") {
-    if (changed_pkgs.length) {
-      version2 = "minor";
-    } else if (changed_dependency_files.length) {
-      version2 = "patch";
-      title = "Update dependencies.";
-    }
-  }
-  const updated_pkgs = /* @__PURE__ */ new Set();
-  changed_pkgs.forEach((pkg) => {
-    updated_pkgs.add(pkg.packageJson.name);
-    if (pkg.packageJson?.main_changeset) {
-      updated_pkgs.add(main_pkg);
-    }
-  });
-  changed_dependency_files.forEach(([file, pkg]) => {
-    updated_pkgs.add(pkg);
-    if (pkgs.find((p) => p.packageJson.name === pkg)?.packageJson?.main_changeset) {
-      updated_pkgs.add(main_pkg);
-    }
-  });
-  let filename = Array.from(changed_files).find(
-    (f) => f.startsWith(".changeset/")
-  );
-  let old_changeset_content = "";
-  let manual_changeset = false;
-  if (filename) {
-    console.log(await import_fs.promises.stat(filename));
-    console.log(await import_fs.promises.stat((0, import_path2.join)(rootDir, filename)));
-    let output_data = "";
-    const options2 = {
-      listeners: {
-        stdout: (data) => {
-          console.log(data.toString());
-          output_data += data.toString();
-        },
-        stderr: (data) => {
-          console.log(data.toString());
-          output_data += data.toString();
-        }
-      }
-    };
-    await (0, import_exec.exec)(
-      "git",
-      ["--no-pager", "log", "-p", "-1", "--", filename],
-      options2
-    );
-    console.log("after git command");
-    const last_change = output_data.trim();
-    if (!/Author: github-actions\[bot\]/.test(last_change)) {
-      (0, import_core.warning)(
-        `Changeset file was edited manually. Skipping changeset generation.`
-      );
-      manual_changeset = true;
-    }
-    old_changeset_content = (await import_fs.promises.readFile(filename, "utf-8")).trim();
-  } else {
-    const id = human_id.humanId({
-      separator: "-",
-      capitalize: false
-    });
-    filename = `.changeset/${id}.md`;
-  }
-  console.log({ filename, old_changeset_content, manual_changeset });
-  if (!manual_changeset) {
-    const changeset_content = `---
-${Array.from(updated_pkgs).map((pkg) => `"${pkg}": ${version2}`).join("\n")}
----
-
-${type2}:${title}
-	`;
-    console.log(changeset_content, old_changeset_content);
-    if (changeset_content.trim() !== old_changeset_content.trim()) {
-      import_fs.promises.writeFile(filename, changeset_content);
-      await (0, import_exec.exec)("git", [
-        "config",
-        "--global",
-        "user.email",
-        "41898282+github-actions[bot]@users.noreply.github.com"
-      ]);
-      await (0, import_exec.exec)("git", [
-        "config",
-        "--global",
-        "user.name",
-        "github-actions[bot]"
-      ]);
-      await (0, import_exec.exec)("git", ["add", "."]);
-      await (0, import_exec.exec)("git", ["commit", "-m", "add changeset"]);
-      await (0, import_exec.exec)("git", ["push"]);
-    }
-  }
-  const frontmatter_version = get_frontmatter_versions(old_changeset_content);
-  const other_packages = pkgs.filter((p) => !p.packageJson.private).map((p) => p.packageJson.name).filter((p) => !updated_pkgs.has(p));
-  console.log(import_github.context.eventName, import_github.context.eventName === "issue_comment");
-  const { manual_version } = import_github.context.eventName === "issue_comment" ? check_for_interaction(import_github.context.payload?.comment?.body) : { manual_version: false };
-  console.log({ manual_version, body: import_github.context.payload?.comment?.body });
-  const pr_comment_content = create_changeset_comment({
-    changed_packages: manual_changeset && frontmatter_version ? frontmatter_version : Array.from(updated_pkgs).map((pkg) => [pkg, version2]),
-    changelog: title,
-    manual_version,
-    other_packages
-  });
-  if (comment) {
-    await octokit.rest.issues.updateComment({
-      owner: import_github.context.repo.owner,
-      repo: import_github.context.repo.repo,
-      comment_id: parseInt(comment.fullDatabaseId),
-      body: pr_comment_content
-    });
-  } else {
-    await octokit.rest.issues.createComment({
-      owner: import_github.context.repo.owner,
-      repo: import_github.context.repo.repo,
-      issue_number: import_github.context.issue.number,
-      body: pr_comment_content
-    });
-  }
-}
-run();
 function get_version_from_label(labels) {
   if (!labels.length)
     return void 0;
@@ -43077,6 +43091,316 @@ function get_type_from_linked_issues(closes) {
     }
   });
   return type2;
+}
+function get_client(token, repo, owner) {
+  const octokit = (0, import_github.getOctokit)(token);
+  return {
+    async get_pr(pr_number) {
+      let {
+        repository: {
+          pullRequest: {
+            baseRefName: base_branch_name,
+            headRefName: current_branch_name,
+            baseRefOid: base_sha,
+            headRefOid: head_sha,
+            closingIssuesReferences: { nodes: closes },
+            labels: { nodes: labels },
+            title,
+            comments: { nodes: comments }
+          }
+        }
+      } = await octokit.graphql(
+        gql_get_pr(owner, repo, pr_number)
+      );
+      return {
+        base_branch_name,
+        current_branch_name,
+        base_sha,
+        head_sha,
+        closes,
+        labels,
+        title,
+        comments
+      };
+    },
+    async upsert_comment({
+      pr_number,
+      comment_id,
+      body
+    }) {
+      if (comment_id) {
+        await octokit.rest.issues.updateComment({
+          owner: import_github.context.repo.owner,
+          repo: import_github.context.repo.repo,
+          comment_id: parseInt(comment_id),
+          body
+        });
+      } else {
+        await octokit.rest.issues.createComment({
+          owner: import_github.context.repo.owner,
+          repo: import_github.context.repo.repo,
+          issue_number: pr_number,
+          body
+        });
+      }
+    }
+  };
+}
+function generate_changeset(packages, type2, title) {
+  return `---
+${packages.filter(([name, version2]) => !!name && !!version2).map(([name, version2]) => `"${name}": ${version2}`).join("\n")}
+	---
+	
+${type2}:${title}
+`;
+}
+
+// .github/actions/generate-changeset/index.ts
+var human_id = __toESM(require_dist(), 1);
+var dev_only_ignore_globs = [
+  "!**/test/**",
+  "!**/*.test.ts",
+  "!**/*.test.js",
+  "!**/*.spec.js",
+  "!**/*.spec.ts",
+  "!**/*.stories.svelte",
+  "!**/package.json",
+  "!**/requirements.txt"
+];
+async function run() {
+  console.log(JSON.stringify(import_github2.context, null, 2));
+  if (import_github2.context?.payload?.pull_request?.head.ref === "changeset-release/main") {
+    (0, import_core.info)("Release PR. Skipping changeset generation.");
+    return;
+  }
+  const token = (0, import_core.getInput)("github-token");
+  const main_pkg = (0, import_core.getInput)("main_pkg");
+  const client = get_client(token, import_github2.context.repo.owner, import_github2.context.repo.repo);
+  const pull_request_number = import_github2.context?.payload?.number || import_github2.context?.issue?.number;
+  console.log({ pull_request_number });
+  let {
+    base_branch_name,
+    current_branch_name,
+    base_sha,
+    head_sha,
+    closes,
+    labels,
+    title,
+    comments
+  } = await client.get_pr(pull_request_number);
+  const changed_files = await get_changed_files(base_sha);
+  const comment = find_comment(comments);
+  const { changeset_path, manual_mode, old_changeset_content } = await get_changeset_status(changed_files);
+  if (manual_mode) {
+    (0, import_core.warning)(
+      `Changeset file was edited manually. Skipping changeset generation.`
+    );
+    const versions = get_frontmatter_versions(old_changeset_content) || [];
+    const pr_comment_content2 = create_changeset_comment({
+      packages: versions,
+      changelog: title,
+      manual_package_selection: true
+    });
+    await client.upsert_comment({
+      pr_number: pull_request_number,
+      body: pr_comment_content2,
+      comment_id: comment?.fullDatabaseId
+    });
+    (0, import_core.info)("Changeset comment updated.");
+  }
+  const { packages: pkgs, rootDir } = (0, import_get_packages.getPackagesSync)(process.cwd());
+  let packages_versions = void 0;
+  let manual_package_selection = false;
+  if (comment?.body) {
+    const selection = check_for_manual_selection(comment.body);
+    manual_package_selection = selection.manual_package_selection;
+    if (manual_package_selection && selection.versions) {
+      console.log(selection.versions);
+      packages_versions = selection.versions;
+    }
+  }
+  let version2 = get_version_from_label(labels) || get_version_from_linked_issues(closes);
+  if (!packages_versions) {
+    const { updated_pkgs, version: _version } = await get_changed_packages({
+      changed_files,
+      pkgs,
+      base_sha,
+      main_pkg,
+      version: version2
+    });
+    if (_version !== "unknown" && version2 === "unknown") {
+      version2 = _version;
+    }
+    packages_versions = Array.from(updated_pkgs).map((pkg) => [pkg, true]);
+  }
+  if (manual_package_selection) {
+    packages_versions = pkgs.map(({ packageJson: { name } }) => [
+      name,
+      packages_versions?.find(([pkg]) => pkg === name)?.[1] ? version2 : false
+    ]);
+  }
+  let type2 = get_type_from_label(labels) || get_type_from_linked_issues(closes);
+  const changeset_content = generate_changeset(packages_versions, type2, title);
+  console.log(changeset_content, old_changeset_content);
+  if (changeset_content.trim() !== old_changeset_content.trim()) {
+    import_fs.promises.writeFile(changeset_path, changeset_content);
+    await (0, import_exec.exec)("git", [
+      "config",
+      "--global",
+      "user.email",
+      "41898282+github-actions[bot]@users.noreply.github.com"
+    ]);
+    await (0, import_exec.exec)("git", [
+      "config",
+      "--global",
+      "user.name",
+      "github-actions[bot]"
+    ]);
+    await (0, import_exec.exec)("git", ["add", "."]);
+    await (0, import_exec.exec)("git", ["commit", "-m", "add changeset"]);
+    await (0, import_exec.exec)("git", ["push"]);
+  }
+  const pr_comment_content = create_changeset_comment({
+    packages: packages_versions,
+    changelog: title,
+    manual_package_selection
+  });
+  await client.upsert_comment({
+    pr_number: pull_request_number,
+    body: pr_comment_content,
+    comment_id: comment?.fullDatabaseId
+  });
+}
+run();
+async function get_changed_files(base_sha) {
+  let output = "";
+  let error = "";
+  const options = {
+    listeners: {
+      stdout: (data) => {
+        output += data.toString();
+      },
+      stderr: (data) => {
+        error += data.toString();
+      }
+    }
+  };
+  await (0, import_exec.exec)("git", ["diff", "--name-only", base_sha], options);
+  return output.split("\n").map((s) => s.trim()).filter(Boolean).reduce((acc, next) => {
+    acc.add(next);
+    return acc;
+  }, /* @__PURE__ */ new Set());
+}
+async function get_changeset_status(changed_files) {
+  let changeset_path = "";
+  changed_files.forEach((f) => {
+    if (f.startsWith(".changeset/")) {
+      changeset_path = f;
+    }
+  });
+  if (changeset_path === "") {
+    return {
+      changeset_path: human_id.humanId({
+        separator: "-",
+        capitalize: false
+      }),
+      manual_mode: false,
+      old_changeset_content: ""
+    };
+  }
+  const old_changeset_content = await import_fs.promises.readFile(changeset_path, "utf-8");
+  let output_data = "";
+  const options = {
+    listeners: {
+      stdout: (data) => {
+        console.log(data.toString());
+        output_data += data.toString();
+      },
+      stderr: (data) => {
+        console.log(data.toString());
+        output_data += data.toString();
+      }
+    }
+  };
+  await (0, import_exec.exec)(
+    "git",
+    ["--no-pager", "log", "-p", "-1", "--", changeset_path],
+    options
+  );
+  const last_change = output_data.trim();
+  if (!/Author: github-actions\[bot\]/.test(last_change)) {
+    (0, import_core.warning)(
+      `Changeset file was edited manually. Skipping changeset generation.`
+    );
+    return {
+      changeset_path,
+      manual_mode: true,
+      old_changeset_content
+    };
+  } else {
+    return {
+      changeset_path,
+      manual_mode: false,
+      old_changeset_content
+    };
+  }
+}
+async function get_changed_packages({
+  changed_files,
+  pkgs,
+  base_sha,
+  main_pkg,
+  version: version2
+}) {
+  const changed_pkgs = await (0, import_git.getChangedPackagesSinceRef)({
+    cwd: process.cwd(),
+    ref: base_sha,
+    changedFilePatterns: dev_only_ignore_globs
+  });
+  const main_package_json = pkgs.find(
+    (p) => p.packageJson.name === main_pkg
+  );
+  if (!main_package_json) {
+    (0, import_core.setFailed)(`Could not find main package ${main_pkg}`);
+  }
+  const dependency_files = pkgs.map(({ packageJson, relativeDir }) => {
+    if (packageJson.python) {
+      return [(0, import_path2.join)(relativeDir, "..", "requirements.txt"), packageJson.name];
+    } else {
+      return [(0, import_path2.join)(relativeDir, "package.json"), packageJson.name];
+    }
+  });
+  const changed_dependency_files = dependency_files.filter(
+    ([f]) => changed_files.has(f)
+  );
+  const updated_pkgs = /* @__PURE__ */ new Set();
+  changed_pkgs.forEach((pkg) => {
+    updated_pkgs.add(pkg.packageJson.name);
+    if (pkg.packageJson?.main_changeset) {
+      updated_pkgs.add(main_pkg);
+    }
+  });
+  changed_dependency_files.forEach(([file, pkg]) => {
+    updated_pkgs.add(pkg);
+    if (pkgs.find((p) => p.packageJson.name === pkg)?.packageJson?.main_changeset) {
+      updated_pkgs.add(main_pkg);
+    }
+  });
+  let new_version = version2;
+  let title = "";
+  if (new_version === "unknown") {
+    if (changed_pkgs.length) {
+      new_version = "minor";
+    } else if (changed_dependency_files.length) {
+      new_version = "patch";
+      title = "Update dependencies.";
+    }
+  }
+  return {
+    updated_pkgs,
+    version: new_version,
+    title
+  };
 }
 /*! Bundled license information:
 

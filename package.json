@@ -31,7 +31,8 @@
 		"remark-parse": "^10.0.2",
 		"undici": "^5.22.1",
 		"unified": "^10.1.2",
-		"unist-util-find": "^2.0.0"
+		"unist-util-find": "^2.0.0",
+		"unist-util-visit": "^5.0.0"
 	},
 	"type": "module",
 	"private": true

@@ -25,6 +25,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - uses: actions/checkout@v3
         with:
+          ref: ${{ steps.get-branch.outputs.branch }}
           fetch-depth: 0
       - name: generate changeset
         uses: "./.github/actions/generate-changeset"

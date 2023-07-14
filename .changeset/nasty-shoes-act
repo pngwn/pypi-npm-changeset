@@ -1,6 +1,6 @@
 ---
-"gradio-test-client-pypi": minor
-"gradio-test-pypi": minor
+"gradio-test-client-pypi": major
+"gradio-test-pypi": major
 ---
 
 feat:Make the whole thing better

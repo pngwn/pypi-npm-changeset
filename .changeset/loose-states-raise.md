@@ -1,6 +1,6 @@
 ---
-"gradio-test-pypi": unknown
-"@pngwn/gradio-test-pkg-one": unknown
+"@pngwn/gradio-test-pkg-one": true
+"gradio-test-pypi": true
 	---
 	
 fix:asd

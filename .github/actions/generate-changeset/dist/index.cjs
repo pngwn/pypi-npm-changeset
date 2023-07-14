@@ -43244,6 +43244,7 @@ async function run() {
     title
   );
   if (changeset_content.trim() !== old_changeset_content.trim()) {
+    console.log({ packages_versions, changeset_content });
     const operation = packages_versions.length === 0 && changeset_content === "" ? "delete" : "add";
     if (operation === "delete") {
       await import_fs.promises.unlink(changeset_path);

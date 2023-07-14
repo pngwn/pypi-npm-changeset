@@ -335,7 +335,7 @@ async function get_changed_packages({
 		add_to_main_changeset: boolean;
 	}
 
-	console.log(changed_dependency_files, changed_pkgs);
+	console.log({ changed_dependency_files, changed_pkgs, version });
 
 	const updated_pkgs = new Set<string>();
 
@@ -361,7 +361,6 @@ async function get_changed_packages({
 	if (new_version === "unknown") {
 		if (changed_pkgs.length) {
 			new_version = "minor";
-			// typ;
 		} else if (changed_dependency_files.length) {
 			new_version = "patch";
 		}

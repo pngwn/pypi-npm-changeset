@@ -43365,7 +43365,7 @@ async function get_changed_packages({
   const changed_dependency_files = dependency_files.filter(
     ([f]) => changed_files.has(f)
   );
-  console.log(changed_dependency_files, changed_pkgs);
+  console.log({ changed_dependency_files, changed_pkgs, version: version2 });
   const updated_pkgs = /* @__PURE__ */ new Set();
   changed_pkgs.forEach((pkg) => {
     updated_pkgs.add(pkg.packageJson.name);

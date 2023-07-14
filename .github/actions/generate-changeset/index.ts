@@ -127,11 +127,13 @@ async function run() {
 			version,
 		});
 
+		console.log({ _version, version });
+
 		if (_version !== "unknown" && version === "unknown") {
 			version = _version;
 		}
 
-		packages_versions = Array.from(updated_pkgs).map((pkg) => [pkg, true]);
+		packages_versions = Array.from(updated_pkgs).map((pkg) => [pkg, version]);
 	}
 
 	if (manual_package_selection) {

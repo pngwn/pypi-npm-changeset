@@ -280,7 +280,7 @@ export function get_type_from_linked_issues(closes: ClosesLink[]) {
 
 import { context, getOctokit } from "@actions/github";
 
-export function get_client(token: string, repo: string, owner: string) {
+export function get_client(token: string, owner: string, repo: string) {
 	const octokit = getOctokit(token);
 
 	return {

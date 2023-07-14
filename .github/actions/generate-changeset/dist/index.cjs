@@ -43092,7 +43092,7 @@ function get_type_from_linked_issues(closes) {
   });
   return type2;
 }
-function get_client(token, repo, owner) {
+function get_client(token, owner, repo) {
   const octokit = (0, import_github.getOctokit)(token);
   return {
     async get_pr(pr_number) {

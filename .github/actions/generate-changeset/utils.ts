@@ -1,5 +1,3 @@
-import { format } from "prettier";
-
 export function gql_get_pr(owner: string, repo: string, pr_number: number) {
 	return `{
     repository(owner: "${owner}", name: "${repo}") {
@@ -349,7 +347,7 @@ export async function generate_changeset(
 		return "";
 	}
 
-	return await format(`---
+	return `---
 ${packages
 	.filter(([name, version]) => !!name && !!version)
 	.sort((a, b) => a[0].localeCompare(b[0]))
@@ -358,5 +356,5 @@ ${packages
 ---
 
 ${type}:${title}
-`);
+`;
 }

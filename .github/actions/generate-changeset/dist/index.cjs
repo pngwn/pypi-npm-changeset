@@ -43223,10 +43223,11 @@ async function run() {
       main_pkg,
       version: version2
     });
+    console.log({ _version, version: version2 });
     if (_version !== "unknown" && version2 === "unknown") {
       version2 = _version;
     }
-    packages_versions = Array.from(updated_pkgs).map((pkg) => [pkg, true]);
+    packages_versions = Array.from(updated_pkgs).map((pkg) => [pkg, version2]);
   }
   if (manual_package_selection) {
     packages_versions = pkgs.map(({ packageJson: { name } }) => [

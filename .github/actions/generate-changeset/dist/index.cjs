@@ -43249,7 +43249,6 @@ async function run() {
     if (operation === "delete") {
       await import_fs.promises.unlink(changeset_path);
       (0, import_core.warning)("No packages selected. Skipping changeset generation.");
-      return;
     } else {
       import_fs.promises.writeFile(changeset_path, changeset_content);
     }

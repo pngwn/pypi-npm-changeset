@@ -168,7 +168,6 @@ async function run() {
 		if (operation === "delete") {
 			await fs.unlink(changeset_path);
 			warning("No packages selected. Skipping changeset generation.");
-			return;
 		} else {
 			fs.writeFile(changeset_path, changeset_content);
 		}

@@ -1,9 +1,6 @@
 ---
-"@pngwn/gradio-test-pkg-one": major
-"@pngwn/gradio-test-pkg-private": major
-"@pngwn/gradio-test-pkg-three": major
-"gradio-test-client-pypi": major
-"gradio-test-pypi": major
+"gradio-test-client-pypi": minor
+"gradio-test-pypi": minor
 ---
 
 feat:Make the whole thing better

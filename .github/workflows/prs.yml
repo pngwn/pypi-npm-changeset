@@ -12,14 +12,19 @@ env:
   NODE_OPTIONS: "--max-old-space-size=4096"
 
 jobs:
-  publish:
+  version:
     permissions: write-all
     name: static checks
     runs-on: ubuntu-22.04
     steps:
+      - id: "get-branch"
+        run: echo ::set-output name=branch::$(gh pr view $PR_NO --repo $REPO --json headRefName --jq '.headRefName')
+        env:
+          REPO: ${{ github.repository }}
+          PR_NO: ${{ github.event.number || github.event.issue.number }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - uses: actions/checkout@v3
         with:
-          ref: refs/pull/${{ github.event.number || github.event.issue.number }}/head
           fetch-depth: 0
       - name: generate changeset
         uses: "./.github/actions/generate-changeset"

@@ -40,7 +40,7 @@ type PackageJson = Packages["packages"][0]["packageJson"] & {
 };
 
 async function run() {
-	console.log(JSON.stringify(context, null, 2));
+	// console.log(JSON.stringify(context, null, 2));
 
 	// we always need these details
 
@@ -55,7 +55,7 @@ async function run() {
 	const pull_request_number =
 		context?.payload?.number || context?.issue?.number;
 
-	console.log({ pull_request_number });
+	// console.log({ pull_request_number });
 
 	let {
 		base_branch_name,
@@ -144,8 +144,6 @@ async function run() {
 	let type = get_type_from_label(labels) || get_type_from_linked_issues(closes);
 
 	const changeset_content = generate_changeset(packages_versions, type, title);
-
-	console.log(changeset_content, old_changeset_content);
 
 	if (changeset_content.trim() !== old_changeset_content.trim()) {
 		fs.writeFile(changeset_path, changeset_content);
@@ -258,11 +256,9 @@ async function get_changeset_status(changed_files: Set<string>): Promise<{
 	const options = {
 		listeners: {
 			stdout: (data: Buffer) => {
-				console.log(data.toString());
 				output_data += data.toString();
 			},
 			stderr: (data: Buffer) => {
-				console.log(data.toString());
 				output_data += data.toString();
 			},
 		},
@@ -339,6 +335,8 @@ async function get_changed_packages({
 		add_to_main_changeset: boolean;
 	}
 
+	console.log({ changed_dependency_files, changed_pkgs, version });
+
 	const updated_pkgs = new Set<string>();
 
 	changed_pkgs.forEach((pkg) => {
@@ -359,21 +357,17 @@ async function get_changed_packages({
 	});
 
 	let new_version = version;
-	let title = "";
 
 	if (new_version === "unknown") {
 		if (changed_pkgs.length) {
 			new_version = "minor";
-			// typ;
 		} else if (changed_dependency_files.length) {
 			new_version = "patch";
-			title = "Update dependencies.";
 		}
 	}
 
 	return {
 		updated_pkgs,
 		version: new_version,
-		title,
 	};
 }

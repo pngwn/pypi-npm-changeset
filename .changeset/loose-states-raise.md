@@ -1,6 +1,6 @@
 ---
-"@pngwn/gradio-test-pkg-one": minor
-"gradio-test-pypi": minor
+"@pngwn/gradio-test-pkg-one": major
+"gradio-test-pypi": major
 	---
 	
 fix:asd

@@ -1,8 +1,8 @@
 ---
-"@pngwn/gradio-test-client": unknown
-"@pngwn/gradio-test-pkg-private": unknown
-"@pngwn/gradio-test-pkg-two": unknown
-"gradio-test-pypi": unknown
+"@pngwn/gradio-test-client": minor
+"@pngwn/gradio-test-pkg-private": minor
+"@pngwn/gradio-test-pkg-two": minor
+"gradio-test-pypi": minor
 ---
 
 fix:A simple change that shouldn't do anything

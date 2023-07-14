@@ -43239,7 +43239,14 @@ async function run() {
   let type2 = get_type_from_label(labels) || get_type_from_linked_issues(closes);
   const changeset_content = generate_changeset(packages_versions, type2, title);
   if (changeset_content.trim() !== old_changeset_content.trim()) {
-    import_fs.promises.writeFile(changeset_path, changeset_content);
+    const operation = packages_versions.length === 0 && changeset_content === "" ? "delete" : "add";
+    if (operation === "delete") {
+      await import_fs.promises.unlink(changeset_path);
+      (0, import_core.warning)("No packages selected. Skipping changeset generation.");
+      return;
+    } else {
+      import_fs.promises.writeFile(changeset_path, changeset_content);
+    }
     await (0, import_exec.exec)("git", [
       "config",
       "--global",
@@ -43253,7 +43260,7 @@ async function run() {
       "github-actions[bot]"
     ]);
     await (0, import_exec.exec)("git", ["add", "."]);
-    await (0, import_exec.exec)("git", ["commit", "-m", "add changeset"]);
+    await (0, import_exec.exec)("git", ["commit", "-m", `${operation} changeset`]);
     await (0, import_exec.exec)("git", ["push"]);
   }
   const pr_comment_content = create_changeset_comment({

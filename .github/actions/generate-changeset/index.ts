@@ -154,7 +154,17 @@ async function run() {
 	const changeset_content = generate_changeset(packages_versions, type, title);
 
 	if (changeset_content.trim() !== old_changeset_content.trim()) {
-		fs.writeFile(changeset_path, changeset_content);
+		const operation =
+			packages_versions.length === 0 && changeset_content === ""
+				? "delete"
+				: "add";
+		if (operation === "delete") {
+			await fs.unlink(changeset_path);
+			warning("No packages selected. Skipping changeset generation.");
+			return;
+		} else {
+			fs.writeFile(changeset_path, changeset_content);
+		}
 
 		await exec("git", [
 			"config",
@@ -169,7 +179,7 @@ async function run() {
 			"github-actions[bot]",
 		]);
 		await exec("git", ["add", "."]);
-		await exec("git", ["commit", "-m", "add changeset"]);
+		await exec("git", ["commit", "-m", `${operation} changeset`]);
 		await exec("git", ["push"]);
 	}
 

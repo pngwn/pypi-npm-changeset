@@ -158,6 +158,7 @@ async function run() {
 	);
 
 	if (changeset_content.trim() !== old_changeset_content.trim()) {
+		console.log({ packages_versions, changeset_content });
 		const operation =
 			packages_versions.length === 0 && changeset_content === ""
 				? "delete"

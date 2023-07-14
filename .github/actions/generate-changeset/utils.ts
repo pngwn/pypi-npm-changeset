@@ -1,3 +1,5 @@
+import { format } from "prettier";
+
 export function gql_get_pr(owner: string, repo: string, pr_number: number) {
 	return `{
     repository(owner: "${owner}", name: "${repo}") {
@@ -336,7 +338,7 @@ export function get_client(token: string, owner: string, repo: string) {
 	};
 }
 
-export function generate_changeset(
+export async function generate_changeset(
 	packages: [string, string | boolean][],
 	type: string,
 	title: string,
@@ -345,13 +347,13 @@ export function generate_changeset(
 		return "";
 	}
 
-	return `---
+	return await format(`---
 ${packages
 	.filter(([name, version]) => !!name && !!version)
 	.map(([name, version]) => `"${name}": ${version}`)
 	.join("\n")}
-	---
-	
+---
+
 ${type}:${title}
-`;
+`);
 }

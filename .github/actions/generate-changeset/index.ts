@@ -151,7 +151,11 @@ async function run() {
 
 	let type = get_type_from_label(labels) || get_type_from_linked_issues(closes);
 
-	const changeset_content = generate_changeset(packages_versions, type, title);
+	const changeset_content = await generate_changeset(
+		packages_versions,
+		type,
+		title,
+	);
 
 	if (changeset_content.trim() !== old_changeset_content.trim()) {
 		const operation =

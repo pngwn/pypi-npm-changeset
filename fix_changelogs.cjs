@@ -10,9 +10,7 @@ const all_packages = getPackagesSync(process.cwd()).packages;
 for (const pkg_name in packages) {
 	const { dirs, highlight, feat, fix, current_changelog } = packages[pkg_name];
 
-	const { version, python } = JSON.parse(
-		readFileSync(join(dirs[0], "./package.json"), "utf-8"),
-	);
+	const { version, python } = all_packages[pkg_name].packageJson;
 
 	const highlights = highlight.map((h) => `${h.summary}`);
 	const features = feat.map((f) => `- ${f.summary}`);
@@ -58,12 +56,9 @@ unlinkSync(join(__dirname, "_changelog.json"));
 
 function bump_local_dependents(pkg_to_bump, version) {
 	for (const pkg_name in all_packages) {
-		const {
-			dirs: [dir],
-		} = packages[pkg_name];
-		const { python } = JSON.parse(
-			readFileSync(join(dir, "./package.json"), "utf-8"),
-		);
+		console.log();
+		const { dir, packageJson } = all_packages[pkg_name];
+		const { python } = packageJson;
 
 		console.log(pkg_name, python);
 

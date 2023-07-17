@@ -46879,6 +46879,9 @@ ${changed_packages_list.join("\n")}
 function get_version_interaction_text(manual_version) {
   return manual_version ? "enable automatic package selection" : "manually select packages to update";
 }
+function format_changelog_preview(changelog) {
+  return changelog.split("\n").map((line) => `> ${line}`).join("\n");
+}
 function create_changeset_comment({
   packages,
   changelog,
@@ -46898,7 +46901,7 @@ ${manual_package_selection ? create_package_checklist(packages) : ""}
 
 #### With the following changelog entry.
 
-> ${changelog}
+${format_changelog_preview(changelog)}
 
 _Maintainers or the PR author can modify the PR title to modify this entry._
 <details><summary>

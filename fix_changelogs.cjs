@@ -74,6 +74,7 @@ function bump_local_dependents(pkg_to_bump, version) {
 		const requirements_path = join(dir, "..", "requirements.txt");
 		const requirements = readFileSync(requirements_path, "utf-8").split("\n");
 
+		console.log(requirements_path, requirements);
 		const pkg_index = requirements.findIndex((line) =>
 			line.startsWith(pkg_name),
 		);

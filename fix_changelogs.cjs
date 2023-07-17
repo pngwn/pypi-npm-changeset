@@ -63,7 +63,7 @@ function bump_local_dependents(pkg_to_bump, version) {
 			readFileSync(join(dir, "./package.json"), "utf-8"),
 		);
 
-		console.log(python);
+		console.log(pkg_name, python);
 
 		if (!python) return;
 

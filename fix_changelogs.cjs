@@ -44,6 +44,8 @@ ${current_changelog}
 		writeFileSync(join(dir, "CHANGELOG.md"), new_changelog);
 	});
 
+	console.log(pkg_name, dirs, version, python);
+
 	if (python) {
 		writeFileSync(join(dirs[0], "version.txt"), version);
 		bump_local_dependents(pkg_name, version);

@@ -199,8 +199,6 @@ const changelogFunctions = {
 			});
 		});
 
-		console.log(JSON.stringify(lines, null, 2));
-
 		fs.writeFileSync("./_changelog.json", JSON.stringify(lines, null, 2));
 
 		return `\n\n-${prefix ? `${prefix} -` : ""} ${firstLine}\n${futureLines

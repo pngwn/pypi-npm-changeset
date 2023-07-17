@@ -46912,9 +46912,8 @@ ${generate_mode_description(manual_package_selection, manual_mode)}
 
 ${format_changelog_preview(changelog)}
 
----
 
-${manual_mode ? "\u26A0\uFE0F _The changeset file for this pull request has been modified manually, so the changeset generation bot has been disabled. To got back into automatic mode, delete the changeset file._" : `_Maintainers or the PR author can modify the PR title to modify this entry._
+${manual_mode ? "\u26A0\uFE0F _The changeset file for this pull request has been modified manually, so the changeset generation bot has been disabled. To go back into automatic mode, delete the changeset file._" : `_Maintainers or the PR author can modify the PR title to modify this entry._
 <details><summary>
 
 #### \u26A0\uFE0F Something isn't right</summary>

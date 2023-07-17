@@ -167,9 +167,13 @@ const changelogFunctions = {
 					.trim();
 			}
 
-			const [, _type, summary] = changeset.summary.match(
-				/^(feat|fix|highlight)\s*:\s*([^]*)/im,
-			) || [, false, changeset.summary];
+			const [, _type, summary] = changeset.summary
+				.trim()
+				.match(/^(feat|fix|highlight)\s*:\s*([^]*)/im) || [
+				,
+				false,
+				changeset.summary,
+			];
 
 			let formatted_summary = "";
 

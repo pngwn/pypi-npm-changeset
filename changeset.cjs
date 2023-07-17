@@ -122,8 +122,8 @@ const changelogFunctions = {
 				: links.user;
 
 		const prefix = [
-			links.pull === null ? "" : ` ${links.pull}`,
-			links.commit === null ? "" : ` ${links.commit}`,
+			links.pull === null ? "" : `${links.pull}`,
+			links.commit === null ? "" : `${links.commit}`,
 		].join("");
 
 		const suffix = users === null ? "" : ` Thanks ${users}!`;
@@ -171,7 +171,7 @@ const changelogFunctions = {
 
 			let formatted_summary = "";
 
-			if (_type === "feat") {
+			if (_type === "highlight") {
 				formatted_summary = `${prefix ? `${prefix} -` : ""} ${summary.replace(
 					/\s$/,
 					"",

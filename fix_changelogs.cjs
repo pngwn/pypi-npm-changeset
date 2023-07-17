@@ -57,6 +57,12 @@ function bump_local_dependents(pkg_to_bump, version) {
 		const {
 			dirs: [dir],
 		} = packages[pkg_name];
+		const { version, python } = JSON.parse(
+			readFileSync(join(dir, "./package.json"), "utf-8"),
+		);
+
+		if (!python) return;
+
 		const requirements_path = join(dir, "..", "requirements.txt");
 		const requirements = readFileSync(requirements_path, "utf-8").split("\n");
 

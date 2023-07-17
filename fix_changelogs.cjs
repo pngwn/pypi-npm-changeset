@@ -6,7 +6,7 @@ const { _handled, ...packages } = JSON.parse(
 	readFileSync(join(__dirname, "./_changelog.json"), "utf-8"),
 );
 const all_packages = getPackagesSync(process.cwd()).packages;
-
+console.log({ all_packages });
 for (const pkg_name in packages) {
 	const { dirs, highlight, feat, fix, current_changelog } = packages[pkg_name];
 

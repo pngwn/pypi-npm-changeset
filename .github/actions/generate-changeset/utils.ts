@@ -81,14 +81,38 @@ function get_version_interaction_text(manual_version: boolean) {
 		: "manually select packages to update";
 }
 
+function format_changelog_preview(changelog: string) {
+	return changelog
+		.split("\n")
+		.map((line) => `> ${line}`)
+		.join("\n");
+}
+
+function generate_mode_description(
+	manual_package_selection: boolean,
+	manual_mode: boolean,
+) {
+	if (manual_mode) {
+		return ``;
+	} else {
+		return `- [${manual_package_selection ? "x" : " "}] Maintainers can ${
+			manual_package_selection ? "de" : " "
+		}select this checkbox to ${get_version_interaction_text(
+			manual_package_selection,
+		)}.`;
+	}
+}
+
 export function create_changeset_comment({
 	packages,
 	changelog,
 	manual_package_selection,
+	manual_mode = false,
 }: {
 	packages: [string, string | boolean][];
 	changelog: string;
 	manual_package_selection: boolean;
+	manual_mode?: boolean;
 }) {
 	return `<!-- tag=changesets_gradio -->
 
@@ -98,25 +122,26 @@ export function create_changeset_comment({
 
 ${create_version_table(packages)}
 ${manual_package_selection ? create_package_checklist(packages) : ""}
-- [${manual_package_selection ? "x" : " "}] Maintainers can ${
-		manual_package_selection ? "de" : " "
-	}select this checkbox to ${get_version_interaction_text(
-		manual_package_selection,
-	)}.
+${generate_mode_description(manual_package_selection, manual_mode)}
+
 
 #### With the following changelog entry.
 
-> ${changelog}
+${format_changelog_preview(changelog)}
 
-_Maintainers or the PR author can modify the PR title to modify this entry._
+${
+	manual_mode
+		? "⚠️ _The changeset file for this pull request has been modified manually, so the changeset generation bot has been disabled. To go back into automatic mode, delete the changeset file._"
+		: `_Maintainers or the PR author can modify the PR title to modify this entry._
 <details><summary>
 
-#### Something isn't right</summary>
+#### ⚠️ Something isn't right</summary>
 
 - Maintainers can change the version label to modify the version bump. 
 - If this pull request needs to update multiple packages to different versions or requires a more comprehensive changelog entry, maintainers can [update the changelog file directly]()
 
-</details> `;
+</details>`
+}`.trim();
 }
 
 import { unified } from "unified";
@@ -348,6 +373,9 @@ export async function generate_changeset(
 		return "";
 	}
 
+	const formatted_type =
+		type === "highlight" ? `${type}:\n\n#### ${title}` : `${type}:${title}`;
+
 	return `---
 ${packages
 	.filter(([name, version]) => !!name && !!version)
@@ -356,6 +384,48 @@ ${packages
 	.join("\n")}
 ---
 
-${type}:${title}
+${formatted_type}
 `;
+}
+
+const RE_FEAT_FIX_REGEX = /^(feat|fix)\s*:/i;
+const RE_HIGHLIGHT_REGEX = /^highlight\s*:/i;
+
+const RE_VALID_FEAT_FIX_REGEX = /^(feat|fix)\s*:.*$/i;
+const RE_VALID_HIGHLIGHT_REGEX = /^highlight\s*:\n\n####[^]*$/i;
+
+export function validate_changelog(changelog: string): {
+	valid: boolean;
+	message: string | false;
+} {
+	const changelog_content = changelog.split("---")[2].trim();
+
+	if (RE_FEAT_FIX_REGEX.test(changelog_content)) {
+		return {
+			valid: RE_VALID_FEAT_FIX_REGEX.test(changelog_content),
+			message: `⚠️ Warning invalid changelog entry.
+
+Changelog entry must be in the format \`feat: <description>\` or \`fix: <description>\`. Entries fior fixes or features cannot span multiple lines. If you wish to add a longer description, please created a \`highlight\` entry instead.`,
+		};
+	} else if (RE_HIGHLIGHT_REGEX.test(changelog_content)) {
+		return {
+			valid: RE_VALID_HIGHLIGHT_REGEX.test(changelog_content),
+			message: `⚠️ Warning invalid changelog entry.
+
+Changelog entry must be in the format:
+\`\`\`highlight: 
+
+#### <feature-title>
+
+<feature-description>
+\`\`\`
+
+Any markdown other than level 1-4 headings is allowed.`,
+		};
+	} else {
+		return {
+			valid: false,
+			message: false,
+		};
+	}
 }

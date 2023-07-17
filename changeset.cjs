@@ -179,7 +179,7 @@ const changelogFunctions = {
 
 			if (_type === "highlight") {
 				const [heading, ...rest] = summary.trim().split("\n");
-				const _heading = `${heading} (${prefix ? `${prefix} -` : ""}`;
+				const _heading = `${heading} ${prefix ? `(${prefix})` : ""}`;
 				const _rest = rest.concat(["", suffix]);
 
 				formatted_summary = `${_heading}\n${_rest.join("\n")}`;

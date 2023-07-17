@@ -47098,9 +47098,10 @@ async function run() {
       `Changeset file was edited manually. Skipping changeset generation.`
     );
     const versions = get_frontmatter_versions(old_changeset_content) || [];
+    const changelog_entry = old_changeset_content.split("---")[2].trim().replace(/^(feat:|fix:|highlight:)/im, "").trim();
     const pr_comment_content2 = create_changeset_comment({
       packages: versions,
-      changelog: title,
+      changelog: changelog_entry,
       manual_package_selection: true
     });
     await client.upsert_comment({

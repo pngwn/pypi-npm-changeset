@@ -46,7 +46,27 @@ ${current_changelog}
 
 	if (python) {
 		writeFileSync(join(dirs[0], "version.txt"), version);
+		bump_local_dependents(pkg_name, version);
 	}
 }
 
 unlinkSync(join(__dirname, "_changelog.json"));
+
+function bump_local_dependents(pkg_to_bump, version) {
+	for (const pkg_name in packages) {
+		const {
+			dirs: [dir],
+		} = packages[pkg_name];
+		const requirements_path = join(dir, "..", "requirements.txt");
+		const requirements = readFileSync(requirements_path, "utf-8").split("\n");
+
+		const pkg_index = requirements.findIndex((line) =>
+			line.startsWith(pkg_name),
+		);
+
+		if (pkg_index !== -1) {
+			requirements[pkg_index] = `${pkg_to_bump}>=${version}`;
+			writeFileSync(requirements_path, requirements.join("\n"));
+		}
+	}
+}

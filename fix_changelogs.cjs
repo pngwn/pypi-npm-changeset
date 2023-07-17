@@ -6,24 +6,20 @@ const { _handled, ...packages } = JSON.parse(
 );
 
 for (const pkg_name in packages) {
-	const { dirs, highlight, feat, fix, other, current_changelog, changesets } =
-		packages[pkg_name];
+	const { dirs, highlight, feat, fix, current_changelog } = packages[pkg_name];
 
 	const { version, python } = JSON.parse(
 		readFileSync(join(dirs[0], "./package.json"), "utf-8"),
 	);
-	const changelog_path = join(dirs[0], "CHANGELOG.md");
 
 	const highlights = highlight.map((h) => `${h.summary}`);
 	const features = feat.map((f) => `- ${f.summary}`);
 	const fixes = fix.map((f) => `- ${f.summary}`);
-	const others = other.map((o) => `- ${o.summary}`);
 
 	const release_notes = [
 		[highlights, "### Highlights"],
 		[features, "### Features"],
 		[fixes, "### Fixes"],
-		[others, "### Other changes"],
 	]
 		.filter(([s], i) => s.length > 0)
 		.map(([lines, title]) => {
@@ -53,4 +49,4 @@ ${current_changelog}
 	}
 }
 
-// unlinkSync(join(__dirname, "_changelog.json"));
+unlinkSync(join(__dirname, "_changelog.json"));

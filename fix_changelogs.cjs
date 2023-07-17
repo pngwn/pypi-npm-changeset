@@ -12,6 +12,7 @@ const all_packages = getPackagesSync(process.cwd()).packages.reduce(
 	},
 	{},
 );
+
 console.log({ all_packages });
 for (const pkg_name in packages) {
 	const { dirs, highlight, feat, fix, current_changelog } = packages[pkg_name];
@@ -68,7 +69,7 @@ function bump_local_dependents(pkg_to_bump, version) {
 
 		console.log(pkg_name, python);
 
-		if (!python) break;
+		if (!python) continue;
 
 		const requirements_path = join(dir, "..", "requirements.txt");
 		const requirements = readFileSync(requirements_path, "utf-8").split("\n");

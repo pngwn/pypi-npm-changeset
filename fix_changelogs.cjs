@@ -1,9 +1,11 @@
 const { join } = require("path");
 const { readFileSync, existsSync, writeFileSync, unlinkSync } = require("fs");
+const { getPackagesSync } = require("@manypkg/get-packages");
 
 const { _handled, ...packages } = JSON.parse(
 	readFileSync(join(__dirname, "./_changelog.json"), "utf-8"),
 );
+const all_packages = getPackagesSync().packages;
 
 for (const pkg_name in packages) {
 	const { dirs, highlight, feat, fix, current_changelog } = packages[pkg_name];
@@ -55,7 +57,7 @@ ${current_changelog}
 unlinkSync(join(__dirname, "_changelog.json"));
 
 function bump_local_dependents(pkg_to_bump, version) {
-	for (const pkg_name in packages) {
+	for (const pkg_name in all_packages) {
 		const {
 			dirs: [dir],
 		} = packages[pkg_name];
@@ -65,7 +67,7 @@ function bump_local_dependents(pkg_to_bump, version) {
 
 		console.log(pkg_name, python);
 
-		if (!python) return;
+		if (!python) break;
 
 		const requirements_path = join(dir, "..", "requirements.txt");
 		const requirements = readFileSync(requirements_path, "utf-8").split("\n");

@@ -129,7 +129,6 @@ ${generate_mode_description(manual_package_selection, manual_mode)}
 
 ${format_changelog_preview(changelog)}
 
-
 ${
 	manual_mode
 		? "⚠️ _The changeset file for this pull request has been modified manually, so the changeset generation bot has been disabled. To go back into automatic mode, delete the changeset file._"
@@ -374,6 +373,9 @@ export async function generate_changeset(
 		return "";
 	}
 
+	const formatted_type =
+		type === "highlight" ? `${type}:\n\n#### ${title}` : `${type}:${title}`;
+
 	return `---
 ${packages
 	.filter(([name, version]) => !!name && !!version)
@@ -382,6 +384,48 @@ ${packages
 	.join("\n")}
 ---
 
-${type}:${title}
+${formatted_type}
 `;
+}
+
+const RE_FEAT_FIX_REGEX = /^(feat|fix)\s*:/i;
+const RE_HIGHLIGHT_REGEX = /^highlight\s*:/i;
+
+const RE_VALID_FEAT_FIX_REGEX = /^(feat|fix)\s*:.*$/i;
+const RE_VALID_HIGHLIGHT_REGEX = /^highlight\s*:\n\n####[^]*$/i;
+
+export function validate_changelog(changelog: string): {
+	valid: boolean;
+	message: string | false;
+} {
+	const changelog_content = changelog.split("---")[2].trim();
+
+	if (RE_FEAT_FIX_REGEX.test(changelog_content)) {
+		return {
+			valid: RE_VALID_FEAT_FIX_REGEX.test(changelog_content),
+			message: `⚠️ Warning invalid changelog entry.
+
+Changelog entry must be in the format \`feat: <description>\` or \`fix: <description>\`. Entries fior fixes or features cannot span multiple lines. If you wish to add a longer description, please created a \`highlight\` entry instead.`,
+		};
+	} else if (RE_HIGHLIGHT_REGEX.test(changelog_content)) {
+		return {
+			valid: RE_VALID_HIGHLIGHT_REGEX.test(changelog_content),
+			message: `⚠️ Warning invalid changelog entry.
+
+Changelog entry must be in the format:
+\`\`\`highlight: 
+
+#### <feature-title>
+
+<feature-description>
+\`\`\`
+
+Any markdown other than level 1-4 headings is allowed.`,
+		};
+	} else {
+		return {
+			valid: false,
+			message: false,
+		};
+	}
 }

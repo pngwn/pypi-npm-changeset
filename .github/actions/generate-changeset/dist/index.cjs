@@ -46912,7 +46912,6 @@ ${generate_mode_description(manual_package_selection, manual_mode)}
 
 ${format_changelog_preview(changelog)}
 
-
 ${manual_mode ? "\u26A0\uFE0F _The changeset file for this pull request has been modified manually, so the changeset generation bot has been disabled. To go back into automatic mode, delete the changeset file._" : `_Maintainers or the PR author can modify the PR title to modify this entry._
 <details><summary>
 
@@ -47064,12 +47063,50 @@ async function generate_changeset(packages, type2, title) {
   if (packages.filter(([name, version2]) => !!name && !!version2).length === 0) {
     return "";
   }
+  const formatted_type = type2 === "highlight" ? `${type2}:
+
+#### ${title}` : `${type2}:${title}`;
   return `---
 ${packages.filter(([name, version2]) => !!name && !!version2).sort((a, b) => a[0].localeCompare(b[0])).map(([name, version2]) => `"${name}": ${version2}`).join("\n")}
 ---
 
-${type2}:${title}
+${formatted_type}
 `;
+}
+var RE_FEAT_FIX_REGEX = /^(feat|fix)\s*:/i;
+var RE_HIGHLIGHT_REGEX = /^highlight\s*:/i;
+var RE_VALID_FEAT_FIX_REGEX = /^(feat|fix)\s*:.*$/i;
+var RE_VALID_HIGHLIGHT_REGEX = /^highlight\s*:\n\n####[^]*$/i;
+function validate_changelog(changelog) {
+  const changelog_content = changelog.split("---")[2].trim();
+  if (RE_FEAT_FIX_REGEX.test(changelog_content)) {
+    return {
+      valid: RE_VALID_FEAT_FIX_REGEX.test(changelog_content),
+      message: `\u26A0\uFE0F Warning invalid changelog entry.
+
+Changelog entry must be in the format \`feat: <description>\` or \`fix: <description>\`. Entries fior fixes or features cannot span multiple lines. If you wish to add a longer description, please created a \`highlight\` entry instead.`
+    };
+  } else if (RE_HIGHLIGHT_REGEX.test(changelog_content)) {
+    return {
+      valid: RE_VALID_HIGHLIGHT_REGEX.test(changelog_content),
+      message: `\u26A0\uFE0F Warning invalid changelog entry.
+
+Changelog entry must be in the format:
+\`\`\`highlight: 
+
+#### <feature-title>
+
+<feature-description>
+\`\`\`
+
+Any markdown other than level 1-4 headings is allowed.`
+    };
+  } else {
+    return {
+      valid: false,
+      message: false
+    };
+  }
 }
 
 // .github/actions/generate-changeset/index.ts
@@ -47112,9 +47149,16 @@ async function run() {
     );
     const versions = get_frontmatter_versions(old_changeset_content) || [];
     const changelog_entry = old_changeset_content.split("---")[2].trim().replace(/^(feat:|fix:|highlight:)/im, "").trim();
+    const { valid, message } = validate_changelog(old_changeset_content);
+    if (message === false) {
+      (0, import_core.setFailed)(
+        `Cannot determine a type for the this changeset. Manual changesets should include \`feat:\`, \`fix:\` or \`highlight:\`.`
+      );
+      return;
+    }
     const pr_comment_content2 = create_changeset_comment({
       packages: versions,
-      changelog: changelog_entry,
+      changelog: !valid ? message : changelog_entry,
       manual_package_selection: false,
       manual_mode: true
     });

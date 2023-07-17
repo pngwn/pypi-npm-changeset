@@ -20,6 +20,7 @@ import {
 	find_comment,
 	get_client,
 	generate_changeset,
+	validate_changelog,
 } from "./utils";
 import * as human_id from "human-id";
 
@@ -76,15 +77,25 @@ async function run() {
 		);
 
 		const versions = get_frontmatter_versions(old_changeset_content) || [];
+
 		const changelog_entry = old_changeset_content
 			.split("---")[2]
 			.trim()
 			.replace(/^(feat:|fix:|highlight:)/im, "")
 			.trim();
 
+		const { valid, message } = validate_changelog(old_changeset_content);
+
+		if (message === false) {
+			setFailed(
+				`Cannot determine a type for the this changeset. Manual changesets should include \`feat:\`, \`fix:\` or \`highlight:\`.`,
+			);
+			return;
+		}
+
 		const pr_comment_content = create_changeset_comment({
 			packages: versions,
-			changelog: changelog_entry,
+			changelog: !valid ? message : changelog_entry,
 			manual_package_selection: false,
 			manual_mode: true,
 		});

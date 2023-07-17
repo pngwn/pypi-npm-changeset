@@ -124,7 +124,9 @@ const changelogFunctions = {
 		const prefix = [
 			links.pull === null ? "" : `${links.pull}`,
 			links.commit === null ? "" : `${links.commit}`,
-		].join("");
+		]
+			.join(" ")
+			.trim();
 
 		const suffix = users === null ? "" : ` Thanks ${users}!`;
 

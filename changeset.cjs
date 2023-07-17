@@ -178,9 +178,15 @@ const changelogFunctions = {
 			let formatted_summary = "";
 
 			if (_type === "highlight") {
-				formatted_summary = `${
-					prefix ? `${prefix} -` : ""
-				} ${summary.trim()}.\n\n${suffix}`;
+				const [heading, ...rest] = summary.trim().split("\n");
+				const _heading = `${heading} (${prefix ? `${prefix} -` : ""}`;
+				const _rest = rest.concat(["", suffix]);
+
+				formatted_summary = `${_heading}\n${_rest.join("\n")}`;
+
+				// formatted_summary = `${
+				// 	prefix ? `${prefix} -` : ""
+				// } ${summary.trim()}.\n\n${suffix}`;
 			} else {
 				formatted_summary = `${prefix ? `${prefix} -` : ""} ${summary.replace(
 					/[\s\.]$/,

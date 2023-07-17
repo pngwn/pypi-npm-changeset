@@ -137,7 +137,7 @@ ${
 		: `_Maintainers or the PR author can modify the PR title to modify this entry._
 <details><summary>
 
-#### Something isn't right</summary>
+#### ⚠️ Something isn't right</summary>
 
 - Maintainers can change the version label to modify the version bump. 
 - If this pull request needs to update multiple packages to different versions or requires a more comprehensive changelog entry, maintainers can [update the changelog file directly]()

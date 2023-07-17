@@ -47211,10 +47211,10 @@ async function get_changeset_status(changed_files) {
   });
   if (changeset_path === "") {
     return {
-      changeset_path: ".changeset/" + human_id.humanId({
+      changeset_path: `.changeset/"${human_id.humanId({
         separator: "-",
         capitalize: false
-      }),
+      })}.md`,
       manual_mode: false,
       old_changeset_content: ""
     };

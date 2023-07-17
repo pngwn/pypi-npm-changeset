@@ -2,6 +2,8 @@ import pkgutil
 
 import gradio.util as util
 
+print('sup')
+
 current_pkg_version = (
     (pkgutil.get_data(__name__, "version.txt") or b"").decode("ascii").strip()
 )

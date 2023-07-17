@@ -5,7 +5,7 @@ const { getPackagesSync } = require("@manypkg/get-packages");
 const { _handled, ...packages } = JSON.parse(
 	readFileSync(join(__dirname, "./_changelog.json"), "utf-8"),
 );
-const all_packages = getPackagesSync().packages;
+const all_packages = getPackagesSync(process.cwd()).packages;
 
 for (const pkg_name in packages) {
 	const { dirs, highlight, feat, fix, current_changelog } = packages[pkg_name];

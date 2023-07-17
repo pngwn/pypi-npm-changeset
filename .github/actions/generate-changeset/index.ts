@@ -90,6 +90,8 @@ async function run() {
 		});
 
 		info("Changeset comment updated.");
+
+		return;
 	}
 
 	const { packages: pkgs } = getPackagesSync(process.cwd());

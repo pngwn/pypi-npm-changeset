@@ -57,9 +57,11 @@ function bump_local_dependents(pkg_to_bump, version) {
 		const {
 			dirs: [dir],
 		} = packages[pkg_name];
-		const { version, python } = JSON.parse(
+		const { python } = JSON.parse(
 			readFileSync(join(dir, "./package.json"), "utf-8"),
 		);
+
+		console.log(python);
 
 		if (!python) return;
 
@@ -68,6 +70,13 @@ function bump_local_dependents(pkg_to_bump, version) {
 
 		const pkg_index = requirements.findIndex((line) =>
 			line.startsWith(pkg_name),
+		);
+
+		console.log(
+			pkg_index,
+			"pkg_index",
+			requirements[pkg_index],
+			"requirements[pkg_index]",
 		);
 
 		if (pkg_index !== -1) {

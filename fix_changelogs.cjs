@@ -63,27 +63,18 @@ unlinkSync(join(__dirname, "_changelog.json"));
 
 function bump_local_dependents(pkg_to_bump, version) {
 	for (const pkg_name in all_packages) {
-		console.log();
-		const { dir, packageJson } = all_packages[pkg_name];
-		const { python } = packageJson;
-
-		console.log(pkg_name, python);
+		const {
+			dir,
+			packageJson: { python },
+		} = all_packages[pkg_name];
 
 		if (!python) continue;
 
 		const requirements_path = join(dir, "..", "requirements.txt");
 		const requirements = readFileSync(requirements_path, "utf-8").split("\n");
 
-		console.log(requirements_path, requirements);
 		const pkg_index = requirements.findIndex((line) =>
-			line.startsWith(pkg_name),
-		);
-
-		console.log(
-			pkg_index,
-			"pkg_index",
-			requirements[pkg_index],
-			"requirements[pkg_index]",
+			line.startsWith(pkg_to_bump),
 		);
 
 		if (pkg_index !== -1) {

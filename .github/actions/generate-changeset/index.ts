@@ -85,7 +85,8 @@ async function run() {
 		const pr_comment_content = create_changeset_comment({
 			packages: versions,
 			changelog: changelog_entry,
-			manual_package_selection: true,
+			manual_package_selection: false,
+			manual_mode: true,
 		});
 
 		await client.upsert_comment({

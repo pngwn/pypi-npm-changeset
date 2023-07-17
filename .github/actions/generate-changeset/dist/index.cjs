@@ -46882,10 +46882,20 @@ function get_version_interaction_text(manual_version) {
 function format_changelog_preview(changelog) {
   return changelog.split("\n").map((line) => `> ${line}`).join("\n");
 }
+function generate_mode_description(manual_package_selection, manual_mode) {
+  if (manual_mode) {
+    return `The changeset file for this pull request has been modified manually. Maintainers or the PR author can update the changeset file directly to update the changed packages, version bump, and changelog entry.`;
+  } else {
+    return `- [${manual_package_selection ? "x" : " "}] Maintainers can ${manual_package_selection ? "de" : " "}select this checkbox to ${get_version_interaction_text(
+      manual_package_selection
+    )}.`;
+  }
+}
 function create_changeset_comment({
   packages,
   changelog,
-  manual_package_selection
+  manual_package_selection,
+  manual_mode = false
 }) {
   return `<!-- tag=changesets_gradio -->
 
@@ -46895,15 +46905,14 @@ function create_changeset_comment({
 
 ${create_version_table(packages)}
 ${manual_package_selection ? create_package_checklist(packages) : ""}
-- [${manual_package_selection ? "x" : " "}] Maintainers can ${manual_package_selection ? "de" : " "}select this checkbox to ${get_version_interaction_text(
-    manual_package_selection
-  )}.
+${generate_mode_description(manual_package_selection, manual_mode)}
+
 
 #### With the following changelog entry.
 
 ${format_changelog_preview(changelog)}
 
-_Maintainers or the PR author can modify the PR title to modify this entry._
+${manual_mode ? "" : `_Maintainers or the PR author can modify the PR title to modify this entry._
 <details><summary>
 
 #### Something isn't right</summary>
@@ -46911,7 +46920,7 @@ _Maintainers or the PR author can modify the PR title to modify this entry._
 - Maintainers can change the version label to modify the version bump. 
 - If this pull request needs to update multiple packages to different versions or requires a more comprehensive changelog entry, maintainers can [update the changelog file directly]()
 
-</details> `;
+</details>`}`.trim();
 }
 var md_parser = unified().use(remarkParse).use(remarkFrontmatter).use(remarkGfm);
 function get_frontmatter_versions(md) {
@@ -47105,7 +47114,8 @@ async function run() {
     const pr_comment_content2 = create_changeset_comment({
       packages: versions,
       changelog: changelog_entry,
-      manual_package_selection: true
+      manual_package_selection: false,
+      manual_mode: true
     });
     await client.upsert_comment({
       pr_number: pull_request_number,

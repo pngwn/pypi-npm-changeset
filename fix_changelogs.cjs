@@ -6,7 +6,7 @@ const { _handled, ...packages } = JSON.parse(
 );
 
 for (const pkg_name in packages) {
-	const { dirs, highlight, feat, fix, other, current_changelog } =
+	const { dirs, highlight, feat, fix, other, current_changelog, changesets } =
 		packages[pkg_name];
 
 	const { version, python } = JSON.parse(
@@ -25,8 +25,14 @@ for (const pkg_name in packages) {
 		[fixes, "### Fixes"],
 		[others, "### Other changes"],
 	]
-		.filter(([s]) => s.length > 0)
-		.map(([lines, title]) => `${title}\n\n${lines.join("\n")}`)
+		.filter(([s], i) => s.length > 0)
+		.map(([lines, title]) => {
+			if (title === "### Highlights") {
+				return `${title}\n\n${lines.join("\n\n")}`;
+			} else {
+				return `${title}\n\n${lines.join("\n")}`;
+			}
+		})
 		.join("\n\n");
 
 	const new_changelog = `# ${pkg_name}
@@ -47,4 +53,4 @@ ${current_changelog}
 	}
 }
 
-unlinkSync(join(__dirname, "_changelog.json"));
+// unlinkSync(join(__dirname, "_changelog.json"));

@@ -3,6 +3,7 @@
 // import { config } from "dotenv";
 const { getPackagesSync } = require("@manypkg/get-packages");
 const gh = require("@changesets/get-github-info");
+const { exec, spawnSync } = require("child_process");
 const { getInfo, getInfoFromPullRequest } = gh;
 const { tool, packages, rootPackage, rootDir } = getPackagesSync(process.cwd());
 
@@ -153,7 +154,6 @@ const changelogFunctions = {
 					feat: [],
 					fix: [],
 					highlight: [],
-					other: [],
 				};
 
 			const changelog_path = join(lines[release.name].dirs[0], "CHANGELOG.md");
@@ -169,11 +169,22 @@ const changelogFunctions = {
 				/^(feat|fix|highlight)\s*:\s*([^]*)/im,
 			) || [, false, changeset.summary];
 
-			lines[release.name][_type || "other"].push({
-				summary: `${prefix ? `${prefix} -` : ""} ${summary.replace(
-					/s$/,
+			let formatted_summary = "";
+
+			if (_type === "feat") {
+				formatted_summary = `${prefix ? `${prefix} -` : ""} ${summary.replace(
+					/\s$/,
 					"",
-				)}. ${suffix}`,
+				)}.\n\n${suffix}`;
+			} else {
+				formatted_summary = `${prefix ? `${prefix} -` : ""} ${summary.replace(
+					/\s$/,
+					"",
+				)}.${suffix}`;
+			}
+
+			lines[release.name][_type || "other"].push({
+				summary: formatted_summary,
 			});
 		});
 
@@ -188,5 +199,3 @@ const changelogFunctions = {
 };
 
 module.exports = changelogFunctions;
-
-//  hello change

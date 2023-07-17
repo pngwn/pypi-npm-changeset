@@ -172,13 +172,12 @@ const changelogFunctions = {
 			let formatted_summary = "";
 
 			if (_type === "highlight") {
-				formatted_summary = `${prefix ? `${prefix} -` : ""} ${summary.replace(
-					/\s$/,
-					"",
-				)}.\n\n${suffix}`;
+				formatted_summary = `${
+					prefix ? `${prefix} -` : ""
+				} ${summary.trim()}.\n\n${suffix}`;
 			} else {
 				formatted_summary = `${prefix ? `${prefix} -` : ""} ${summary.replace(
-					/\s$/,
+					/[\s\.]$/,
 					"",
 				)}.${suffix}`;
 			}

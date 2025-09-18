@@ -42,7 +42,4 @@ jobs:
       - name: publish to pypi
         uses: "pngwn/gradio-actions/actions/publish-pypi@main"
         with:
-          user: __token__
-          passwords: |
-            gradio-test-pypi:${{ secrets.PYPI_API_TOKEN }}
-            gradio-test-client-pypi:${{ secrets.PYPI_API_TOKEN }}
+          use-oidc: true

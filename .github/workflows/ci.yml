@@ -22,12 +22,12 @@ jobs:
           fetch-depth: 0
           persist-credentials: false
       - name: Install pnpm
-        uses: pnpm/action-setup@v2
+        uses: pnpm/action-setup@v4
         with:
-          version: 8
-      - uses: actions/setup-node@v3
+          version: 10
+      - uses: actions/setup-node@v5
         with:
-          node-version: 18
+          node-version: 22
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
       - name: create and publish versions
@@ -40,8 +40,6 @@ jobs:
           title: "chore: update versions"
           publish: pnpm ci:publish
         env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GRADIO_PAT }}
       - name: publish to pypi
         uses: "pngwn/gradio-actions/actions/publish-pypi@main"

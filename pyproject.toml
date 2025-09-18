@@ -1,5 +1,9 @@
 [build-system]
-requires = ["hatchling", "hatch-requirements-txt", "hatch-fancy-pypi-readme>=22.5.0"]
+requires = [
+  "hatchling",
+  "hatch-requirements-txt",
+  "hatch-fancy-pypi-readme>=22.5.0",
+]
 build-backend = "hatchling.build"
 
 [project]
@@ -50,9 +54,7 @@ filename = "requirements.txt"
 
 [tool.hatch.metadata.hooks.fancy-pypi-readme]
 content-type = "text/markdown"
-fragments = [
-  { path = "README.md" },
-]
+fragments = [{ path = "README.md" }]
 
 [[tool.hatch.metadata.hooks.fancy-pypi-readme.substitutions]]
 pattern = "(website/homepage|readme_files)/"
@@ -63,38 +65,27 @@ pattern = 'demo/([\S]*.gif)'
 replacement = 'https://raw.githubusercontent.com/gradio-app/gradio/main/demo/\g<1>'
 
 [tool.hatch.build]
-artifacts = [
-  "/gradio/templates",
-]
+artifacts = ["/gradio/templates"]
 
+[tool.hatch.build.targets.wheel]
+packages = ["gradio"]
 
 [tool.hatch.build.targets.sdist]
-include = [
-  "/gradio",
-  "/README.md",
-  "/requirements.txt",
-]
+include = ["/gradio", "/README.md", "/requirements.txt"]
 
 [tool.ruff]
 target-version = "py37"
-extend-select = [
-  "B",
-  "C",
-  "I",
-  "N",
-  "SIM",
-  "UP",
-]
+extend-select = ["B", "C", "I", "N", "SIM", "UP"]
 ignore = [
-  "C901", # function is too complex (TODO: un-ignore this)
-  "B023", # function definition in loop (TODO: un-ignore this)
-  "B008", # function call in argument defaults
-  "B017", # pytest.raises considered evil
-  "B028", # explicit stacklevel for warnings
-  "E501", # from scripts/lint_backend.sh
+  "C901",   # function is too complex (TODO: un-ignore this)
+  "B023",   # function definition in loop (TODO: un-ignore this)
+  "B008",   # function call in argument defaults
+  "B017",   # pytest.raises considered evil
+  "B028",   # explicit stacklevel for warnings
+  "E501",   # from scripts/lint_backend.sh
   "SIM105", # contextlib.suppress (has a performance cost)
   "SIM117", # multiple nested with blocks (doesn't look good with gr.Row etc)
-  "UP007", # use X | Y for type annotations (TODO: can be enabled once Pydantic plays nice with them)
+  "UP007",  # use X | Y for type annotations (TODO: can be enabled once Pydantic plays nice with them)
 ]
 
 [tool.ruff.per-file-ignores]
@@ -102,7 +93,7 @@ ignore = [
   "E402", # Demos may have imports not at the top
   "E741", # Demos may have ambiguous variable names
   "F405", # Demos may use star imports
-  "I", # Don't care about import order
+  "I",    # Don't care about import order
 ]
 "gradio/__init__.py" = [
   "F401", # "Imported but unused" (TODO: it would be better to be explicit and use __all__)

@@ -1,5 +1,9 @@
 [build-system]
-requires = ["hatchling", "hatch-requirements-txt", "hatch-fancy-pypi-readme>=22.5.0"]
+requires = [
+  "hatchling",
+  "hatch-requirements-txt",
+  "hatch-fancy-pypi-readme>=22.5.0",
+]
 build-backend = "hatchling.build"
 
 [project]
@@ -46,21 +50,16 @@ filename = "requirements.txt"
 
 [tool.hatch.metadata.hooks.fancy-pypi-readme]
 content-type = "text/markdown"
-fragments = [
-  { path = "README.md" },
-]
+fragments = [{ path = "README.md" }]
+
+[tool.hatch.build.targets.wheel]
+packages = ["gradio-test-client-pypi"]
 
 [tool.hatch.build.targets.sdist]
-include = [
-  "/gradio-test-client-pypi",
-  "/README.md",
-  "/requirements.txt",
-]
+include = ["/gradio-test-client-pypi", "/README.md", "/requirements.txt"]
 
 [tool.ruff]
 extend = "../../pyproject.toml"
 
 [tool.ruff.isort]
-known-first-party = [
-  "gradio-test-client-pypi"
-]
+known-first-party = ["gradio-test-client-pypi"]

@@ -28,6 +28,7 @@ jobs:
         run: pnpm install --frozen-lockfile
       - name: create and publish versions
         id: changesets
+        continue-on-error: true
         uses: changesets/action@v1
         with:
           version: pnpm ci:version

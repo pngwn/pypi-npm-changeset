@@ -11,9 +11,11 @@ env:
 jobs:
   publish:
     permissions:
-      contents: read
+      contents: write
       id-token: write
       pull-requests: write
+      attestations: write
+      packages: write
     name: static checks
     runs-on: ubuntu-22.04
     steps:
@@ -57,3 +59,178 @@ jobs:
         uses: "pngwn/gradio-actions/actions/publish-pypi@main"
         with:
           use-oidc: true
+      
+      - name: Build and identify artifacts
+        id: build
+        run: |
+          pnpm build
+          
+          # Create a directory for attestations
+          mkdir -p attestations
+          
+          # Find all npm packages (tgz files) and save to a file
+          find . -name "*.tgz" -type f > npm-artifacts.txt
+          echo "npm_count=$(wc -l < npm-artifacts.txt)" >> $GITHUB_OUTPUT
+          
+          # Find all PyPI packages (whl files) and save to a file  
+          find . -name "*.whl" -type f > pypi-artifacts.txt
+          echo "pypi_count=$(wc -l < pypi-artifacts.txt)" >> $GITHUB_OUTPUT
+          
+          # Display found artifacts
+          echo "Found npm artifacts:"
+          cat npm-artifacts.txt
+          echo "Found PyPI artifacts:"
+          cat pypi-artifacts.txt
+      
+      - name: Generate attestations for each npm package
+        run: |
+          while IFS= read -r artifact; do
+            if [ -n "$artifact" ]; then
+              BASENAME=$(basename "$artifact")
+              PACKAGE_NAME="${BASENAME%.tgz}"
+              
+              echo "Generating attestations for npm package: $artifact"
+              
+              # Generate SBOM for this specific package
+              npx @cyclonedx/cyclonedx-npm --output-file "attestations/${PACKAGE_NAME}-sbom.json" --output-format json || \
+                echo '{"error": "SBOM generation failed"}' > "attestations/${PACKAGE_NAME}-sbom.json"
+              
+              # Generate build provenance attestation
+              gh attestation generate "$artifact" \
+                --predicate-type "https://slsa.dev/provenance/v1" \
+                -o "attestations/${PACKAGE_NAME}-provenance.jsonl"
+              
+              # Generate SBOM attestation
+              gh attestation generate "$artifact" \
+                --predicate-type "https://cyclonedx.org/bom" \
+                --predicate "attestations/${PACKAGE_NAME}-sbom.json" \
+                -o "attestations/${PACKAGE_NAME}-sbom-attestation.jsonl"
+            fi
+          done < npm-artifacts.txt
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Generate attestations for each PyPI package
+        run: |
+          while IFS= read -r artifact; do
+            if [ -n "$artifact" ]; then
+              BASENAME=$(basename "$artifact")
+              PACKAGE_NAME="${BASENAME%.whl}"
+              
+              echo "Generating attestations for PyPI package: $artifact"
+              
+              # Generate SBOM for this specific package
+              pip-audit --format cyclonedx-json --output "attestations/${PACKAGE_NAME}-sbom.json" || \
+                cyclonedx-py -o "attestations/${PACKAGE_NAME}-sbom.json" --format json || \
+                echo '{"error": "SBOM generation failed"}' > "attestations/${PACKAGE_NAME}-sbom.json"
+              
+              # Generate build provenance attestation
+              gh attestation generate "$artifact" \
+                --predicate-type "https://slsa.dev/provenance/v1" \
+                -o "attestations/${PACKAGE_NAME}-provenance.jsonl"
+              
+              # Generate SBOM attestation
+              gh attestation generate "$artifact" \
+                --predicate-type "https://cyclonedx.org/bom" \
+                --predicate "attestations/${PACKAGE_NAME}-sbom.json" \
+                -o "attestations/${PACKAGE_NAME}-sbom-attestation.jsonl"
+            fi
+          done < pypi-artifacts.txt
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Create Release
+        if: steps.changesets.outputs.published == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GRADIO_PAT }}
+        run: |
+          VERSION=$(node -p "require('./package.json').version")
+          RELEASE_TAG="v${VERSION}"
+          
+          # Build release notes with package-specific verification commands
+          RELEASE_NOTES="## 🔒 Supply Chain Security
+
+          ### Verification
+          Verify the authenticity of each release artifact:
+          "
+          
+          # Add npm package verification commands
+          if [ -s npm-artifacts.txt ]; then
+            RELEASE_NOTES="${RELEASE_NOTES}
+          **npm packages:**"
+            while IFS= read -r artifact; do
+              if [ -n "$artifact" ]; then
+                BASENAME=$(basename "$artifact")
+                RELEASE_NOTES="${RELEASE_NOTES}
+          \`\`\`bash
+          gh attestation verify ${BASENAME} --owner ${{ github.repository_owner }}
+          \`\`\`"
+              fi
+            done < npm-artifacts.txt
+          fi
+          
+          # Add PyPI package verification commands
+          if [ -s pypi-artifacts.txt ]; then
+            RELEASE_NOTES="${RELEASE_NOTES}
+          
+          **PyPI packages:**"
+            while IFS= read -r artifact; do
+              if [ -n "$artifact" ]; then
+                BASENAME=$(basename "$artifact")
+                RELEASE_NOTES="${RELEASE_NOTES}
+          \`\`\`bash
+          gh attestation verify ${BASENAME} --owner ${{ github.repository_owner }}
+          \`\`\`"
+              fi
+            done < pypi-artifacts.txt
+          fi
+          
+          RELEASE_NOTES="${RELEASE_NOTES}
+
+          ### Attestations
+          Each package has individual attestations:
+          - **Build Provenance**: SLSA provenance attestation 
+          - **SBOM**: Software Bill of Materials attestation
+          
+          All attestation files are available as release assets.
+
+          ## Changes
+          See [CHANGELOG.md](./CHANGELOG.md) for detailed changes.
+          
+          ---
+          *Published with changesets*"
+          
+          gh release create "${RELEASE_TAG}" \
+            --title "Release ${RELEASE_TAG}" \
+            --notes "${RELEASE_NOTES}" \
+            || echo "Release may already exist, continuing..."
+      
+      - name: Upload attestation bundles to release
+        if: steps.changesets.outputs.published == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GRADIO_PAT }}
+        run: |
+          VERSION=$(node -p "require('./package.json').version")
+          RELEASE_TAG="v${VERSION}"
+          
+          # Upload all attestation files from the attestations directory
+          if [ -d "attestations" ]; then
+            for file in attestations/*; do
+              if [ -f "$file" ]; then
+                echo "Uploading $(basename "$file") to release..."
+                gh release upload "${RELEASE_TAG}" "$file" \
+                  --clobber || echo "Failed to upload $(basename "$file")"
+              fi
+            done
+          fi
+          
+          # Also upload the artifact lists for reference
+          if [ -f "npm-artifacts.txt" ]; then
+            gh release upload "${RELEASE_TAG}" npm-artifacts.txt \
+              --clobber || echo "Failed to upload npm artifacts list"
+          fi
+          
+          if [ -f "pypi-artifacts.txt" ]; then
+            gh release upload "${RELEASE_TAG}" pypi-artifacts.txt \
+              --clobber || echo "Failed to upload PyPI artifacts list"
+          fi

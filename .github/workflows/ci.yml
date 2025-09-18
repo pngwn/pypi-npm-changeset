@@ -43,6 +43,16 @@ jobs:
           publish: pnpm ci:publish
         env:
           GITHUB_TOKEN: ${{ secrets.GRADIO_PAT }}
+      - name: Upload npm logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: npm-logs
+          path: |
+            /home/runner/.npm/_logs/
+            ~/.npm/_logs/
+          retention-days: 7
+          if-no-files-found: ignore
       - name: publish to pypi
         uses: "pngwn/gradio-actions/actions/publish-pypi@main"
         with:

@@ -5,7 +5,7 @@
 	"main": "index.js",
 	"scripts": {
 		"ci:version": "changeset version && pnpm i --lockfile-only && node ./fix_changelogs.cjs",
-		"ci:publish": "pnpm publish --no-git-checks --access public -r --filter=@pngwn/*",
+		"ci:publish": "pnpm publish --loglevel verbose --no-git-checks --access public -r --filter=@pngwn/*",
 		"refresh": "cp -r ./_changesets/*.md ./.changeset/",
 		"build-action": "esbuild .github/actions/publish-pypi/index.ts --bundle --platform=node --outfile=.github/actions/publish-pypi/dist/index.cjs && esbuild .github/actions/generate-changeset/index.ts --bundle --platform=node --outfile=.github/actions/generate-changeset/dist/index.cjs"
 	},

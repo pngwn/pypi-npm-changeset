@@ -9,5 +9,13 @@
 	"keywords": [],
 	"author": "",
 	"license": "ISC",
-	"main_changeset": true
+	"main_changeset": true,
+	"publishConfig": {
+		"provenance": true
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/pngwn/pypi-npm-changeset.git",
+		"directory": "client/js"
+	}
 }

@@ -10,6 +10,10 @@ env:
 
 jobs:
   publish:
+    permissions:
+      contents: read
+      id-token: write
+      pull-requests: write
     name: static checks
     runs-on: ubuntu-22.04
     steps:
